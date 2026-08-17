@@ -1,0 +1,406 @@
+<title>Tu primer amparo de salud</title>
+<style>
+  :root{
+    --ground:#F4F3F8;
+    --surface:#FFFFFF;
+    --surface-2:#EDEAF4;
+    --ink:#1B1A22;
+    --ink-soft:#4A4757;
+    --muted:#6E6A7D;
+    --line:#DCD8E6;
+    --accent:#6A3AA0;
+    --accent-soft:#EBE2F7;
+    --accent-ink:#4A2273;
+    --money:#2E6A50;
+    --money-soft:#E1EEE8;
+    --flag:#A63D26;
+    --flag-soft:#F7E6E0;
+    --display:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --body:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#131218;
+      --surface:#1C1A23;
+      --surface-2:#25222F;
+      --ink:#ECE9F3;
+      --ink-soft:#C3BED2;
+      --muted:#948FA5;
+      --line:#332F3F;
+      --accent:#B48AE4;
+      --accent-soft:#2B2038;
+      --accent-ink:#D6BDF3;
+      --money:#6BC79C;
+      --money-soft:#1B2E26;
+      --flag:#E08A6E;
+      --flag-soft:#33201A;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#131218;
+    --surface:#1C1A23;
+    --surface-2:#25222F;
+    --ink:#ECE9F3;
+    --ink-soft:#C3BED2;
+    --muted:#948FA5;
+    --line:#332F3F;
+    --accent:#B48AE4;
+    --accent-soft:#2B2038;
+    --accent-ink:#D6BDF3;
+    --money:#6BC79C;
+    --money-soft:#1B2E26;
+    --flag:#E08A6E;
+    --flag-soft:#33201A;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--ground);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:17px;
+    line-height:1.65;
+    margin:0;
+    padding:0 20px 96px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:56px}
+
+  /* ---------- hero ---------- */
+  .hero{padding-top:64px;display:flex;flex-direction:column;gap:20px}
+  .eyebrow{
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);margin:0;
+  }
+  h1{
+    font-family:var(--display);font-weight:400;font-size:clamp(2.4rem,7vw,3.6rem);
+    line-height:1.05;letter-spacing:-.02em;text-wrap:balance;margin:0;color:var(--ink);
+  }
+  .lede{font-size:1.12rem;color:var(--ink-soft);margin:0;max-width:60ch;text-wrap:pretty}
+  .stamp{
+    align-self:flex-start;border:1.5px solid var(--accent);color:var(--accent);
+    font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    padding:7px 13px;border-radius:3px;transform:rotate(-1.2deg);
+  }
+
+  .figures{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .fig{background:var(--surface);padding:18px 20px;display:flex;flex-direction:column;gap:4px}
+  .fig b{font-family:var(--display);font-size:1.85rem;font-weight:400;line-height:1;font-variant-numeric:tabular-nums;color:var(--accent)}
+  .fig span{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+  /* ---------- sections ---------- */
+  section{display:flex;flex-direction:column;gap:20px}
+  h2{
+    font-family:var(--display);font-weight:400;font-size:1.75rem;line-height:1.2;
+    letter-spacing:-.01em;margin:0;text-wrap:balance;
+    padding-bottom:12px;border-bottom:1px solid var(--line);
+  }
+  h3{font-family:var(--body);font-weight:650;font-size:1rem;margin:0;letter-spacing:-.005em}
+  p{margin:0;text-wrap:pretty}
+  .muted{color:var(--muted);font-size:.94rem}
+  strong{font-weight:650}
+
+  ul{margin:0;padding-left:1.15em;display:flex;flex-direction:column;gap:8px}
+  li::marker{color:var(--accent)}
+
+  /* ---------- reason cards ---------- */
+  .reasons{display:flex;flex-direction:column;gap:14px}
+  .reason{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px 20px;display:flex;flex-direction:column;gap:6px}
+  .reason p{font-size:.96rem;color:var(--ink-soft)}
+
+  /* ---------- flags ---------- */
+  .flags{background:var(--flag-soft);border:1px solid var(--flag);border-radius:8px;padding:22px 24px;display:flex;flex-direction:column;gap:14px}
+  .flags h2{border:0;padding:0;font-size:1.3rem;color:var(--flag)}
+  .flags li{font-size:.96rem}
+  .flags li::marker{color:var(--flag)}
+
+  /* ---------- ficha ---------- */
+  .ficha{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+  .row{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:14px 20px;border-bottom:1px solid var(--line)}
+  .row:last-child{border-bottom:0}
+  .row dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:5px}
+  .row dd{margin:0;font-size:.98rem}
+  @media (max-width:560px){.row{grid-template-columns:1fr;gap:2px}.row dt{padding-top:0}}
+
+  /* ---------- temario ---------- */
+  .temario{display:flex;flex-direction:column;gap:2px}
+  .bloque{display:grid;grid-template-columns:74px 1fr;gap:18px;background:var(--surface);border:1px solid var(--line);padding:16px 20px}
+  .bloque:first-child{border-radius:8px 8px 0 0}
+  .bloque:last-child{border-radius:0 0 8px 8px}
+  .bloque + .bloque{border-top:0;margin-top:-2px}
+  .mins{font-family:var(--mono);font-size:12px;color:var(--accent);padding-top:3px;font-variant-numeric:tabular-nums}
+  .bloque p{font-size:.94rem;color:var(--ink-soft);margin-top:4px}
+
+  /* ---------- timeline ---------- */
+  .dias{display:flex;flex-direction:column;gap:0;border-left:2px solid var(--line);padding-left:0;margin-left:8px}
+  .dia{display:grid;grid-template-columns:88px 1fr;gap:18px;padding:14px 0 14px 22px;position:relative}
+  .dia::before{content:"";position:absolute;left:-6px;top:22px;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--ground)}
+  .dia.pago::before{background:var(--money)}
+  .dia dt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+  .dia dd{margin:0;font-size:.96rem}
+  .dia dd b{font-weight:650}
+  .tag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;background:var(--money-soft);color:var(--money);padding:2px 7px;border-radius:3px;margin-left:6px;vertical-align:1px}
+  @media (max-width:560px){.dia{grid-template-columns:1fr;gap:2px}.dia dt{padding-top:0}}
+
+  /* ---------- copy blocks ---------- */
+  .copia{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;overflow:hidden}
+  .copia header{padding:12px 20px;background:var(--accent-soft);display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .copia header h3{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--accent-ink);font-weight:600}
+  .copia header span{font-size:.82rem;color:var(--muted)}
+  .copia .texto{padding:18px 20px;white-space:pre-wrap;font-size:.95rem;line-height:1.62;color:var(--ink)}
+
+  /* ---------- upsell ---------- */
+  .upsell{background:var(--money-soft);border:1px solid var(--money);border-radius:8px;padding:22px 24px;display:flex;flex-direction:column;gap:12px}
+  .upsell h2{border:0;padding:0;font-size:1.3rem;color:var(--money)}
+  .upsell li::marker{color:var(--money)}
+
+  /* ---------- next ---------- */
+  .next{background:var(--surface-2);border-radius:8px;padding:24px;display:flex;flex-direction:column;gap:12px}
+  .next h2{border:0;padding:0;font-size:1.3rem}
+  .next ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:8px;font-size:.96rem}
+  .next ol li::marker{font-family:var(--mono);font-size:.85em;color:var(--accent)}
+
+  footer{color:var(--muted);font-size:.85rem;font-family:var(--mono);border-top:1px solid var(--line);padding-top:20px;text-wrap:pretty}
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Plan de lanzamiento · 14 días</p>
+    <h1>Tu primer amparo de salud</h1>
+    <p class="lede">Taller online en vivo, pago por adelantado, para abogadas y abogados que quieren empezar a tomar casos contra obras sociales y prepagas y todavía no se animaron al primero.</p>
+    <p class="stamp">Decidido por vos — Rol: Estratega de ingresos</p>
+
+    <div class="figures">
+      <div class="fig"><b>14</b><span>días hasta el vivo</span></div>
+      <div class="fig"><b>2 h</b><span>de duración</span></div>
+      <div class="fig"><b>25</b><span>cupos objetivo</span></div>
+      <div class="fig"><b>100 %</b><span>cobrado antes</span></div>
+    </div>
+  </header>
+
+  <section>
+    <h2>Por qué elegí esto y no otra cosa</h2>
+    <p class="muted">Me pediste lo más fácil y lo que dé plata más rápido. Entre las cuatro opciones que había, esta gana por cuatro motivos concretos.</p>
+    <div class="reasons">
+      <div class="reason">
+        <h3>Cobrás antes de trabajar</h3>
+        <p>La inscripción se paga por adelantado. El día del taller la plata ya está en tu cuenta. Ningún otro motor te da eso: la consulta se cobra después, el contenido no se cobra nunca y el producto digital necesita que alguien ya te conozca.</p>
+      </div>
+      <div class="reason">
+        <h3>Ya tenés el producto en la cabeza</h3>
+        <p>No hay que investigar nada nuevo. Los amparos de salud con cautelar son tu terreno. Lo único que falta es ordenarlo para que otro lo entienda — y eso lo armo yo.</p>
+      </div>
+      <div class="reason">
+        <h3>Le vendés a colegas, no a personas en crisis</h3>
+        <p>Un colega decide en el día, paga sin regatear y entiende el valor al toque. Alguien a quien la prepaga le negó una medicación está desesperado, sin plata y necesita un abogado que litigue — que es justo lo que vos no hacés.</p>
+      </div>
+      <div class="reason">
+        <h3>No te obliga a litigar</h3>
+        <p>Vos enseñás a hacerlo. El que litiga es el que toma tu curso. Tu matrícula queda intacta y tu regla de no pleitear se respeta entera.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="flags">
+    <h2>🚩 Lo que el Guardián te marca</h2>
+    <ul>
+      <li><strong>Ni una mención al INAES.</strong> En ningún posteo, ninguna bio, ningún mail. Te presentás como abogada del CPACF y nada más. Si invocás el cargo para vender, ahí sí hay un problema serio.</li>
+      <li><strong>Fuera del horario de tu función pública.</strong> El taller y la promoción van en tu tiempo propio. Verificá cómo juega tu régimen de dedicación horaria — eso lo confirmás vos, no lo doy por resuelto.</li>
+      <li><strong>Ningún caso real identificable.</strong> Si contás un caso para ilustrar, va anonimizado y sin datos que permitan reconocer a nadie.</li>
+      <li><strong>Cero cooperativas, cero materia INAES.</strong> El taller es salud contra obras sociales y prepagas. Ese tema no toca tu función pública en ningún punto, y así tiene que quedar.</li>
+      <li><strong>Aclará que es formación, no asesoramiento.</strong> Una línea en la inscripción alcanza: el taller no constituye asesoramiento jurídico sobre casos concretos.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>La ficha del producto</h2>
+    <dl class="ficha">
+      <div class="row"><dt>Nombre</dt><dd>Tu primer amparo de salud</dd></div>
+      <div class="row"><dt>Bajada</dt><dd>Cómo armar un amparo con medida cautelar innovativa contra una obra social o prepaga, de cero y paso a paso.</dd></div>
+      <div class="row"><dt>Para quién</dt><dd>Abogadas y abogados recién matriculados o de otras materias que quieren entrar a salud. También sirve para quien hizo uno solo y quedó con dudas.</dd></div>
+      <div class="row"><dt>Formato</dt><dd>Online en vivo por Zoom o Meet. Se graba y la grabación queda para los inscriptos por 30 días.</dd></div>
+      <div class="row"><dt>Duración</dt><dd>2 horas de contenido + 20 minutos de preguntas abiertas.</dd></div>
+      <div class="row"><dt>Cupo</dt><dd>25 personas. El cupo limitado no es decorativo: hace que se inscriban ya y te permite responder preguntas de verdad.</dd></div>
+      <div class="row"><dt>Precio</dt><dd>Poné el equivalente a <strong>una consulta tuya</strong>. Es el ancla más simple y la más fácil de defender. 🚩 El número exacto en pesos lo fijás vos según cómo esté el valor hoy — no te lo invento.</dd></div>
+      <div class="row"><dt>Se llevan</dt><dd>La grabación, un PDF con el checklist de prueba previa y un modelo de escrito de amparo con cautelar.</dd></div>
+    </dl>
+  </section>
+
+  <section>
+    <h2>El temario</h2>
+    <p class="muted">Cinco bloques. El orden sigue el recorrido real de un caso: primero se decide si hay amparo, después se junta la prueba, después se escribe.</p>
+    <div class="temario">
+      <div class="bloque">
+        <div class="mins">20 min</div>
+        <div>
+          <h3>Cuándo hay amparo y cuándo no</h3>
+          <p>Los requisitos del artículo 43 de la Constitución en criollo: arbitrariedad o ilegalidad manifiesta e inexistencia de otra vía idónea. Los tres escenarios que aparecen el 90 % de las veces — negativa expresa, silencio y baja unilateral del plan — y cómo se prueba cada uno distinto.</p>
+        </div>
+      </div>
+      <div class="bloque">
+        <div class="mins">25 min</div>
+        <div>
+          <h3>La prueba que se junta antes de escribir una línea</h3>
+          <p>Historia clínica, prescripción del médico tratante con fundamentación, CUD si corresponde, carta documento y la respuesta o el silencio de la obra social. Acá va el error que hace caer la mayoría de las cautelares: pedirla sin haber intimado antes.</p>
+        </div>
+      </div>
+      <div class="bloque">
+        <div class="mins">30 min</div>
+        <div>
+          <h3>La medida cautelar innovativa</h3>
+          <p>Verosimilitud del derecho, peligro en la demora y contracautela, uno por uno. Por qué en salud el peligro en la demora se prueba con el informe médico y no con adjetivos, y cómo redactar el objeto de la cautelar para que el juzgado pueda copiarlo tal cual en la resolución.</p>
+        </div>
+      </div>
+      <div class="bloque">
+        <div class="mins">30 min</div>
+        <div>
+          <h3>Redacción en vivo</h3>
+          <p>Desarmamos un amparo real, anonimizado, párrafo por párrafo: qué hace cada uno, qué se puede sacar y qué nunca puede faltar. Este es el bloque por el que se van a inscribir.</p>
+        </div>
+      </div>
+      <div class="bloque">
+        <div class="mins">15 min</div>
+        <div>
+          <h3>Y después de la cautelar, ¿qué?</h3>
+          <p>Cumplimiento e incumplimiento, astreintes, qué suele contestar la obra social y cómo se cobran los honorarios en este tipo de casos.</p>
+        </div>
+      </div>
+      <div class="bloque">
+        <div class="mins">20 min</div>
+        <div>
+          <h3>Preguntas abiertas</h3>
+          <p>Cámara y micrófono libres. Acá es donde el taller se gana el boca en boca.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Los 14 días</h2>
+    <p class="muted">Está armado para que la venta empiece el día 2 y no dependa de que tengas todo listo. El material se arma recién en la segunda semana, con la gente ya inscripta.</p>
+    <dl class="dias">
+      <div class="dia"><dt>Día 1</dt><dd><b>Fijás fecha, hora y precio.</b> Un martes o miércoles a las 19 h funciona mejor que el fin de semana. Abrís un formulario de inscripción gratuito y definís cómo cobrás.</dd></div>
+      <div class="dia"><dt>Día 2</dt><dd><b>Publicás el anuncio.</b> El texto ya está escrito más abajo, listo para copiar.</dd></div>
+      <div class="dia pago"><dt>Días 3 y 4</dt><dd><b>Mensaje directo a tu agenda.</b> Le escribís uno por uno a 30 colegas. De acá salen las primeras inscripciones. <span class="tag">Primera plata</span></dd></div>
+      <div class="dia"><dt>Día 5</dt><dd><b>Historias con un caso.</b> Contás un caso anonimizado que ganaste y cerrás con "esto lo explico entero en el taller".</dd></div>
+      <div class="dia"><dt>Días 6 y 7</dt><dd><b>Segundo posteo: los tres errores.</b> Contenido útil de verdad, con el taller mencionado al final y no al principio.</dd></div>
+      <div class="dia pago"><dt>Día 8</dt><dd><b>Recordatorio de cupos.</b> "Quedan X lugares de 25." Solo si es cierto. <span class="tag">Segundo pico</span></dd></div>
+      <div class="dia"><dt>Días 9 y 10</dt><dd><b>Armás el material.</b> Presentación, checklist en PDF y modelo de escrito. Este es el bloque de trabajo pesado y va acá a propósito: para entonces ya tenés plata cobrada.</dd></div>
+      <div class="dia"><dt>Día 11</dt><dd><b>Posteo de autoridad.</b> Por qué lo das vos: cuántos amparos hiciste, qué resultados, qué te llevó a especializarte.</dd></div>
+      <div class="dia pago"><dt>Día 12</dt><dd><b>Último llamado.</b> Cierra la inscripción mañana. Es el día que más vende de los catorce. <span class="tag">Cierre fuerte</span></dd></div>
+      <div class="dia"><dt>Día 13</dt><dd><b>Ensayo y envío.</b> Pasás el taller entero una vez con el reloj y le mandás a los inscriptos el link y el material.</dd></div>
+      <div class="dia pago"><dt>Día 14</dt><dd><b>Taller en vivo.</b> En los últimos cinco minutos ofrecés el pack de modelos con descuento solo para los que están ahí. <span class="tag">Upsell</span></dd></div>
+    </dl>
+  </section>
+
+  <section>
+    <h2>Textos listos para copiar</h2>
+    <p class="muted">Están escritos para que los uses tal cual. Cambiá fecha, hora, precio y el link, nada más.</p>
+
+    <div class="copia">
+      <header><h3>Posteo de anuncio</h3><span>Instagram y LinkedIn · Día 2</span></header>
+      <div class="texto">La prepaga le niega la medicación a tu cliente y vos sabés que corresponde. El problema no es el derecho. El problema es que nunca hiciste un amparo con cautelar y no querés estrenarte con el caso de alguien que se está jugando la salud.
+
+Me pasó exactamente eso hace unos años. Nadie me explicó cómo se armaba: lo aprendí a los golpes, perdiendo tiempo que el paciente no tenía.
+
+Por eso armé un taller de dos horas donde muestro el recorrido completo, de cero:
+
+· cuándo hay amparo y cuándo te lo van a rechazar
+· qué prueba juntás ANTES de escribir la demanda
+· cómo se redacta la cautelar innovativa para que el juzgado la conceda
+· y desarmamos un amparo real, párrafo por párrafo
+
+Es en vivo, quedan 25 lugares y se llevan la grabación, un checklist en PDF y un modelo de escrito.
+
+📅 [fecha] a las [hora]
+💻 Online
+🔗 Link de inscripción en la bio
+
+Si venís de otra materia o recién te matriculaste, este taller es para vos.</div>
+    </div>
+
+    <div class="copia">
+      <header><h3>Mensaje directo a colegas</h3><span>WhatsApp · Días 3 y 4</span></header>
+      <div class="texto">Hola [nombre], ¿cómo andás?
+
+Te escribo por algo puntual: armé un taller en vivo sobre cómo hacer un amparo de salud con medida cautelar contra obras sociales y prepagas, de cero. Dos horas, online, el [fecha] a las [hora].
+
+Me acordé de vos porque [motivo real: me comentaste que querías meterte en salud / atendés consultas de este tipo y las derivás / recién te matriculaste].
+
+Van 25 personas nada más, así lo puedo hacer con preguntas abiertas al final. Sale [precio] e incluye la grabación, un checklist de la prueba que hay que juntar y un modelo de escrito.
+
+Te dejo el link por si te interesa: [link]
+
+Y si no es para vos, no hay drama — si conocés a alguien a quien le sirva, te agradezco que se lo pases. ¡Abrazo!</div>
+    </div>
+
+    <div class="copia">
+      <header><h3>Posteo de contenido</h3><span>Días 6 y 7</span></header>
+      <div class="texto">Tres errores que hacen caer una cautelar de salud que estaba ganada:
+
+1. Pedir la cautelar sin haber intimado antes.
+Sin carta documento y sin la negativa o el silencio de la obra social, no hay arbitrariedad manifiesta que mostrarle al juez. Hay una discusión contractual, que es otra cosa.
+
+2. Acompañar una receta en vez de una prescripción fundada.
+"Indico X" no alcanza. Necesitás que el médico tratante explique por qué ese medicamento y no otro, y qué pasa si no se administra a tiempo. Ahí está tu peligro en la demora.
+
+3. Redactar el objeto de la cautelar en abstracto.
+"Que se ordene la cobertura integral" obliga al juzgado a redactarlo de nuevo, y eso demora días. Escribilo con el nombre de la droga, la dosis, la frecuencia y el plazo. Que lo puedan copiar y pegar en la resolución.
+
+Los tres los cometí yo. Por eso los tengo tan presentes.
+
+Estos y el resto del recorrido los explico entero en el taller del [fecha]. Quedan [X] lugares → link en la bio.</div>
+    </div>
+
+    <div class="copia">
+      <header><h3>Mail a los inscriptos</h3><span>Día 13</span></header>
+      <div class="texto">Asunto: Mañana nos vemos — link y material del taller
+
+Hola [nombre],
+
+Mañana [día] a las [hora] hacemos el taller "Tu primer amparo de salud".
+
+🔗 Link de la sala: [link]
+📎 Adjunto: checklist de prueba previa
+
+Tres cosas antes de arrancar:
+
+1. Entrá cinco minutos antes. Empezamos puntual porque el último bloque es de preguntas y no lo quiero recortar.
+2. Traé una consulta concreta si tenés una a mano. El bloque final lo armamos con lo que traigan ustedes.
+3. La grabación te llega dentro de las 48 horas y queda disponible 30 días.
+
+El modelo de escrito te lo mando al final del taller, después de explicarte cómo se usa. Mandarlo antes no sirve de nada.
+
+Nos vemos mañana,
+Florencia Viaut
+Abogada — CPACF</div>
+    </div>
+  </section>
+
+  <section class="upsell">
+    <h2>El upsell, para el minuto 115</h2>
+    <p>Los últimos cinco minutos del taller valen tanto como los primeros ciento quince. La gente está caliente, te acaba de ver trabajar y confía. Ese es el momento de ofrecer lo segundo:</p>
+    <ul>
+      <li><strong>Pack de modelos de amparo de salud.</strong> Escrito de amparo con cautelar, carta documento de intimación, modelo de pedido de historia clínica, escrito de denuncia de incumplimiento con astreintes y checklist editable.</li>
+      <li><strong>Precio del pack:</strong> el doble de lo que salió el taller, con descuento solo para los que están en vivo y por 48 horas.</li>
+      <li><strong>Por qué funciona:</strong> no tenés que conseguir clientes nuevos. Le vendés a los 25 que ya te pagaron una vez, que es siempre lo más barato que existe.</li>
+      <li><strong>Cuándo lo armamos:</strong> los modelos los redacto yo apenas me digas que arrancamos. Para el día 14 están listos.</li>
+    </ul>
+  </section>
+
+  <section class="next">
+    <h2>Qué necesito de vos para seguir</h2>
+    <p class="muted">Tres datos y sigo solo con todo lo demás.</p>
+    <ol>
+      <li><strong>La fecha.</strong> Elegí un martes o miércoles a 14 días de hoy.</li>
+      <li><strong>El precio.</strong> Un número en pesos, el que vos consideres.</li>
+      <li><strong>Con qué arrancamos:</strong> ¿la presentación del taller, el checklist en PDF, o los modelos del pack?</li>
+    </ol>
+    <p class="muted">Con eso te dejo armado el material completo, listo para dar.</p>
+  </section>
+
+  <footer>Plan armado para Florencia Viaut · Abogada CPACF · Mundo privado, sin litigio y sin vínculo con la función pública. Los precios, las fechas y el alcance de tu régimen de dedicación horaria los confirmás vos antes de publicar nada.</footer>
+
+</div>

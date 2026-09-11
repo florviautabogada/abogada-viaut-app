@@ -1,0 +1,149 @@
+<title>El Tablón en una página</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&family=Archivo+Black&family=Archivo+Narrow:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--papel:#F4F5F2; --hoja:#FFFFFF; --hoja3:#E9EBE6; --tinta:#111111; --tinta-2:#3A3D37; --gris:#6E716B; --filete:#D8DAD4; --filete-2:#BFC2BA; --verde:#0B8A3C; --verde-osc:#076B2E; --verde-lav:#E3F3E8; --sobre-verde:#FFFFFF}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--papel:#101210; --hoja:#181A18; --hoja3:#2A2E2A; --tinta:#F1F2EE; --tinta-2:#C9CCC5; --gris:#8F938C; --filete:#2F332F; --filete-2:#454944; --verde:#3ECF7A; --verde-osc:#5ADB8E; --verde-lav:#17311F; --sobre-verde:#0F110F}}
+:root[data-theme="dark"]{--papel:#101210; --hoja:#181A18; --hoja3:#2A2E2A; --tinta:#F1F2EE; --tinta-2:#C9CCC5; --gris:#8F938C; --filete:#2F332F; --filete-2:#454944; --verde:#3ECF7A; --verde-osc:#5ADB8E; --verde-lav:#17311F; --sobre-verde:#0F110F}
+*{box-sizing:border-box}
+body{background:var(--papel); color:var(--tinta); font-family:"Archivo","Helvetica Neue",Arial,sans-serif; font-size:15.5px; line-height:1.5; -webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0; letter-spacing:-.01em; text-wrap:balance}
+p{margin:0}
+.hoja{max-width:820px; margin:0 auto; padding-inline:20px; padding-block:0 48px}
+.banda{background:var(--verde); color:var(--sobre-verde); font-family:"Archivo Narrow",sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:.16em; font-size:.74rem; padding:8px 20px; margin-inline:-20px}
+header{padding-block:22px 14px; border-bottom:3px solid var(--tinta); margin-bottom:20px; display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap}
+h1{font-family:"Archivo Black",Impact,sans-serif; font-size:clamp(1.8rem,5vw,2.5rem); line-height:.95; text-transform:uppercase; letter-spacing:-.03em}
+.sub{font-size:.95rem; color:var(--tinta-2); margin-top:8px; max-width:60ch}
+.meta{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:.7rem; color:var(--gris); text-transform:uppercase; letter-spacing:.08em; text-align:right; line-height:1.7}
+.grid{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+@media (max-width:640px){.grid{grid-template-columns:1fr}}
+.bloque{background:var(--hoja); border:1px solid var(--filete-2); padding:16px 18px; break-inside:avoid}
+.bloque.ancho{grid-column:1/-1}
+.bloque h2{font-family:"Archivo Narrow",sans-serif; font-weight:700; font-size:.82rem; text-transform:uppercase; letter-spacing:.12em; color:var(--verde-osc); margin-bottom:10px; padding-bottom:6px; border-bottom:2px solid var(--verde)}
+.bloque.neg h2{color:var(--tinta); border-bottom-color:var(--tinta)}
+ul,ol{margin:0; padding-left:18px; display:flex; flex-direction:column; gap:6px; color:var(--tinta-2); font-size:.93rem}
+li::marker{color:var(--verde)}
+.neg li::marker{color:var(--tinta)}
+b{color:var(--tinta)}
+.roles{display:grid; grid-template-columns:auto 1fr; gap:6px 14px; font-size:.93rem}
+.roles dt{font-family:"Archivo Narrow",sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:.06em; font-size:.78rem; color:var(--gris); padding-top:2px; white-space:nowrap}
+.roles dd{margin:0; color:var(--tinta-2)}
+.cal{list-style:none; padding:0; gap:0}
+.cal li{display:grid; grid-template-columns:96px 1fr; gap:10px; padding:7px 0; border-bottom:1px solid var(--filete)}
+.cal li:last-child{border-bottom:0}
+.cal .s{font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--verde-osc); padding-top:3px}
+.num{display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:1px; background:var(--filete-2); border:1px solid var(--filete-2); margin-top:4px}
+.num div{background:var(--hoja); padding:10px 12px}
+.num .v{font-family:"IBM Plex Mono",monospace; font-size:1.1rem; color:var(--tinta)}
+.num .l{font-size:.76rem; color:var(--gris); margin-top:2px; line-height:1.3}
+.nota{border-left:4px solid var(--tinta); background:var(--hoja3); padding:10px 12px; font-size:.9rem; color:var(--tinta-2); margin-top:12px}
+.nota.v{border-left-color:var(--verde); background:var(--verde-lav)}
+footer{border-top:3px solid var(--tinta); margin-top:20px; padding-top:10px; font-size:.78rem; color:var(--gris); line-height:1.6}
+@media print{body{background:#fff} .hoja{padding:0} .bloque{border-color:#999} .banda{-webkit-print-color-adjust:exact; print-color-adjust:exact}}
+</style>
+
+<div class="hoja">
+<div class="banda">Junta Interna ATE · INAES · Para la reunión</div>
+<header>
+  <div>
+    <h1>El Tablón en una página</h1>
+    <p class="sub">Una cartelera de trabajo entre compañeras y compañeros del INAES, administrada por la Junta Interna. Prueba piloto de tres meses. Esto es lo que hay que decidir, lo que hace falta y cómo sabemos si funcionó.</p>
+  </div>
+  <div class="meta">Propuesta<br>Septiembre 2026<br>Para decidir en Junta</div>
+</header>
+
+<div class="grid">
+
+  <div class="bloque">
+    <h2>Qué es</h2>
+    <ul>
+      <li>Avisos de <b>ofrezco</b> (un oficio, una profesión, un producto, tiempo) y de <b>busco</b> (alguien que sepa, que haga, que venda).</li>
+      <li>Para <b>todo el personal del INAES</b>, afiliado o no. Se entra con un código personal que da la Junta.</li>
+      <li>Nadie ve teléfonos ni mails. Se responde por el tablón y cada persona decide qué comparte.</li>
+      <li>Todo lo que se ofrece se hace <b>fuera del horario</b> y sin recursos del organismo.</li>
+    </ul>
+  </div>
+
+  <div class="bloque neg">
+    <h2>Qué no es</h2>
+    <ul>
+      <li><b>No es del INAES.</b> No la desarrolló, no la administra, no la aloja. Es una herramienta gremial de la Junta.</li>
+      <li><b>No intermedia.</b> No contrata, no cobra comisión, no garantiza el trabajo. El acuerdo es entre las dos personas.</li>
+      <li><b>No asesora.</b> No da consejo legal, contable ni de ningún tipo.</li>
+      <li><b>No admite nada vinculado a trámites del INAES.</b> Lo bloquea antes de publicar. Es la regla más importante: evita conflictos de intereses a quien publica.</li>
+    </ul>
+  </div>
+
+  <div class="bloque ancho">
+    <h2>Qué hace falta para arrancar</h2>
+    <ol>
+      <li><b>Decisión de la Junta en acta</b>: se aprueba el piloto, sus reglas y su fecha de inicio y fin.</li>
+      <li><b>Una persona que administre</b> (delegado o delegada): reparte códigos, baja avisos, revisa reportes. Unos 15 minutos por día.</li>
+      <li><b>Un mail gremial</b> de contacto para bajas, reportes y consultas sobre datos. Nunca uno del organismo.</li>
+      <li><b>Alojamiento propio</b>, contratado por la Junta o el sindicato. Nunca en sistemas del INAES.</li>
+      <li><b>Códigos personales</b>: uno por persona, entregados en mano. Permite retirar el acceso a una sola persona.</li>
+      <li><b>Treinta avisos semilla</b> antes de abrir, para que el primer día no parezca vacío.</li>
+    </ol>
+    <div class="nota"><b>Una verdad técnica.</b> Lo que existe hoy es una demostración: cada teléfono guarda sus propios avisos y no los ve nadie más. Para que el piloto funcione de verdad hace falta alojarla con una base de datos, que es trabajo técnico de algunas semanas y tiene un costo mensual bajo. Sin eso no hay piloto: hay una maqueta.</div>
+  </div>
+
+  <div class="bloque">
+    <h2>Quién hace qué</h2>
+    <dl class="roles">
+      <dt>La Junta</dt><dd>Decide las reglas, revisa reportes una vez por semana en su reunión, retira códigos. Responde por el tablón como cuerpo.</dd>
+      <dt>Administra</dt><dd>Reparte códigos, baja lo que rompe una regla, avisa por mensaje, borra datos cuando alguien lo pide.</dd>
+      <dt>Cada persona</dt><dd>Publica, responde, guarda, reporta. Cumple la ley en lo que acuerde con la otra parte.</dd>
+    </dl>
+  </div>
+
+  <div class="bloque">
+    <h2>Las reglas, en corto</h2>
+    <ol>
+      <li>Fuera del horario y sin recursos del organismo.</li>
+      <li>Nada de trámites del INAES: ni ofrecer, ni pedir, ni recomendar.</li>
+      <li>Tu contacto es tuyo: lo pasás vos, por mensaje.</li>
+      <li>El tablón conecta, no contrata.</li>
+      <li>Un aviso por cosa; precio de referencia, no promesa.</li>
+      <li>Los avisos vencen a los 60 días.</li>
+      <li>La Junta baja lo que rompe una regla. La segunda vez, se retira el código.</li>
+    </ol>
+  </div>
+
+  <div class="bloque ancho">
+    <h2>Cómo sabemos si funcionó</h2>
+    <p style="font-size:.93rem; color:var(--tinta-2)">Cuatro números, una vez por semana, en la misma planilla. Propuesta de umbral para pasar a inter-organismos: <b>ocho semanas seguidas</b> con al menos cinco respuestas por semana y cuatro de cada diez avisos con alguna respuesta.</p>
+    <div class="num">
+      <div><div class="v">Avisos</div><div class="l">publicados en la semana</div></div>
+      <div><div class="v">Respuestas</div><div class="l">mensajes enviados en la semana</div></div>
+      <div><div class="v">% respondidos</div><div class="l">avisos con al menos una respuesta</div></div>
+      <div><div class="v">Reportes</div><div class="l">y cuántos terminaron en baja</div></div>
+    </div>
+  </div>
+
+  <div class="bloque">
+    <h2>Calendario del piloto</h2>
+    <ul class="cal">
+      <li><span class="s">Semana 0</span><span>La Junta aprueba en acta. Se define quién administra y el mail de contacto.</span></li>
+      <li><span class="s">Semanas 1–2</span><span>Alojamiento, avisos semilla, códigos impresos.</span></li>
+      <li><span class="s">Semana 3</span><span>Se abre. Códigos en mano a quien los pida.</span></li>
+      <li><span class="s">Semanas 3–14</span><span>Piloto. Revisión semanal de reportes y números.</span></li>
+      <li><span class="s">Semana 15</span><span>La Junta evalúa con los cuatro números y decide: seguir, ampliar o cerrar.</span></li>
+    </ul>
+  </div>
+
+  <div class="bloque">
+    <h2>Datos personales</h2>
+    <dl class="roles">
+      <dt>Guarda</dt><dd>Nombre, sector si la persona lo puso, sus avisos y mensajes.</dd>
+      <dt>No guarda</dt><dd>Teléfono, mail, DNI, legajo, afiliación, ubicación.</dd>
+      <dt>Responsable</dt><dd>Junta Interna ATE — INAES, como cuerpo colegiado.</dd>
+      <dt>Derechos</dt><dd>Ver, corregir y borrar, al instante desde la app o por mail a la Junta.</dd>
+    </dl>
+    <div class="nota v">Abrirlo a todo el personal, y no sólo a afiliadas, evita que la lista de usuarias revele afiliación sindical, que es dato sensible (art. 2, Ley 25.326). Antes de abrir con usuarias reales, la Junta inscribe la base en el Registro Nacional de Bases de Datos de la AAIP; el trámite es gratuito.</div>
+  </div>
+
+</div>
+
+<footer>
+  Propuesta para la Junta Interna ATE — INAES. Documento de trabajo, no dictamen. El encuadre normativo se verifica al momento de ejecutar cada paso. La demostración se puede ver en el link que acompaña esta hoja; los avisos que muestra son ficticios.
+</footer>
+</div>

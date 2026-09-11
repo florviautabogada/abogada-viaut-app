@@ -214,8 +214,8 @@ footer.pie{border-top:3px solid var(--tinta); margin-top:44px; padding-top:14px;
   <div class="de">Junta Interna ATE · INAES</div>
 
   <div class="paso-ent on" id="ent-1">
-    <h2>Ingresá con el código de la Junta</h2>
-    <p class="exp">La Junta lo entrega en mano. No hace falta mail ni contraseña.</p>
+    <h2>Ingresá con tu código</h2>
+    <p class="exp">Es personal y te lo da la Junta en mano. No hace falta mail ni contraseña.</p>
     <div class="campo">
       <input type="text" id="ent-codigo" class="codigo" maxlength="12" placeholder="CÓDIGO" autocomplete="off" aria-label="Código de invitación">
     </div>
@@ -401,7 +401,7 @@ footer.pie{border-top:3px solid var(--tinta); margin-top:44px; padding-top:14px;
       <h2>Un día en el tablón</h2>
       <p class="sub">Así funciona en la práctica, dentro del INAES.</p>
       <ul class="dia">
-        <li><span class="h">Lunes</span><div><h3>La Junta reparte códigos</h3><p>Un delegado o delegada le da el código en mano a quien lo pide. Cualquier persona que trabaje en el organismo puede pedirlo, afiliada o no.</p></div></li>
+        <li><span class="h">Lunes</span><div><h3>La Junta reparte códigos</h3><p>Un delegado o delegada le da un código personal, en mano, a quien lo pide. Cualquier persona que trabaje en el organismo puede pedirlo, afiliada o no. Como cada código es de una sola persona, se puede retirar uno sin tocar los demás.</p></div></li>
         <li><span class="h">Martes 18:40</span><div><h3>Rita publica</h3><p>Desde el colectivo, ya fuera del horario, publica que cocina viandas. Cinco pasos, tres minutos. El aviso aparece arriba, marcado como suyo.</p></div></li>
         <li><span class="h">Miércoles</span><div><h3>Marcela responde</h3><p>Lo ve en el almuerzo, toca Responder y le escribe. Rita recibe el mensaje en Lo mío. Ninguna de las dos vio el teléfono de la otra todavía.</p></div></li>
         <li><span class="h">Miércoles</span><div><h3>Se arreglan entre ellas</h3><p>Por mensaje se pasan el número, acuerdan precio y día. A partir de acá el tablón no participa: el trato es entre las dos personas.</p></div></li>
@@ -696,7 +696,7 @@ $("#p-publicar").onclick = publicar;
 /* entrada */
 $("#ent-entrar").onclick = () => {
   const c = $("#ent-codigo").value.trim().toUpperCase().replace(/\s/g,"");
-  if(c !== CODIGO_DEMO){ flotante("Ese código no es válido. Pedíselo a la Junta."); return; }
+  if(c !== CODIGO_DEMO){ flotante("Ese código no es válido. Pedí el tuyo a la Junta."); return; }
   $("#ent-1").classList.remove("on"); $("#ent-2").classList.add("on"); $("#ent-nombre").focus();
 };
 $("#ent-codigo").addEventListener("keydown", ev => { if(ev.key === "Enter") $("#ent-entrar").click(); });

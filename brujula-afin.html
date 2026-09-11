@@ -33,110 +33,68 @@
 }
 
 *{box-sizing:border-box}
-body{
-  background:var(--paper); color:var(--ink);
-  font-family:"Karla","Helvetica Neue",Arial,sans-serif;
-  font-size:15.5px; line-height:1.55;
-  -webkit-font-smoothing:antialiased;
-}
+body{background:var(--paper); color:var(--ink); font-family:"Karla","Helvetica Neue",Arial,sans-serif; font-size:15.5px; line-height:1.55; -webkit-font-smoothing:antialiased}
 h1,h2,h3{font-family:"Fraunces","Iowan Old Style",Georgia,serif; margin:0; text-wrap:balance; letter-spacing:-.01em}
 h1{font-size:1.5rem; font-weight:600}
-h2{font-size:1.25rem; font-weight:600}
+h2{font-size:1.22rem; font-weight:600}
 h3{font-size:1.02rem; font-weight:600}
 p{margin:0}
 button{font:inherit; color:inherit; cursor:pointer}
 input,select,textarea{font:inherit; color:inherit}
 .mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
-.eyebrow{
-  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.68rem;
-  letter-spacing:.14em; text-transform:uppercase; color:var(--muted);
-}
+.eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
 :focus-visible{outline:2px solid var(--brass); outline-offset:2px; border-radius:6px}
 
-/* ---------- shell ---------- */
 .shell{max-width:880px; margin:0 auto; padding-inline:16px; padding-block:0 56px}
-header.top{
-  position:sticky; top:0; z-index:30; background:var(--paper);
-  border-bottom:1px solid var(--line); margin-inline:-16px; padding:14px 16px 0;
-}
+header.top{position:sticky; top:0; z-index:30; background:var(--paper); border-bottom:1px solid var(--line); margin-inline:-16px; padding:14px 16px 0}
 .brandrow{display:flex; align-items:center; gap:12px; max-width:848px; margin:0 auto; flex-wrap:wrap}
-.mark{
-  width:34px; height:34px; border-radius:50%; flex:none;
-  background:var(--surface); border:1.5px solid var(--brass);
-  display:grid; place-items:center;
-}
-.mark span{
-  display:block; width:2px; height:15px; border-radius:2px;
-  background:linear-gradient(var(--rose) 0 50%, var(--ink-soft) 50% 100%);
-  transform:rotate(34deg);
-}
+.mark{width:34px; height:34px; border-radius:50%; flex:none; background:var(--surface); border:1.5px solid var(--brass); display:grid; place-items:center}
+.mark span{display:block; width:2px; height:15px; border-radius:2px; background:linear-gradient(var(--rose) 0 50%, var(--ink-soft) 50% 100%); transform:rotate(34deg)}
 .brandname{font-family:"Fraunces",Georgia,serif; font-size:1.18rem; font-weight:600; letter-spacing:-.015em}
 .brandsub{font-size:.78rem; color:var(--muted); margin-left:auto; text-align:right}
 nav.tabs{display:flex; gap:2px; max-width:848px; margin:10px auto 0; overflow-x:auto; scrollbar-width:none}
 nav.tabs::-webkit-scrollbar{display:none}
-.tab{
-  border:0; background:none; padding:9px 13px 11px; white-space:nowrap;
-  color:var(--muted); border-bottom:2px solid transparent; font-weight:500; font-size:.92rem;
-}
+.tab{border:0; background:none; padding:9px 13px 11px; white-space:nowrap; color:var(--muted); border-bottom:2px solid transparent; font-weight:500; font-size:.92rem}
 .tab:hover{color:var(--ink)}
 .tab[aria-selected="true"]{color:var(--ink); border-bottom-color:var(--brass)}
-.tab .badge{
-  display:inline-block; min-width:18px; padding:0 5px; margin-left:6px; border-radius:9px;
-  background:var(--rose); color:var(--paper); font-size:.7rem; font-weight:700; line-height:18px; text-align:center;
-}
+.tab .badge{display:inline-block; min-width:18px; padding:0 5px; margin-left:6px; border-radius:9px; background:var(--rose); color:var(--paper); font-size:.7rem; font-weight:700; line-height:18px; text-align:center}
 
 main{padding-top:20px}
 .view{display:none}
 .view.on{display:block}
 .stack{display:flex; flex-direction:column; gap:16px}
-.viewhead{display:flex; flex-direction:column; gap:3px; margin-bottom:2px}
+.viewhead{display:flex; flex-direction:column; gap:3px}
 .viewhead p{color:var(--ink-soft); font-size:.92rem}
 
-/* ---------- cards ---------- */
 .card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow)}
 .pad{padding:18px}
 
-/* profile card */
-.profile{overflow:hidden}
-.portrait{
-  height:172px; display:flex; align-items:flex-end; justify-content:space-between;
-  padding:14px 16px; gap:10px; position:relative;
-}
-.portrait::after{
-  content:""; position:absolute; inset:0;
-  background:radial-gradient(120% 90% at 80% 0%, rgba(255,255,255,.30), transparent 60%);
-  pointer-events:none;
-}
-.initials{
-  font-family:"Fraunces",Georgia,serif; font-size:2.6rem; font-weight:600; color:#fff;
-  text-shadow:0 2px 12px rgba(0,0,0,.35); line-height:1; position:relative; z-index:1;
-}
-.portrait .kmtag{
-  position:relative; z-index:1; background:rgba(12,16,26,.62); color:#fff; backdrop-filter:blur(4px);
-  font-family:"IBM Plex Mono",monospace; font-size:.72rem; padding:4px 9px; border-radius:99px;
-}
+/* ---- sello: reemplaza a la foto ---- */
+.sello{width:56px; height:56px; border-radius:50%; flex:none; position:relative; display:grid; place-items:center; border:1.5px solid var(--line-strong); overflow:hidden}
+.sello::before{content:""; position:absolute; inset:0; opacity:.9}
+.sello i{position:relative; z-index:1; font-style:normal; font-family:"Fraunces",Georgia,serif; font-weight:600; font-size:1.15rem; color:#fff; text-shadow:0 1px 6px rgba(0,0,0,.4)}
+.sello.sm{width:40px; height:40px}
+.sello.sm i{font-size:.9rem}
+.sello.lg{width:78px; height:78px}
+.sello.lg i{font-size:1.6rem}
+
 .idrow{display:flex; align-items:baseline; gap:9px; flex-wrap:wrap}
 .idrow .age{font-family:"IBM Plex Mono",monospace; color:var(--muted); font-size:.95rem}
-.verif{
-  display:inline-flex; align-items:center; gap:4px; font-size:.72rem; font-weight:700;
-  color:var(--teal); background:var(--teal-wash); padding:2px 8px; border-radius:99px;
-}
+.verif{display:inline-flex; align-items:center; gap:4px; font-size:.72rem; font-weight:700; color:var(--teal); background:var(--teal-wash); padding:2px 8px; border-radius:99px}
 .where{color:var(--muted); font-size:.88rem}
-.bio{color:var(--ink-soft); margin-top:10px}
-.chips{display:flex; flex-wrap:wrap; gap:6px; margin-top:12px}
-.chip{
-  font-size:.8rem; padding:4px 10px; border-radius:99px;
-  border:1px solid var(--line-strong); color:var(--ink-soft); background:var(--surface-2);
-}
+.bio{color:var(--ink-soft); margin-top:12px}
+
+.prompts{display:flex; flex-direction:column; gap:12px; margin-top:16px; border-top:1px solid var(--line); padding-top:16px}
+.prompt .q{font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--brass-ink); margin-bottom:3px}
+.prompt .a{font-family:"Fraunces",Georgia,serif; font-size:1.02rem; line-height:1.5; color:var(--ink)}
+
+.chips{display:flex; flex-wrap:wrap; gap:6px; margin-top:14px}
+.chip{font-size:.8rem; padding:4px 10px; border-radius:99px; border:1px solid var(--line-strong); color:var(--ink-soft); background:var(--surface-2)}
 .chip.match{border-color:var(--brass); color:var(--brass-ink); background:var(--brass-wash); font-weight:700}
 .chip.match::before{content:"◆ "; font-size:.7em}
-.seek{
-  margin-top:12px; display:inline-flex; align-items:center; gap:7px;
-  font-size:.86rem; color:var(--ink-soft);
-}
+.seek{margin-top:12px; display:inline-flex; align-items:center; gap:7px; font-size:.86rem; color:var(--ink-soft)}
 .seek b{color:var(--ink)}
 
-/* affinity block */
 .affinity{display:grid; grid-template-columns:170px 1fr; gap:18px; align-items:center; border-top:1px solid var(--line); padding:16px 18px; background:var(--surface-2)}
 .dial{position:relative; text-align:center}
 .dial svg{width:100%; height:auto; display:block; max-width:170px; margin-inline:auto}
@@ -152,12 +110,8 @@ main{padding-top:20px}
 .reasons li{font-size:.87rem; color:var(--ink-soft); padding-left:16px; position:relative}
 .reasons li::before{content:"—"; position:absolute; left:0; color:var(--brass)}
 
-/* actions */
 .actions{display:flex; gap:10px; padding:16px 18px; border-top:1px solid var(--line); flex-wrap:wrap}
-.btn{
-  border:1px solid var(--line-strong); background:var(--surface); border-radius:10px;
-  padding:11px 16px; font-weight:700; font-size:.92rem; transition:transform .12s ease, background .15s ease;
-}
+.btn{border:1px solid var(--line-strong); background:var(--surface); border-radius:10px; padding:11px 16px; font-weight:700; font-size:.92rem; transition:transform .12s ease, background .15s ease}
 .btn:hover{background:var(--surface-2)}
 .btn:active{transform:translateY(1px)}
 .btn.grow{flex:1; min-width:120px; text-align:center}
@@ -166,27 +120,21 @@ main{padding-top:20px}
 .btn.ghost{background:none}
 .btn.sm{padding:7px 12px; font-size:.85rem; font-weight:500}
 .btn.danger{color:var(--rose); border-color:var(--rose)}
+.btn[disabled]{opacity:.45; cursor:not-allowed}
 
-/* filters */
 .filters{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px}
 .field{display:flex; flex-direction:column; gap:5px}
 .field label{font-size:.78rem; font-weight:700; color:var(--ink-soft)}
-.field input[type="text"], .field input[type="number"], .field select, .field textarea{
-  background:var(--surface-2); border:1px solid var(--line-strong); border-radius:9px; padding:9px 10px;
-}
-.field textarea{resize:vertical; min-height:76px}
+.field input[type="text"], .field input[type="number"], .field select, .field textarea{background:var(--surface-2); border:1px solid var(--line-strong); border-radius:9px; padding:9px 10px}
+.field textarea{resize:vertical; min-height:72px}
 .range{display:flex; align-items:center; gap:9px}
 .range input[type="range"]{flex:1; accent-color:var(--brass)}
-.range output{font-family:"IBM Plex Mono",monospace; font-size:.84rem; color:var(--muted); min-width:56px; text-align:right; font-variant-numeric:tabular-nums}
 .pickchips{display:flex; flex-wrap:wrap; gap:6px}
 .pick{font-size:.82rem; padding:5px 11px; border-radius:99px; border:1px solid var(--line-strong); background:var(--surface-2); color:var(--ink-soft)}
 .pick[aria-pressed="true"]{background:var(--brass-wash); border-color:var(--brass); color:var(--brass-ink); font-weight:700}
 
-/* results */
-.results{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px}
+.results{display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:14px}
 .rescard{display:flex; gap:12px; padding:13px; align-items:flex-start}
-.av{width:52px; height:52px; border-radius:12px; flex:none; display:grid; place-items:center; color:#fff; font-family:"Fraunces",Georgia,serif; font-size:1.2rem; font-weight:600}
-.av.sm{width:40px; height:40px; border-radius:10px; font-size:.95rem}
 .resmeta{min-width:0; flex:1}
 .resmeta .nm{font-weight:700; display:flex; align-items:center; gap:6px; flex-wrap:wrap}
 .resmeta .sub{font-size:.8rem; color:var(--muted)}
@@ -195,40 +143,54 @@ main{padding-top:20px}
 .pct.hi{background:var(--teal-wash); color:var(--teal)}
 .pct.mid{background:var(--brass-wash); color:var(--brass-ink)}
 
-/* matches + chat */
 .mrow{display:flex; gap:12px; align-items:center; padding:12px 14px; width:100%; text-align:left; border:0; background:none; border-bottom:1px solid var(--line)}
 .mrow:last-child{border-bottom:0}
 .mrow:hover{background:var(--surface-2)}
-.chatwrap{display:flex; flex-direction:column; height:min(66vh,540px)}
+.chatwrap{display:flex; flex-direction:column; height:min(70vh,600px)}
 .chathead{display:flex; align-items:center; gap:11px; padding:12px 14px; border-bottom:1px solid var(--line)}
 .msgs{flex:1; overflow-y:auto; padding:16px 14px; display:flex; flex-direction:column; gap:9px; background:var(--surface-2)}
-.msg{max-width:76%; padding:9px 13px; border-radius:14px; font-size:.92rem; line-height:1.45}
+.msg{max-width:78%; padding:9px 13px; border-radius:14px; font-size:.92rem; line-height:1.45}
 .msg.them{align-self:flex-start; background:var(--surface); border:1px solid var(--line); border-bottom-left-radius:5px}
 .msg.me{align-self:flex-end; background:var(--brass-wash); border:1px solid var(--brass); color:var(--brass-ink); border-bottom-right-radius:5px}
-.composer{display:flex; gap:9px; padding:12px 14px; border-top:1px solid var(--line)}
-.composer input{flex:1; background:var(--surface-2); border:1px solid var(--line-strong); border-radius:10px; padding:10px 12px}
+.msg.sys{align-self:center; max-width:100%; text-align:center; background:none; border:1px dashed var(--line-strong); color:var(--ink-soft); font-size:.82rem; border-radius:10px}
+.composer{display:flex; gap:9px; padding:12px 14px; border-top:1px solid var(--line); flex-wrap:wrap}
+.composer input{flex:1; min-width:140px; background:var(--surface-2); border:1px solid var(--line-strong); border-radius:10px; padding:10px 12px}
+.blocked{width:100%; font-size:.82rem; color:var(--rose); background:var(--rose-wash); border-radius:8px; padding:8px 10px}
 
-.note{
-  font-size:.82rem; color:var(--ink-soft); background:var(--surface-2);
-  border:1px dashed var(--line-strong); border-radius:10px; padding:10px 12px;
-}
+/* medidor de conversación */
+.gate{border-top:1px solid var(--line); background:var(--surface-2); padding:12px 14px}
+.gatehead{display:flex; align-items:center; gap:10px; font-size:.84rem}
+.gatehead .lbl{font-weight:700}
+.gatebar{flex:1; height:7px; border-radius:99px; background:var(--surface-3); overflow:hidden; min-width:70px}
+.gatebar span{display:block; height:100%; background:var(--teal); border-radius:99px; transition:width .3s ease}
+.steps{list-style:none; margin:10px 0 0; padding:0; display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:4px}
+.steps li{font-size:.8rem; color:var(--muted); display:flex; gap:7px; align-items:flex-start}
+.steps li.ok{color:var(--ink-soft)}
+.steps li .mk{font-family:"IBM Plex Mono",monospace; color:var(--line-strong)}
+.steps li.ok .mk{color:var(--teal)}
+.reveal{border-top:1px solid var(--line); padding:14px; background:var(--teal-wash)}
+.reveal h3{color:var(--teal)}
+.reveal p{font-size:.88rem; color:var(--ink-soft); margin-top:4px}
+
+.note{font-size:.82rem; color:var(--ink-soft); background:var(--surface-2); border:1px dashed var(--line-strong); border-radius:10px; padding:10px 12px}
+.note b{color:var(--ink)}
 .empty{text-align:center; padding:40px 20px; color:var(--muted)}
 .empty h3{color:var(--ink); margin-bottom:6px}
 
-/* axes editor */
-.axis{display:grid; grid-template-columns:1fr; gap:4px; padding:10px 0; border-bottom:1px solid var(--line)}
+.axis{display:grid; gap:4px; padding:10px 0; border-bottom:1px solid var(--line)}
 .axis:last-child{border-bottom:0}
 .axislabels{display:flex; justify-content:space-between; font-size:.78rem; color:var(--muted); gap:10px}
 .axis input[type="range"]{width:100%; accent-color:var(--brass)}
 .axisname{font-size:.78rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--brass-ink); font-family:"IBM Plex Mono",monospace}
 
-/* modal */
-.overlay{
-  position:fixed; inset:0; z-index:60; background:rgba(10,14,22,.62);
-  display:grid; place-items:center; padding:18px;
-}
+.rules{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px}
+.rules li{display:flex; gap:11px; font-size:.9rem; color:var(--ink-soft)}
+.rules .n{font-family:"IBM Plex Mono",monospace; color:var(--brass); font-weight:500; flex:none}
+.rules b{color:var(--ink)}
+
+.overlay{position:fixed; inset:0; z-index:60; background:rgba(10,14,22,.62); display:grid; place-items:center; padding:18px; overflow-y:auto}
 .overlay[hidden]{display:none}
-.modal{background:var(--surface); border:1px solid var(--line); border-radius:16px; max-width:400px; width:100%; padding:22px; box-shadow:var(--shadow)}
+.modal{background:var(--surface); border:1px solid var(--line); border-radius:16px; max-width:420px; width:100%; padding:22px; box-shadow:var(--shadow)}
 .modal h2{margin-bottom:8px}
 .modal p{color:var(--ink-soft); font-size:.92rem}
 .modal .actions{border-top:0; padding:16px 0 0}
@@ -236,16 +198,11 @@ main{padding-top:20px}
 .radiolist label{display:flex; gap:9px; align-items:flex-start; font-size:.9rem; color:var(--ink-soft)}
 .matchcard{text-align:center}
 .matchcard .avs{display:flex; justify-content:center; margin:14px 0 10px}
-.matchcard .avs .av{width:66px; height:66px; border-radius:50%; border:3px solid var(--surface); font-size:1.5rem}
-.matchcard .avs .av:last-child{margin-left:-16px}
+.matchcard .avs .sello{border:3px solid var(--surface)}
+.matchcard .avs .sello:last-child{margin-left:-14px}
 
-.toast{
-  position:fixed; left:50%; bottom:22px; transform:translateX(-50%); z-index:70;
-  background:var(--ink); color:var(--paper); padding:11px 18px; border-radius:99px;
-  font-size:.88rem; box-shadow:var(--shadow); max-width:calc(100% - 32px);
-}
+.toast{position:fixed; left:50%; bottom:22px; transform:translateX(-50%); z-index:70; background:var(--ink); color:var(--paper); padding:11px 18px; border-radius:99px; font-size:.88rem; box-shadow:var(--shadow); max-width:calc(100% - 32px)}
 .toast[hidden]{display:none}
-
 footer.foot{max-width:848px; margin:34px auto 0; padding-top:16px; border-top:1px solid var(--line); color:var(--muted); font-size:.8rem}
 
 @media (max-width:560px){
@@ -262,15 +219,16 @@ footer.foot{max-width:848px; margin:34px auto 0; padding-top:16px; border-top:1p
     <div class="mark" aria-hidden="true"><span></span></div>
     <div>
       <div class="brandname">Brújula Afín</div>
-      <div class="eyebrow">Citas por afinidad</div>
+      <div class="eyebrow">Primero la charla</div>
     </div>
     <div class="brandsub">Demo · perfiles ficticios</div>
   </div>
   <nav class="tabs" role="tablist" aria-label="Secciones">
     <button class="tab" role="tab" data-view="descubrir" aria-selected="true">Descubrir</button>
     <button class="tab" role="tab" data-view="buscar" aria-selected="false">Buscar</button>
-    <button class="tab" role="tab" data-view="matches" aria-selected="false">Matches<span class="badge" id="mcount" hidden>0</span></button>
+    <button class="tab" role="tab" data-view="matches" aria-selected="false">Charlas<span class="badge" id="mcount" hidden>0</span></button>
     <button class="tab" role="tab" data-view="perfil" aria-selected="false">Mi perfil</button>
+    <button class="tab" role="tab" data-view="reglas" aria-selected="false">Reglas</button>
   </nav>
 </header>
 
@@ -281,7 +239,14 @@ footer.foot{max-width:848px; margin:34px auto 0; padding-top:16px; border-top:1p
     <div class="stack">
       <div class="viewhead">
         <h1>Descubrir</h1>
-        <p>Un perfil por vez, ordenado por afinidad con tus respuestas. La brújula muestra de dónde sale ese número.</p>
+        <p>Acá nadie tiene foto. Se elige por lo que la persona escribió y por cuánto coincide con vos.</p>
+      </div>
+      <div class="card pad">
+        <p class="note" style="border:0; background:none; padding:0">
+          <b>Cómo funciona:</b> los perfiles no muestran foto. Si hay interés mutuo se abre la charla.
+          Recién después de una conversación real, la app habilita mostrar la foto — y sólo si
+          <b>las dos personas</b> quieren. Podés no mostrarla nunca y seguir usando la app igual.
+        </p>
       </div>
       <div id="deck"></div>
     </div>
@@ -293,55 +258,25 @@ footer.foot{max-width:848px; margin:34px auto 0; padding-top:16px; border-top:1p
         <h1>Buscar</h1>
         <p>Filtrá por lo que te importa y ordená por afinidad, cercanía o edad.</p>
       </div>
-
       <div class="card pad">
         <div class="filters">
-          <div class="field">
-            <label for="f-texto">Palabra clave</label>
-            <input type="text" id="f-texto" placeholder="nombre, barrio, algo de la bio">
+          <div class="field"><label for="f-texto">Palabra clave</label><input type="text" id="f-texto" placeholder="barrio, algo de la bio, una respuesta"></div>
+          <div class="field"><label for="f-busca">Qué busca</label>
+            <select id="f-busca"><option value="">Cualquiera</option><option>Algo serio</option><option>Conocer gente</option><option>Amistad</option><option>Sin definir</option></select>
           </div>
-          <div class="field">
-            <label for="f-busca">Qué busca</label>
-            <select id="f-busca">
-              <option value="">Cualquiera</option>
-              <option>Algo serio</option>
-              <option>Conocer gente</option>
-              <option>Amistad</option>
-              <option>Sin definir</option>
-            </select>
+          <div class="field"><label for="f-orden">Ordenar por</label>
+            <select id="f-orden"><option value="afin">Afinidad</option><option value="km">Cercanía</option><option value="edad">Edad</option><option value="nombre">Nombre</option></select>
           </div>
-          <div class="field">
-            <label for="f-orden">Ordenar por</label>
-            <select id="f-orden">
-              <option value="afin">Afinidad</option>
-              <option value="km">Cercanía</option>
-              <option value="edad">Edad</option>
-              <option value="nombre">Nombre</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="f-edadmin">Edad mínima <span class="mono" id="o-edadmin">25</span></label>
-            <div class="range"><input type="range" id="f-edadmin" min="18" max="70" value="25"></div>
-          </div>
-          <div class="field">
-            <label for="f-edadmax">Edad máxima <span class="mono" id="o-edadmax">48</span></label>
-            <div class="range"><input type="range" id="f-edadmax" min="18" max="70" value="48"></div>
-          </div>
-          <div class="field">
-            <label for="f-km">Distancia máxima <span class="mono" id="o-km">30 km</span></label>
-            <div class="range"><input type="range" id="f-km" min="1" max="60" value="30"></div>
-          </div>
-          <div class="field">
-            <label for="f-afin">Afinidad mínima <span class="mono" id="o-afin">0</span></label>
-            <div class="range"><input type="range" id="f-afin" min="0" max="95" step="5" value="0"></div>
-          </div>
-          <div class="field">
-            <label for="f-verif">Solo perfiles verificados</label>
-            <select id="f-verif"><option value="no">No, mostrar todos</option><option value="si">Sí, solo verificados</option></select>
+          <div class="field"><label for="f-edadmin">Edad mínima <span class="mono" id="o-edadmin">25</span></label><div class="range"><input type="range" id="f-edadmin" min="18" max="70" value="25"></div></div>
+          <div class="field"><label for="f-edadmax">Edad máxima <span class="mono" id="o-edadmax">48</span></label><div class="range"><input type="range" id="f-edadmax" min="18" max="70" value="48"></div></div>
+          <div class="field"><label for="f-km">Distancia máxima <span class="mono" id="o-km">30 km</span></label><div class="range"><input type="range" id="f-km" min="1" max="60" value="30"></div></div>
+          <div class="field"><label for="f-afin">Afinidad mínima <span class="mono" id="o-afin">0</span></label><div class="range"><input type="range" id="f-afin" min="0" max="95" step="5" value="0"></div></div>
+          <div class="field"><label for="f-verif">Identidad verificada</label>
+            <select id="f-verif"><option value="no">Mostrar todos</option><option value="si">Solo verificados</option></select>
           </div>
         </div>
         <div class="field" style="margin-top:14px">
-          <label>Intereses en común (elegí los que quieras)</label>
+          <label>Intereses en común</label>
           <div class="pickchips" id="f-intereses"></div>
         </div>
         <div class="actions" style="padding-inline:0; padding-bottom:0">
@@ -349,7 +284,6 @@ footer.foot{max-width:848px; margin:34px auto 0; padding-top:16px; border-top:1p
           <span class="mono" id="f-count" style="margin-left:auto; align-self:center; color:var(--muted); font-size:.84rem"></span>
         </div>
       </div>
-
       <div class="results" id="results"></div>
     </div>
   </section>
@@ -357,8 +291,8 @@ footer.foot{max-width:848px; margin:34px auto 0; padding-top:16px; border-top:1p
   <section class="view" id="view-matches">
     <div class="stack">
       <div class="viewhead">
-        <h1>Matches</h1>
-        <p>Cuando a las dos personas les interesa, se abre la conversación.</p>
+        <h1>Charlas</h1>
+        <p>Cada charla tiene un recorrido. La foto se habilita al final, y sólo con el sí de las dos partes.</p>
       </div>
       <div id="matchlist"></div>
       <div id="chatbox"></div>
@@ -367,47 +301,50 @@ footer.foot{max-width:848px; margin:34px auto 0; padding-top:16px; border-top:1p
 
   <section class="view" id="view-perfil">
     <div class="stack">
-      <div class="viewhead">
-        <h1>Mi perfil</h1>
-        <p>Todo lo que cambies acá recalcula la afinidad al instante.</p>
-      </div>
+      <div class="viewhead"><h1>Mi perfil</h1><p>Todo lo que cambies acá recalcula la afinidad al instante.</p></div>
 
       <div class="card pad stack">
         <div class="filters">
           <div class="field"><label for="p-nombre">Nombre</label><input type="text" id="p-nombre"></div>
           <div class="field"><label for="p-edad">Edad</label><input type="number" id="p-edad" min="18" max="99"></div>
           <div class="field"><label for="p-ciudad">Dónde vivís</label><input type="text" id="p-ciudad"></div>
-          <div class="field">
-            <label for="p-busca">Qué buscás</label>
+          <div class="field"><label for="p-busca">Qué buscás</label>
             <select id="p-busca"><option>Algo serio</option><option>Conocer gente</option><option>Amistad</option><option>Sin definir</option></select>
           </div>
-          <div class="field">
-            <label for="p-interes">Me interesan</label>
+          <div class="field"><label for="p-interes">Me interesan</label>
             <select id="p-interes"><option value="F">Mujeres</option><option value="M">Varones</option><option value="T">Todas las personas</option></select>
           </div>
-          <div class="field">
-            <label for="p-prefkm">Hasta qué distancia <span class="mono" id="o-prefkm">25 km</span></label>
-            <div class="range"><input type="range" id="p-prefkm" min="1" max="60" value="25"></div>
-          </div>
+          <div class="field"><label for="p-prefkm">Hasta qué distancia <span class="mono" id="o-prefkm">25 km</span></label><div class="range"><input type="range" id="p-prefkm" min="1" max="60" value="25"></div></div>
         </div>
         <div class="field"><label for="p-bio">Tu bio</label><textarea id="p-bio" maxlength="240"></textarea></div>
-        <div class="field">
-          <label>Tus intereses</label>
-          <div class="pickchips" id="p-intereses"></div>
+        <div class="field"><label>Tus intereses</label><div class="pickchips" id="p-intereses"></div></div>
+      </div>
+
+      <div class="card pad stack">
+        <div>
+          <h2>Tus dos respuestas</h2>
+          <p style="color:var(--ink-soft); font-size:.9rem; margin-top:4px">Esto es lo primero que lee la otra persona. Sin foto, es lo que te presenta.</p>
         </div>
+        <div class="field"><label for="p-r1" id="lab-r1"></label><textarea id="p-r1" maxlength="200"></textarea></div>
+        <div class="field"><label for="p-r2" id="lab-r2"></label><textarea id="p-r2" maxlength="200"></textarea></div>
       </div>
 
       <div class="card pad stack">
         <div>
           <h2>Cuestionario de afinidad</h2>
-          <p style="color:var(--ink-soft); font-size:.9rem; margin-top:4px">Cinco ejes. Movés la barra hacia el lado con el que más te identificás; pesa el 40&nbsp;% del puntaje.</p>
+          <p style="color:var(--ink-soft); font-size:.9rem; margin-top:4px">Cinco ejes. Pesan el 40&nbsp;% del puntaje.</p>
         </div>
         <div id="axes"></div>
       </div>
 
       <div class="card pad stack">
+        <h2>Tu foto</h2>
+        <p class="note"><b>No se sube al perfil.</b> En esta app la foto no forma parte del perfil público: se comparte dentro de una charla, cuando las dos personas lo piden, y nunca antes. En la demo se representa con un sello de color; en la app real sería tu foto.</p>
+      </div>
+
+      <div class="card pad stack">
         <h2>Seguridad</h2>
-        <p class="note">Podés bloquear o reportar desde el menú <b>···</b> de cualquier perfil. Quien bloqueás desaparece de Descubrir, de Buscar y de tus matches.</p>
+        <p class="note">Bloqueá o reportá desde el menú <b>···</b> de cualquier perfil o charla. A quien bloqueás desaparece de todas las pantallas.</p>
         <div id="blocklist"></div>
       </div>
 
@@ -415,6 +352,31 @@ footer.foot{max-width:848px; margin:34px auto 0; padding-top:16px; border-top:1p
         <h2>Datos</h2>
         <p style="color:var(--ink-soft); font-size:.9rem">Todo se guarda solo en este navegador. Nada se envía a ningún servidor.</p>
         <div><button class="btn sm danger" id="p-reset">Borrar todo y empezar de cero</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="view-reglas">
+    <div class="stack">
+      <div class="viewhead"><h1>Reglas de la casa</h1><p>Son parte del producto, no letra chica. Están para que esto funcione distinto.</p></div>
+      <div class="card pad">
+        <ul class="rules">
+          <li><span class="n">01</span><span><b>Sin fotos en el perfil.</b> Nadie elige ni descarta por una cara. Los perfiles muestran lo que la persona escribió.</span></li>
+          <li><span class="n">02</span><span><b>Primero se conversa.</b> La opción de mostrarse aparece recién cuando la charla recorrió los seis pasos: que escriban los dos, que se pregunten, que respondan la consigna.</span></li>
+          <li><span class="n">03</span><span><b>La foto es opcional, siempre.</b> Nadie está obligado a mostrarse, ni en el paso seis ni nunca. Se puede seguir la charla sin foto.</span></li>
+          <li><span class="n">04</span><span><b>Doble sí.</b> La foto se ve sólo si las dos personas la piden. Un sí solo no revela nada, y se puede retirar.</span></li>
+          <li><span class="n">05</span><span><b>No se pasan contactos antes de tiempo.</b> El chat bloquea links, usuarios de redes y teléfonos hasta que la charla esté completa. Es para que la regla no se esquive por afuera.</span></li>
+          <li><span class="n">06</span><span><b>Bloquear y reportar están siempre a mano.</b> En un toque, desde cualquier pantalla, sin explicaciones.</span></li>
+          <li><span class="n">07</span><span><b>Mayores de 18.</b> La app es sólo para personas adultas.</span></li>
+        </ul>
+      </div>
+      <div class="card pad">
+        <h2>Por qué así</h2>
+        <p style="color:var(--ink-soft); margin-top:8px">
+          Las apps de citas tradicionales ponen la foto primero y la conversación último. Eso premia lo que se ve
+          y castiga lo que se dice. Acá el orden está invertido a propósito: la foto es el final del camino y no
+          la puerta de entrada, y llegar hasta ahí requiere haber escrito algo de verdad.
+        </p>
       </div>
     </div>
   </section>
@@ -431,45 +393,131 @@ footer.foot{max-width:848px; margin:34px auto 0; padding-top:16px; border-top:1p
 <script>
 "use strict";
 
-/* ---------------- datos de demo ---------------- */
+/* ================= datos ================= */
 const INTERESES = ["Cine","Cocinar","Correr","Yoga","Libros","Música en vivo","Viajar","Perros","Gatos","Teatro","Política","Ciencia","Fotografía","Café de especialidad","Montaña","Bailar","Videojuegos","Huerta"];
 
 const EJES = [
-  {clave:"ritmo",  nombre:"Ritmo",  izq:"Plan tranquilo en casa", der:"Salir todo lo que se pueda"},
-  {clave:"vinculo",nombre:"Vínculo",izq:"Mucha independencia",    der:"Mucho tiempo juntos"},
-  {clave:"mundo",  nombre:"Mundo",  izq:"Reservada, de a pocos",  der:"Muy social, grupos grandes"},
-  {clave:"rumbo",  nombre:"Rumbo",  izq:"Improvisar sobre la marcha", der:"Planificar con tiempo"},
-  {clave:"fuego",  nombre:"Fuego",  izq:"Evitar el conflicto",    der:"Debatir a fondo"}
+  {nombre:"Ritmo",  izq:"Plan tranquilo en casa",     der:"Salir todo lo que se pueda"},
+  {nombre:"Vínculo",izq:"Mucha independencia",        der:"Mucho tiempo juntos"},
+  {nombre:"Mundo",  izq:"Reservada, de a pocos",      der:"Muy social, grupos grandes"},
+  {nombre:"Rumbo",  izq:"Improvisar sobre la marcha", der:"Planificar con tiempo"},
+  {nombre:"Fuego",  izq:"Evitar el conflicto",        der:"Debatir a fondo"}
 ];
 
+const CONSIGNAS = ["Algo en lo que cambié de opinión", "Un domingo bien usado es"];
+const CONSIGNA_CHAT = "¿Qué es lo que te hace perder la noción del tiempo?";
+
 const PERFILES = [
-  {id:"p1",n:"Malena",e:34,g:"F",c:"Villa Crespo, CABA",km:4,v:true,b:"Editora. Me levanto temprano aunque nadie me obligue, corro por el parque y después desayuno tres horas leyendo.",i:["Libros","Correr","Café de especialidad","Cine","Perros"],q:"Algo serio",x:[35,60,40,70,55],h:12,f:["Hola! Qué bueno que coincidimos.","Te cuento: estoy terminando un libro que me tiene obsesionada.","¿Sos de madrugar o te levanto de prepo un sábado?","Hay una feria de editoriales el finde, por si te tienta."]},
-  {id:"p2",n:"Julieta",e:31,g:"F",c:"Caballito, CABA",km:6,v:true,b:"Bióloga, trabajo con plantas nativas. Tengo una huerta en el balcón que ya es un problema de espacio.",i:["Huerta","Ciencia","Montaña","Perros","Cocinar"],q:"Algo serio",x:[30,55,35,65,45],h:41,f:["Hola, me gustó tu perfil.","Te aviso que hablo de plantas más de lo socialmente aceptable.","¿Conocés algún vivero bueno por tu zona?","¿Te gusta caminar largo o te aburrís?"]},
-  {id:"p3",n:"Camila",e:29,g:"F",c:"Palermo, CABA",km:2,v:false,b:"Diseñadora. Vivo entre muestras de color y recitales chicos. Mi plan ideal termina bailando.",i:["Música en vivo","Bailar","Fotografía","Cine","Viajar"],q:"Conocer gente",x:[80,35,85,25,60],h:7,f:["Holaa!","Toca una banda que me encanta el jueves, aviso nomás.","¿Bailás o sos de los que miran?","Contame algo raro tuyo, arranco yo si querés."]},
-  {id:"p4",n:"Rocío",e:37,g:"F",c:"San Isidro, GBA",km:18,v:true,b:"Médica pediatra. Guardias de por medio, pero cuando estoy libre desaparezco a la montaña.",i:["Montaña","Correr","Libros","Yoga","Perros"],q:"Algo serio",x:[40,50,30,75,40],h:23,f:["Hola! Perdón la demora, venía de guardia.","¿Hiciste alguna travesía larga alguna vez?","Mi plan perfecto es sin señal de celular.","¿Café o te caigo directamente con mate?"]},
-  {id:"p5",n:"Agustina",e:42,g:"F",c:"Almagro, CABA",km:5,v:false,b:"Abogada laboralista. Me gusta discutir, pero de buena fe. Cocino bien y lo sé.",i:["Política","Cocinar","Teatro","Libros","Café de especialidad"],q:"Algo serio",x:[45,65,55,60,85],h:58,f:["Hola, buen perfil.","Aviso: si decís algo con lo que no estoy de acuerdo, lo vamos a hablar.","¿Qué comés cuando cocinás para vos sola?","Vi una obra buenísima en el Cervantes, te la recomiendo."]},
-  {id:"p6",n:"Delfina",e:27,g:"F",c:"Nuñez, CABA",km:9,v:false,b:"Estudio cine y trabajo en producción. Vivo con dos gatos que me toleran.",i:["Cine","Gatos","Fotografía","Música en vivo","Videojuegos"],q:"Conocer gente",x:[65,40,60,35,50],h:15,f:["Hola :)","¿Última peli que te gustó de verdad?","Mis gatos se llaman Fassbinder y Nube.","¿Te va un ciclo de cine el domingo?"]},
-  {id:"p7",n:"Victoria",e:39,g:"F",c:"Vicente López, GBA",km:12,v:true,b:"Arquitecta. Me fascinan las ciudades ajenas: planifico viajes que a veces hago.",i:["Viajar","Fotografía","Café de especialidad","Teatro","Cocinar"],q:"Algo serio",x:[50,60,50,80,45],h:33,f:["Hola! Qué tal.","Tengo un Excel de viajes, no juzgues.","¿Ciudad o playa? Es una pregunta con trampa.","¿Te copa caminar sin destino un domingo?"]},
-  {id:"p8",n:"Mariana",e:45,g:"F",c:"Belgrano, CABA",km:8,v:true,b:"Profesora de literatura. Dos hijos grandes, una perra vieja y muchas ganas de conversar de verdad.",i:["Libros","Teatro","Política","Perros","Yoga"],q:"Algo serio",x:[35,55,40,60,70],h:47,f:["Hola, gracias por escribir.","¿Qué estás leyendo?","Prefiero una charla larga antes que veinte mensajes cortos.","Si te gusta el teatro independiente, tengo recomendaciones."]},
-  {id:"p9",n:"Sofía",e:33,g:"F",c:"Tigre, GBA",km:28,v:false,b:"Programadora, remoto. Entreno crossfit y juego demasiado. Honesta hasta que incomoda.",i:["Videojuegos","Correr","Ciencia","Gatos","Música en vivo"],q:"Conocer gente",x:[55,30,45,40,75],h:61,f:["Hola!","¿Jugás algo o me vas a decir que no tenés tiempo?","Trabajo remoto, así que mi horario es un caos elegido.","Te digo las cosas de frente, aviso antes."]},
-  {id:"p10",n:"Bruno",e:36,g:"M",c:"Colegiales, CABA",km:5,v:true,b:"Chef de un lugar chico. Trabajo cuando todos salen, así que mis domingos son sagrados.",i:["Cocinar","Música en vivo","Libros","Perros","Café de especialidad"],q:"Algo serio",x:[45,55,50,55,50],h:19,f:["Hola! Qué gusto.","Si venís al local te cocino algo que no está en la carta.","¿Comés de todo o tenés alguna guerra declarada?","Los domingos los tengo libres, por si pinta plan."]},
-  {id:"p11",n:"Tomás",e:30,g:"M",c:"Boedo, CABA",km:7,v:false,b:"Músico y profe de guitarra. Toco los jueves en un bar de la esquina de mi casa.",i:["Música en vivo","Bailar","Cine","Videojuegos","Viajar"],q:"Conocer gente",x:[75,40,70,30,55],h:9,f:["Hola!!","Toco el jueves, estás invitada.","¿Qué escuchás cuando nadie te ve?","Soy malísimo para planificar, aviso."]},
-  {id:"p12",n:"Ignacio",e:41,g:"M",c:"Martínez, GBA",km:16,v:true,b:"Ingeniero. Corro maratones con más entusiasmo que talento. Padre de Lola, una golden.",i:["Correr","Perros","Montaña","Ciencia","Libros"],q:"Algo serio",x:[30,50,35,85,40],h:52,f:["Hola, cómo andás.","Mañana salgo a correr temprano, es mi terapia.","¿Te gustan los perros o los tolerás?","Soy de planificar bastante, lo admito."]},
-  {id:"p13",n:"Martín",e:38,g:"M",c:"San Telmo, CABA",km:6,v:false,b:"Fotógrafo. Vivo en un PH con luz de la buena. Mucho café, poca rutina.",i:["Fotografía","Café de especialidad","Viajar","Teatro","Gatos"],q:"Sin definir",x:[60,35,55,25,50],h:28,f:["Hola, buenas fotos las tuyas.","Mi casa tiene una luz de las 6 de la tarde que es un show.","¿Te dejarías retratar o odiás la cámara?","No tengo mucha rutina, para bien y para mal."]},
-  {id:"p14",n:"Facundo",e:44,g:"M",c:"Flores, CABA",km:10,v:true,b:"Docente y sindicalista. Discuto por deporte, pero escucho. Huerta comunitaria los sábados.",i:["Política","Huerta","Libros","Cocinar","Teatro"],q:"Algo serio",x:[35,60,60,65,90],h:44,f:["Hola! Buen perfil el tuyo.","Los sábados estoy en la huerta del barrio, sumate.","¿Te interesa la discusión política o te agota?","Prometo escuchar más de lo que hablo. Prometo."]},
-  {id:"p15",n:"Emilia",e:35,g:"F",c:"Barracas, CABA",km:11,v:false,b:"Psicóloga. Silencio, yoga y libros durante la semana; los sábados, teatro.",i:["Yoga","Libros","Teatro","Gatos","Cine"],q:"Amistad",x:[25,45,25,55,35],h:36,f:["Hola, gracias por escribir.","Estoy buscando gente para hacer cosas, lo digo de entrada.","¿Hacés algo para bajar un cambio?","Hay una obra en el Abasto que quiero ver."]},
-  {id:"p16",n:"Nicolás",e:32,g:"M",c:"Villa Urquiza, CABA",km:13,v:false,b:"Ciencia de datos de día, huerta de balcón de noche. Bailo mal y no me importa.",i:["Ciencia","Huerta","Bailar","Videojuegos","Correr"],q:"Conocer gente",x:[60,45,55,50,60],h:5,f:["Hola!","Tengo tomates cherry que son mi orgullo.","¿Te animás a una clase de baile aunque seamos un desastre?","Pregunto todo, es deformación profesional."]}
+  {id:"p1",n:"Malena",e:34,g:"F",c:"Villa Crespo, CABA",km:4,v:true,h:12,q:"Algo serio",
+   b:"Editora. Me levanto temprano aunque nadie me obligue, corro por el parque y después desayuno tres horas leyendo.",
+   i:["Libros","Correr","Café de especialidad","Cine","Perros"], x:[35,60,40,70,55],
+   r:["Que había que terminar todos los libros que empezaba. Abandoné tres este año y dormí mejor.","Correr temprano, un café que dure una hora y un mediodía sin planes."],
+   c3:"Corregir un texto ajeno hasta que suena bien. Levanto la cabeza y pasaron cuatro horas.",
+   f:["Hola, qué bueno que coincidimos. Me dio curiosidad lo que escribiste sobre cambiar de opinión.","Te cuento que estoy con un libro que me tiene obsesionada hace dos semanas, no puedo con otra cosa.","¿Vos sos de madrugar o te levanto de prepo un sábado? Lo pregunto en serio, es información crítica.","Hay una feria de editoriales el fin de semana que viene y me encantaría ir acompañada."]},
+  {id:"p2",n:"Julieta",e:31,g:"F",c:"Caballito, CABA",km:6,v:true,h:41,q:"Algo serio",
+   b:"Bióloga, trabajo con plantas nativas. Tengo una huerta en el balcón que ya es un problema de espacio.",
+   i:["Huerta","Ciencia","Montaña","Perros","Cocinar"], x:[30,55,35,65,45],
+   r:["Que la ciudad no tenía naturaleza. Tiene muchísima, sólo que nadie la mira.","Feria a la mañana, cocinar con eso a la tarde y no salir de casa."],
+   c3:"Mirar germinar cosas. Suena a chiste pero me siento a mirar y se me va la tarde.",
+   f:["Hola, me gustó mucho cómo escribís. Sobre todo lo del domingo.","Te aviso de entrada que hablo de plantas bastante más de lo socialmente aceptable.","¿Conocés algún vivero bueno por tu zona? Ando buscando uno que no me estafe.","¿Te gusta caminar largo o te aburrís a los veinte minutos? Necesito saber con qué cuento."]},
+  {id:"p3",n:"Camila",e:29,g:"F",c:"Palermo, CABA",km:2,v:false,h:7,q:"Conocer gente",
+   b:"Diseñadora. Vivo entre muestras de color y recitales chicos. Mi plan ideal termina bailando.",
+   i:["Música en vivo","Bailar","Fotografía","Cine","Viajar"], x:[80,35,85,25,60],
+   r:["Que planear un viaje le sacaba la gracia. Ahora planeo y me sobra gracia igual.","Empezar tarde, terminar bailando y arrepentirme el lunes."],
+   c3:"Editar fotos. Empiezo a las nueve y de golpe es la una de la mañana.",
+   f:["Holaa, buenísimo lo que pusiste sobre el domingo, me reí.","Toca una banda que me encanta el jueves en un lugar chiquito, aviso nomás.","¿Bailás o sos de los que se quedan mirando desde la barra? No hay respuesta incorrecta, pero casi.","Contame algo raro tuyo. Arranco yo si querés: le hablo a las plantas de otra gente."]},
+  {id:"p4",n:"Rocío",e:37,g:"F",c:"San Isidro, GBA",km:18,v:true,h:23,q:"Algo serio",
+   b:"Médica pediatra. Guardias de por medio, pero cuando estoy libre desaparezco a la montaña.",
+   i:["Montaña","Correr","Libros","Yoga","Perros"], x:[40,50,30,75,40],
+   r:["Que descansar era no hacer nada. Descanso mucho más caminando ocho horas.","Levantarme sin alarma y que el día no tenga ninguna obligación fija."],
+   c3:"Caminar en subida. Es lo único que me apaga la cabeza del todo.",
+   f:["Hola, perdón la demora, venía de una guardia larga.","¿Hiciste alguna travesía de varios días alguna vez o sos más de salidas cortas?","Mi plan perfecto no tiene señal de celular, te lo aviso antes de que te ilusiones.","¿Café o te caigo directamente con el mate? Es una pregunta con trampa."]},
+  {id:"p5",n:"Agustina",e:42,g:"F",c:"Almagro, CABA",km:5,v:false,h:58,q:"Algo serio",
+   b:"Abogada laboralista. Me gusta discutir, pero de buena fe. Cocino bien y lo sé.",
+   i:["Política","Cocinar","Teatro","Libros","Café de especialidad"], x:[45,65,55,60,85],
+   r:["Que ganar una discusión servía de algo. Ahora me interesa más entender por qué el otro piensa así.","Cocinar algo que lleve horas para gente que se queda hasta tarde."],
+   c3:"Cocinar sin receta. Empiezo con lo que hay y se me va la tarde entera.",
+   f:["Hola, buen perfil el tuyo. Me llamó la atención lo que escribiste primero.","Aviso: si decís algo con lo que no estoy de acuerdo, lo vamos a hablar. No es amenaza, es método.","¿Qué comés cuando cocinás para vos sola? Se aprende mucho de la respuesta.","Vi una obra buenísima la semana pasada y la sigo pensando. ¿Vas al teatro?"]},
+  {id:"p6",n:"Delfina",e:27,g:"F",c:"Núñez, CABA",km:9,v:false,h:15,q:"Conocer gente",
+   b:"Estudio cine y trabajo en producción. Vivo con dos gatos que me toleran.",
+   i:["Cine","Gatos","Fotografía","Música en vivo","Videojuegos"], x:[65,40,60,35,50],
+   r:["Que el cine viejo era aburrido. Me equivoqué feo y lo admito.","Ver dos películas seguidas sin culpa y pedir algo rico."],
+   c3:"Armar una lista de películas para alguien. Me tomo un trabajo desproporcionado.",
+   f:["Hola, me gustó tu respuesta sobre cambiar de opinión.","¿Cuál es la última peli que te gustó de verdad? No la que decís en público, la de verdad.","Mis gatos se llaman Fassbinder y Nube. Uno le hace honor al nombre, el otro no.","Hay un ciclo de cine el domingo y estoy buscando con quién ir."]},
+  {id:"p7",n:"Victoria",e:39,g:"F",c:"Vicente López, GBA",km:12,v:true,h:33,q:"Algo serio",
+   b:"Arquitecta. Me fascinan las ciudades ajenas: planifico viajes que a veces hago.",
+   i:["Viajar","Fotografía","Café de especialidad","Teatro","Cocinar"], x:[50,60,50,80,45],
+   r:["Que había que vivir en el centro para tener vida. Me mudé lejos y tengo más vida que antes.","Caminar una ciudad sin mapa, aunque sea la mía."],
+   c3:"Mirar planos de edificios que nunca voy a construir. Es un vicio caro en tiempo.",
+   f:["Hola, qué tal. Me quedé pensando en tu segunda respuesta.","Tengo un Excel de viajes con pestañas. No juzgues todavía, esperá a conocerme.","¿Ciudad o playa? Es una pregunta con trampa y quiero ver cómo salís.","¿Te copa caminar sin destino un domingo o te pone ansioso no saber a dónde vas?"]},
+  {id:"p8",n:"Mariana",e:45,g:"F",c:"Belgrano, CABA",km:8,v:true,h:47,q:"Algo serio",
+   b:"Profesora de literatura. Dos hijos grandes, una perra vieja y muchas ganas de conversar de verdad.",
+   i:["Libros","Teatro","Política","Perros","Yoga"], x:[35,55,40,60,70],
+   r:["Que a cierta edad ya estaba todo decidido. Es mentira y me llevó años entenderlo.","Una charla larga que empiece en el almuerzo y termine de noche."],
+   c3:"Leer en voz alta. Me pasa que releo el mismo párrafo por el sonido y pierdo la hora.",
+   f:["Hola, gracias por escribir. Me gustó lo que pusiste, es honesto.","¿Qué estás leyendo? Y no vale decir nada, todos estamos leyendo algo aunque sea el diario.","Prefiero una charla larga antes que veinte mensajes cortos, te lo digo de entrada.","Si te gusta el teatro independiente tengo recomendaciones para tres meses."]},
+  {id:"p9",n:"Sofía",e:33,g:"F",c:"Tigre, GBA",km:28,v:false,h:61,q:"Conocer gente",
+   b:"Programadora, trabajo remoto. Entreno en serio y juego demasiado. Honesta hasta que incomoda.",
+   i:["Videojuegos","Correr","Ciencia","Gatos","Música en vivo"], x:[55,30,45,40,75],
+   r:["Que trabajar de lo que me gusta iba a alcanzar. No alcanza, hay que tener vida además.","Entrenar temprano y después no hacer absolutamente nada productivo."],
+   c3:"Un juego bien diseñado. Miro el reloj y perdí la noche entera sin darme cuenta.",
+   f:["Hola, me copó que escribieras algo concreto y no una lista de frases.","¿Jugás algo o me vas a decir que no tenés tiempo? Todo el mundo dice eso.","Trabajo remoto así que mi horario es un caos, pero es un caos elegido por mí.","Te digo las cosas de frente, aviso antes así no hay sorpresas después."]},
+  {id:"p10",n:"Bruno",e:36,g:"M",c:"Colegiales, CABA",km:5,v:true,h:19,q:"Algo serio",
+   b:"Chef de un lugar chico. Trabajo cuando todos salen, así que mis domingos son sagrados.",
+   i:["Cocinar","Música en vivo","Libros","Perros","Café de especialidad"], x:[45,55,50,55,50],
+   r:["Que la cocina era competencia. Es un laburo de equipo y tardé diez años en verlo.","Cocinar sin apuro para gente que no paga la cuenta."],
+   c3:"Probar y corregir un plato. Cincuenta veces la misma salsa y se me fue la tarde.",
+   f:["Hola, qué gusto. Me gustó lo que contaste del domingo.","Si te tienta, te cocino algo que no está en la carta. Es mi único truco y lo uso siempre.","¿Comés de todo o tenés alguna guerra declarada con algún ingrediente?","Los domingos los tengo libres, por si en algún momento pinta un plan sin apuro."]},
+  {id:"p11",n:"Tomás",e:30,g:"M",c:"Boedo, CABA",km:7,v:false,h:9,q:"Conocer gente",
+   b:"Músico y profe de guitarra. Toco los jueves en un bar de la esquina de mi casa.",
+   i:["Música en vivo","Bailar","Cine","Videojuegos","Viajar"], x:[75,40,70,30,55],
+   r:["Que había que sonar como alguien. Ahora sueno mal pero sueno a mí.","Levantarse tarde, tocar un rato y terminar comiendo con gente."],
+   c3:"Sacar una canción de oído. Empiezo y de golpe es de madrugada.",
+   f:["Hola, buenísimo lo que escribiste. Se nota que no lo copiaste de ningún lado.","Toco el jueves en un bar acá a la vuelta, estás invitada sin compromiso.","¿Qué escuchás cuando no te ve nadie? Esa es la pregunta que importa.","Soy malísimo para planificar, lo aviso antes de que hagamos planes."]},
+  {id:"p12",n:"Ignacio",e:41,g:"M",c:"Martínez, GBA",km:16,v:true,h:52,q:"Algo serio",
+   b:"Ingeniero. Corro maratones con más entusiasmo que talento. Padre de Lola, una golden vieja.",
+   i:["Correr","Perros","Montaña","Ciencia","Libros"], x:[30,50,35,85,40],
+   r:["Que el orden servía para todo. Sirve para el trabajo, no para las personas.","Salir a correr temprano y que el resto del día no tenga horario."],
+   c3:"Arreglar cosas que no están rotas del todo. Me pierdo horas en eso.",
+   f:["Hola, cómo andás. Me quedé pensando en tu primera respuesta.","Mañana salgo a correr temprano, es lo más parecido a terapia que tengo.","¿Te gustan los perros de verdad o los tolerás? Es información importante para mí.","Soy bastante de planificar, lo admito. ¿Eso te suma o te espanta?"]},
+  {id:"p13",n:"Martín",e:38,g:"M",c:"San Telmo, CABA",km:6,v:false,h:28,q:"Sin definir",
+   b:"Fotógrafo. Vivo en un PH con luz de la buena. Mucho café, poca rutina.",
+   i:["Fotografía","Café de especialidad","Viajar","Teatro","Gatos"], x:[60,35,55,25,50],
+   r:["Que necesitaba equipo caro. Las mejores fotos las saqué con lo que tenía a mano.","Salir a caminar con la cámara y volver cuando se hace de noche."],
+   c3:"Revelar. Entro al cuarto a las tres de la tarde y salgo de noche.",
+   f:["Hola, me gustó cómo escribís. Es raro leer algo que no suene a formulario.","Mi casa tiene una luz a las seis de la tarde que es un espectáculo, en serio.","¿Te dejarías retratar o sos de las que odian la cámara? Sin presión.","No tengo mucha rutina, para bien y para mal. ¿Vos necesitás rutina?"]},
+  {id:"p14",n:"Facundo",e:44,g:"M",c:"Flores, CABA",km:10,v:true,h:44,q:"Algo serio",
+   b:"Docente y sindicalista. Discuto por deporte, pero escucho. Huerta comunitaria los sábados.",
+   i:["Política","Huerta","Libros","Cocinar","Teatro"], x:[35,60,60,65,90],
+   r:["Que tener razón alcanzaba para convencer. No alcanza para nada, hay que escuchar primero.","La huerta a la mañana y una mesa larga al mediodía."],
+   c3:"Preparar una clase que me entusiasma. Se me va el domingo entero y no me doy cuenta.",
+   f:["Hola, buen perfil el tuyo. Sobre todo la primera respuesta, es honesta.","Los sábados estoy en la huerta del barrio, sumate cuando quieras y sin compromiso.","¿Te interesa la discusión política o te agota? Pregunto en serio, las dos respuestas están bien.","Prometo escuchar más de lo que hablo. Prometo, no garantizo."]},
+  {id:"p15",n:"Emilia",e:35,g:"F",c:"Barracas, CABA",km:11,v:false,h:36,q:"Amistad",
+   b:"Psicóloga. Silencio, yoga y libros durante la semana; los sábados, teatro.",
+   i:["Yoga","Libros","Teatro","Gatos","Cine"], x:[25,45,25,55,35],
+   r:["Que estar sola era un problema a resolver. Aprendí a estar bien y ahora elijo distinto.","Clase temprano, un libro a la tarde y una obra a la noche."],
+   c3:"Escribir a mano. Me siento a anotar algo y termino con cuadernos enteros.",
+   f:["Hola, gracias por escribir. Me gustó lo que pusiste.","Estoy buscando gente para hacer cosas, lo digo de entrada así no hay malentendidos.","¿Hacés algo para bajar un cambio o vas a full todo el tiempo?","Hay una obra en el Abasto que quiero ver hace semanas y nadie me acompaña."]},
+  {id:"p16",n:"Nicolás",e:32,g:"M",c:"Villa Urquiza, CABA",km:13,v:false,h:5,q:"Conocer gente",
+   b:"Ciencia de datos de día, huerta de balcón de noche. Bailo mal y no me importa.",
+   i:["Ciencia","Huerta","Bailar","Videojuegos","Correr"], x:[60,45,55,50,60],
+   r:["Que los números explicaban todo. Explican bastante, pero lo importante casi nunca.","Levantarme sin plan y que el día se arme solo.",],
+   c3:"Meterme en un problema que no tengo que resolver. Es mi forma de perder tiempo favorita.",
+   f:["Hola, me gustó que escribieras algo real y no una lista de gustos.","Tengo tomates cherry en el balcón que son mi mayor orgullo del año.","¿Te animás a una clase de baile aunque seamos un desastre los dos?","Pregunto todo, es deformación profesional. Avisame si te cansa."]}
 ];
 
 const YO_DEFECTO = {
-  n:"Vos", e:34, c:"Palermo, CABA", b:"Me gusta el plan largo: una comida que se estira, una caminata sin rumbo y una conversación que no mira el reloj.",
+  n:"Vos", e:34, c:"Palermo, CABA", q:"Algo serio", interes:"T", prefKm:25,
+  b:"Me gusta el plan largo: una comida que se estira, una caminata sin rumbo y una conversación que no mira el reloj.",
   i:["Libros","Cocinar","Cine","Perros","Café de especialidad"],
-  q:"Algo serio", interes:"T", prefKm:25, x:[40,55,45,60,55]
+  r:["Que las cosas importantes se deciden rápido. Las mejores decisiones que tomé me llevaron meses.","Cocinar sin apuro, salir a caminar y volver cuando ya es de noche."],
+  x:[40,55,45,60,55]
 };
 
-/* ---------------- estado ---------------- */
-const CLAVE = "brujula-afin.v1";
+/* ================= estado ================= */
+const CLAVE = "brujula-afin.v2";
 let S = cargar();
+let chatAbierto = null;
 
 function cargar(){
   const base = {yo:{...YO_DEFECTO}, likes:[], pases:[], bloqueados:[], chats:{}, reportes:[]};
@@ -480,11 +528,13 @@ function cargar(){
     return {...base, ...g, yo:{...base.yo, ...(g.yo||{})}};
   }catch(err){ return base; }
 }
-function guardar(){
-  try{ localStorage.setItem(CLAVE, JSON.stringify(S)); }catch(err){ /* modo privado: seguimos en memoria */ }
+function guardar(){ try{ localStorage.setItem(CLAVE, JSON.stringify(S)); }catch(err){} }
+
+function chatNuevo(p){
+  return {msgs:[{de:"ellos", t:p.f[0]}], consignaYo:null, consignaEllos:null, pidoFoto:false, pidenFoto:false};
 }
 
-/* ---------------- afinidad ---------------- */
+/* ================= afinidad ================= */
 const PESOS = {ejes:0.40, intereses:0.30, intencion:0.20, cercania:0.10};
 
 function afinidad(p){
@@ -494,8 +544,7 @@ function afinidad(p){
   const ejes = 1 - (d/5)/100;
 
   const comunes = p.i.filter(t => yo.i.includes(t));
-  const denom = Math.max(1, Math.min(p.i.length, yo.i.length));
-  const intereses = Math.min(1, comunes.length / denom);
+  const intereses = Math.min(1, comunes.length / Math.max(1, Math.min(p.i.length, yo.i.length)));
 
   let intencion;
   if(yo.q === p.q) intencion = 1;
@@ -503,18 +552,13 @@ function afinidad(p){
   else if([yo.q,p.q].includes("Amistad")) intencion = 0.25;
   else intencion = 0.6;
 
-  const margen = Math.max(0, p.km - yo.prefKm);
-  const cercania = Math.max(0, 1 - margen/25);
+  const cercania = Math.max(0, 1 - Math.max(0, p.km - yo.prefKm)/25);
 
   const total = ejes*PESOS.ejes + intereses*PESOS.intereses + intencion*PESOS.intencion + cercania*PESOS.cercania;
   return {
     total: Math.round(total*100),
-    partes: [
-      {lb:"Ejes", v:Math.round(ejes*100)},
-      {lb:"Intereses", v:Math.round(intereses*100)},
-      {lb:"Intención", v:Math.round(intencion*100)},
-      {lb:"Cercanía", v:Math.round(cercania*100)}
-    ],
+    partes: [{lb:"Ejes",v:Math.round(ejes*100)},{lb:"Intereses",v:Math.round(intereses*100)},
+             {lb:"Intención",v:Math.round(intencion*100)},{lb:"Cercanía",v:Math.round(cercania*100)}],
     comunes
   };
 }
@@ -531,142 +575,140 @@ function motivos(p, a){
   if(a.comunes.length >= 3) out.push(`Comparten ${a.comunes.length} intereses: ${a.comunes.slice(0,3).join(", ").toLowerCase()}.`);
   else if(a.comunes.length) out.push(`Coinciden en ${a.comunes.join(" y ").toLowerCase()}.`);
   else out.push("No comparten intereses declarados: puede ser un buen contraste o un problema.");
-
   if(S.yo.q === p.q) out.push(`Los dos buscan lo mismo: ${p.q.toLowerCase()}.`);
   else out.push(`Vos buscás ${S.yo.q.toLowerCase()} y ${p.n} busca ${p.q.toLowerCase()}.`);
-
   let mejor = 0, peor = 0;
   for(let k=1;k<5;k++){
     if(Math.abs(S.yo.x[k]-p.x[k]) < Math.abs(S.yo.x[mejor]-p.x[mejor])) mejor = k;
     if(Math.abs(S.yo.x[k]-p.x[k]) > Math.abs(S.yo.x[peor]-p.x[peor])) peor = k;
   }
   out.push(`Se parecen mucho en ${EJES[mejor].nombre.toLowerCase()}; donde más se diferencian es en ${EJES[peor].nombre.toLowerCase()}.`);
-  if(p.km > S.yo.prefKm) out.push(`Está a ${p.km} km, más lejos de los ${S.yo.prefKm} km que pusiste como límite.`);
+  if(p.km > S.yo.prefKm) out.push(`Está a ${p.km} km, más lejos del límite de ${S.yo.prefKm} km que pusiste.`);
   return out;
 }
 
-/* corresponde: determinista por perfil, más probable cuanto mayor la afinidad */
 function correspondido(p, puntaje){ return ((p.h*7) % 100) < (puntaje + 12); }
-
 function visibles(){
-  const yo = S.yo;
-  return PERFILES.filter(p => {
-    if(S.bloqueados.includes(p.id)) return false;
-    if(yo.interes !== "T" && p.g !== yo.interes) return false;
-    return true;
-  });
+  return PERFILES.filter(p => !S.bloqueados.includes(p.id) && (S.yo.interes === "T" || p.g === S.yo.interes));
 }
 
-/* ---------------- utilidades de UI ---------------- */
-const $ = sel => document.querySelector(sel);
-const $$ = sel => Array.from(document.querySelectorAll(sel));
-const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+/* ================= recorrido de la charla ================= */
+const MIN_MSJ = 4, MIN_LARGO = 40;
 
-function tono(h){ return `linear-gradient(148deg, hsl(${h} 52% 58%), hsl(${(h+42)%360} 44% 34%))`; }
-function iniciales(n){ return n.trim().slice(0,2).toUpperCase(); }
+function recorrido(id){
+  const ch = S.chats[id] || chatNuevo(PERFILES.find(p=>p.id===id));
+  const mios = ch.msgs.filter(m => m.de === "yo");
+  const suyos = ch.msgs.filter(m => m.de === "ellos");
+  const largoMio = mios.length ? mios.reduce((s,m)=>s+m.t.length,0)/mios.length : 0;
+  const pasos = [
+    {t:"Se escribieron los dos", ok: mios.length >= 1 && suyos.length >= 1},
+    {t:`Escribiste ${Math.min(mios.length,MIN_MSJ)} de ${MIN_MSJ} mensajes`, ok: mios.length >= MIN_MSJ},
+    {t:`Te respondió ${Math.min(suyos.length,MIN_MSJ)} de ${MIN_MSJ} veces`, ok: suyos.length >= MIN_MSJ},
+    {t:"Le hiciste alguna pregunta", ok: mios.some(m => m.t.includes("?"))},
+    {t:"Escribiste mensajes con contenido", ok: largoMio >= MIN_LARGO},
+    {t:"Los dos respondieron la consigna", ok: !!ch.consignaYo && !!ch.consignaEllos}
+  ];
+  const hechos = pasos.filter(x => x.ok).length;
+  return {pasos, hechos, total:pasos.length, completo: hechos === pasos.length, ch};
+}
+
+/* el filtro que hace cumplir la regla: nada de contactos antes de tiempo */
+const PATRONES = [
+  {re:/https?:\/\/|www\.|\.com|\.ar\b/i, por:"un link"},
+  {re:/@[a-z0-9._]{3,}/i, por:"un usuario de red social"},
+  {re:/\b\d[\d\s.\-]{7,}\b/, por:"un número de teléfono"},
+  {re:/instagram|insta\b|whats ?app|wpp|telegram|facebook|tiktok|snap\b/i, por:"otra aplicación"},
+  {re:/\bfotos?\b|\bselfies?\b|\bpic\b|\bimagen\b/i, por:"una foto"}
+];
+function filtrar(txt){
+  for(const p of PATRONES) if(p.re.test(txt)) return p.por;
+  return null;
+}
+
+/* ================= utilidades ================= */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const iniciales = n => n.trim().slice(0,2).toUpperCase();
+
+/* el sello no es una foto ni una foto borrosa: es un patrón geométrico derivado del perfil */
+function sello(p, clase, revelado){
+  const h = p.h * 6 % 360;
+  const fondo = revelado
+    ? `linear-gradient(148deg, hsl(${h} 52% 58%), hsl(${(h+42)%360} 44% 34%))`
+    : `repeating-conic-gradient(from ${h}deg, var(--surface-2) 0deg 18deg, var(--surface-3) 18deg 36deg)`;
+  const letra = revelado ? `<i>${esc(iniciales(p.n))}</i>` : `<i style="color:var(--muted); text-shadow:none">${esc(iniciales(p.n))}</i>`;
+  return `<div class="sello ${clase||""}" style="background:${fondo}" aria-hidden="true">${letra}</div>`;
+}
 
 let tToast;
 function aviso(txt){
-  const t = $("#toast");
-  t.textContent = txt; t.hidden = false;
-  clearTimeout(tToast);
-  tToast = setTimeout(()=>{ t.hidden = true; }, 2600);
+  const t = $("#toast"); t.textContent = txt; t.hidden = false;
+  clearTimeout(tToast); tToast = setTimeout(()=>{ t.hidden = true; }, 3000);
 }
 
 function dial(n){
   const largo = 251.33, p = Math.max(0, Math.min(100, n))/100;
   const color = n>=62 ? "var(--teal)" : n>=45 ? "var(--brass)" : "var(--muted)";
-  return `
-  <svg viewBox="0 0 200 110" role="img" aria-label="Afinidad ${n} sobre 100">
+  return `<svg viewBox="0 0 200 110" role="img" aria-label="Afinidad ${n} sobre 100">
     <path d="M20,100 A80,80 0 0 1 180,100" fill="none" stroke="var(--surface-3)" stroke-width="12" stroke-linecap="round"></path>
-    <path d="M20,100 A80,80 0 0 1 180,100" fill="none" stroke="${color}" stroke-width="12" stroke-linecap="round"
-          stroke-dasharray="${(largo*p).toFixed(1)} ${largo}"></path>
-    <g transform="rotate(${((n-50)*1.8).toFixed(1)} 100 100)">
-      <line x1="100" y1="100" x2="100" y2="40" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"></line>
-    </g>
-    <circle cx="100" cy="100" r="5" fill="var(--ink)"></circle>
-  </svg>`;
+    <path d="M20,100 A80,80 0 0 1 180,100" fill="none" stroke="${color}" stroke-width="12" stroke-linecap="round" stroke-dasharray="${(largo*p).toFixed(1)} ${largo}"></path>
+    <g transform="rotate(${((n-50)*1.8).toFixed(1)} 100 100)"><line x1="100" y1="100" x2="100" y2="40" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"></line></g>
+    <circle cx="100" cy="100" r="5" fill="var(--ink)"></circle></svg>`;
 }
 
 function bloqueAfinidad(a){
-  return `
-  <div class="affinity">
-    <div class="dial">
-      ${dial(a.total)}
-      <div class="score">${a.total}</div>
-      <div class="grade">${esc(grado(a.total))}</div>
-    </div>
-    <div class="bars">
-      ${a.partes.map(x => `
-        <div class="bar">
-          <span class="lb">${esc(x.lb)}</span>
-          <span class="track"><span class="fill" style="width:${x.v}%"></span></span>
-          <span class="vl">${x.v}</span>
-        </div>`).join("")}
-    </div>
+  return `<div class="affinity">
+    <div class="dial">${dial(a.total)}<div class="score">${a.total}</div><div class="grade">${esc(grado(a.total))}</div></div>
+    <div class="bars">${a.partes.map(x => `<div class="bar"><span class="lb">${esc(x.lb)}</span><span class="track"><span class="fill" style="width:${x.v}%"></span></span><span class="vl">${x.v}</span></div>`).join("")}</div>
   </div>`;
 }
 
-/* ---------------- vista: descubrir ---------------- */
+/* ================= descubrir ================= */
 function candidatos(){
-  return visibles()
-    .filter(p => !S.likes.includes(p.id) && !S.pases.includes(p.id))
-    .map(p => ({p, a:afinidad(p)}))
-    .sort((u,w) => w.a.total - u.a.total);
+  return visibles().filter(p => !S.likes.includes(p.id) && !S.pases.includes(p.id))
+    .map(p => ({p, a:afinidad(p)})).sort((u,w) => w.a.total - u.a.total);
 }
 
 function pintarDeck(){
-  const cola = candidatos();
-  const cont = $("#deck");
+  const cola = candidatos(), cont = $("#deck");
   if(!cola.length){
-    cont.innerHTML = `
-      <div class="card empty">
-        <h3>Por ahora no queda nadie</h3>
-        <p>Revisaste todos los perfiles que entran en tus preferencias.</p>
-        <div style="margin-top:16px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap">
-          <button class="btn sm" id="d-volver">Volver a ver los que pasé</button>
-          <button class="btn sm ghost" data-ir="perfil">Ajustar mis preferencias</button>
-        </div>
-      </div>`;
+    cont.innerHTML = `<div class="card empty"><h3>Por ahora no queda nadie</h3>
+      <p>Revisaste todos los perfiles que entran en tus preferencias.</p>
+      <div style="margin-top:16px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap">
+        <button class="btn sm" id="d-volver">Volver a ver los que pasé</button>
+        <button class="btn sm ghost" data-ir="perfil">Ajustar mis preferencias</button>
+      </div></div>`;
     const v = $("#d-volver");
     if(v) v.onclick = () => { S.pases = []; guardar(); pintarDeck(); aviso("Los perfiles que pasaste vuelven a la lista."); };
     return;
   }
   const {p, a} = cola[0];
-  cont.innerHTML = `
-    <article class="card profile">
-      <div class="portrait" style="background:${tono(p.h)}">
-        <div class="initials">${esc(iniciales(p.n))}</div>
-        <div class="kmtag">${p.km} km</div>
-      </div>
-      <div class="pad">
-        <div style="display:flex; gap:10px; align-items:flex-start">
-          <div style="flex:1; min-width:0">
-            <div class="idrow">
-              <h2>${esc(p.n)}</h2>
-              <span class="age">${p.e}</span>
-              ${p.v ? '<span class="verif">✓ Verificada</span>' : ''}
-            </div>
-            <div class="where">${esc(p.c)}</div>
-          </div>
-          <button class="btn sm ghost" data-menu="${p.id}" aria-label="Opciones de seguridad para ${esc(p.n)}">···</button>
+  cont.innerHTML = `<article class="card">
+    <div class="pad">
+      <div style="display:flex; gap:14px; align-items:flex-start">
+        ${sello(p, "lg", false)}
+        <div style="flex:1; min-width:0">
+          <div class="idrow"><h2>${esc(p.n)}</h2><span class="age">${p.e}</span>${p.v ? '<span class="verif">✓ Identidad verificada</span>' : ''}</div>
+          <div class="where">${esc(p.c)} · a ${p.km} km</div>
+          <div class="eyebrow" style="margin-top:6px">Sin foto — se ve al final de la charla</div>
         </div>
-        <p class="bio">${esc(p.b)}</p>
-        <div class="chips">
-          ${p.i.map(t => `<span class="chip ${a.comunes.includes(t)?"match":""}">${esc(t)}</span>`).join("")}
-        </div>
-        <div class="seek">Busca <b>${esc(p.q)}</b></div>
+        <button class="btn sm ghost" data-menu="${p.id}" aria-label="Opciones de seguridad para ${esc(p.n)}">···</button>
       </div>
-      ${bloqueAfinidad(a)}
-      <ul class="reasons">${motivos(p,a).map(m=>`<li>${esc(m)}</li>`).join("")}</ul>
-      <div class="actions">
-        <button class="btn grow ghost" data-pasar="${p.id}">Pasar</button>
-        <button class="btn grow like" data-like="${p.id}">Me interesa</button>
+      <p class="bio">${esc(p.b)}</p>
+      <div class="prompts">
+        ${p.r.map((resp,k) => `<div class="prompt"><div class="q">${esc(CONSIGNAS[k])}</div><div class="a">${esc(resp)}</div></div>`).join("")}
       </div>
-    </article>
-    <p class="mono" style="color:var(--muted); font-size:.78rem; margin-top:10px; text-align:center">
-      Quedan ${cola.length} perfil${cola.length===1?"":"es"} en tu cola
-    </p>`;
+      <div class="chips">${p.i.map(t => `<span class="chip ${a.comunes.includes(t)?"match":""}">${esc(t)}</span>`).join("")}</div>
+      <div class="seek">Busca <b>${esc(p.q)}</b></div>
+    </div>
+    ${bloqueAfinidad(a)}
+    <ul class="reasons">${motivos(p,a).map(m=>`<li>${esc(m)}</li>`).join("")}</ul>
+    <div class="actions">
+      <button class="btn grow ghost" data-pasar="${p.id}">Pasar</button>
+      <button class="btn grow like" data-like="${p.id}">Me interesa</button>
+    </div></article>
+    <p class="mono" style="color:var(--muted); font-size:.78rem; margin-top:10px; text-align:center">Quedan ${cola.length} perfil${cola.length===1?"":"es"} en tu cola</p>`;
 }
 
 function darLike(id){
@@ -675,23 +717,17 @@ function darLike(id){
   cerrarModal();
   const a = afinidad(p);
   if(!S.likes.includes(id)) S.likes.push(id);
-  guardar();
   if(correspondido(p, a.total)){
-    if(!S.chats[id]) S.chats[id] = [{de:"ellos", t:p.f[0]}];
-    guardar();
-    modalMatch(p, a.total);
+    if(!S.chats[id]) S.chats[id] = chatNuevo(p);
+    guardar(); modalMatch(p, a.total);
   }else{
-    aviso(`Le dijiste que sí a ${p.n}. Si corresponde, aparece en Matches.`);
+    guardar(); aviso(`Le dijiste que sí a ${p.n}. Si corresponde, se abre la charla.`);
   }
   pintarTodo();
 }
+function pasar(id){ if(!S.pases.includes(id)) S.pases.push(id); guardar(); pintarDeck(); }
 
-function pasar(id){
-  if(!S.pases.includes(id)) S.pases.push(id);
-  guardar(); pintarDeck();
-}
-
-/* ---------------- vista: buscar ---------------- */
+/* ================= buscar ================= */
 const F = {texto:"", busca:"", orden:"afin", edadmin:25, edadmax:48, km:30, afin:0, verif:"no", intereses:[]};
 
 function pintarFiltros(){
@@ -700,9 +736,7 @@ function pintarFiltros(){
 }
 
 function pintarResultados(){
-  const lista = visibles()
-    .map(p => ({p, a:afinidad(p)}))
-    .filter(({p,a}) => {
+  const lista = visibles().map(p => ({p, a:afinidad(p)})).filter(({p,a}) => {
       if(p.e < F.edadmin || p.e > F.edadmax) return false;
       if(p.km > F.km) return false;
       if(a.total < F.afin) return false;
@@ -710,13 +744,11 @@ function pintarResultados(){
       if(F.verif === "si" && !p.v) return false;
       if(F.intereses.length && !F.intereses.every(t => p.i.includes(t))) return false;
       if(F.texto){
-        const t = F.texto.toLowerCase();
-        const heno = (p.n+" "+p.c+" "+p.b+" "+p.i.join(" ")).toLowerCase();
-        if(!heno.includes(t)) return false;
+        const heno = (p.n+" "+p.c+" "+p.b+" "+p.i.join(" ")+" "+p.r.join(" ")).toLowerCase();
+        if(!heno.includes(F.texto.toLowerCase())) return false;
       }
       return true;
-    })
-    .sort((u,w) => {
+    }).sort((u,w) => {
       if(F.orden === "afin") return w.a.total - u.a.total;
       if(F.orden === "km") return u.p.km - w.p.km;
       if(F.orden === "edad") return u.p.e - w.p.e;
@@ -724,63 +756,51 @@ function pintarResultados(){
     });
 
   $("#f-count").textContent = `${lista.length} de ${visibles().length} perfiles`;
-
   $("#results").innerHTML = lista.length ? lista.map(({p,a}) => `
     <article class="card rescard">
-      <div class="av" style="background:${tono(p.h)}">${esc(iniciales(p.n))}</div>
+      ${sello(p, "", false)}
       <div class="resmeta">
         <div class="nm">${esc(p.n)}, ${p.e} ${p.v ? '<span class="verif">✓</span>' : ''}</div>
         <div class="sub">${esc(p.c)} · ${p.km} km · ${esc(p.q)}</div>
-        <div class="line">${esc(p.b)}</div>
+        <div class="line">${esc(p.r[0])}</div>
         <div style="display:flex; gap:8px; align-items:center; margin-top:10px; flex-wrap:wrap">
           <span class="pct ${a.total>=62?"hi":a.total>=45?"mid":""}">${a.total}</span>
           <span style="font-size:.78rem; color:var(--muted)">${a.comunes.length} en común</span>
           <button class="btn sm" data-ver="${p.id}" style="margin-left:auto">Ver</button>
         </div>
       </div>
-    </article>`).join("") : `
-    <div class="card empty" style="grid-column:1/-1">
+    </article>`).join("") : `<div class="card empty" style="grid-column:1/-1">
       <h3>Ningún perfil entra en esos filtros</h3>
-      <p>Probá ampliar la distancia, bajar la afinidad mínima o sacar algún interés.</p>
-    </div>`;
+      <p>Probá ampliar la distancia, bajar la afinidad mínima o sacar algún interés.</p></div>`;
 }
 
-/* ---------------- vista: matches y chat ---------------- */
-let chatAbierto = null;
-
+/* ================= charlas ================= */
 function misMatches(){
-  return S.likes
-    .filter(id => S.chats[id] && !S.bloqueados.includes(id))
-    .map(id => PERFILES.find(p => p.id === id))
-    .filter(Boolean);
+  return S.likes.filter(id => S.chats[id] && !S.bloqueados.includes(id))
+    .map(id => PERFILES.find(p => p.id === id)).filter(Boolean);
 }
 
 function pintarMatches(){
-  const ms = misMatches();
-  const n = ms.length;
-  const badge = $("#mcount");
-  badge.hidden = n === 0; badge.textContent = n;
+  const ms = misMatches(), badge = $("#mcount");
+  badge.hidden = ms.length === 0; badge.textContent = ms.length;
 
-  $("#matchlist").innerHTML = n ? `<div class="card">${ms.map(p => {
-      const c = S.chats[p.id] || [];
-      const ultimo = c.length ? c[c.length-1] : null;
+  $("#matchlist").innerHTML = ms.length ? `<div class="card">${ms.map(p => {
+      const r = recorrido(p.id);
+      const ultimo = r.ch.msgs[r.ch.msgs.length-1];
       const prev = ultimo ? (ultimo.de === "yo" ? "Vos: " : "") + ultimo.t : "Todavía no se escribieron";
-      return `
-      <button class="mrow" data-chat="${p.id}">
-        <div class="av sm" style="background:${tono(p.h)}">${esc(iniciales(p.n))}</div>
+      const revelado = r.ch.pidoFoto && r.ch.pidenFoto;
+      return `<button class="mrow" data-chat="${p.id}">
+        ${sello(p, "sm", revelado)}
         <div class="resmeta">
           <div class="nm">${esc(p.n)}, ${p.e}</div>
           <div class="line" style="-webkit-line-clamp:1; margin-top:2px">${esc(prev)}</div>
         </div>
-        <span class="pct ${afinidad(p).total>=62?"hi":"mid"}">${afinidad(p).total}</span>
+        <span class="pct ${r.completo?"hi":"mid"}" title="Pasos de la charla">${r.hechos}/${r.total}</span>
       </button>`;
-    }).join("")}</div>` : `
-    <div class="card empty">
-      <h3>Todavía no hay matches</h3>
-      <p>Andá a Descubrir y marcá los perfiles que te interesen. El match aparece cuando es mutuo.</p>
-      <div style="margin-top:14px"><button class="btn sm" data-ir="descubrir">Ir a Descubrir</button></div>
-    </div>`;
-
+    }).join("")}</div>` : `<div class="card empty">
+      <h3>Todavía no hay charlas abiertas</h3>
+      <p>Andá a Descubrir y marcá los perfiles que te interesen. La charla se abre cuando el interés es mutuo.</p>
+      <div style="margin-top:14px"><button class="btn sm" data-ir="descubrir">Ir a Descubrir</button></div></div>`;
   pintarChat();
 }
 
@@ -788,102 +808,159 @@ function pintarChat(){
   const caja = $("#chatbox");
   if(!chatAbierto || !S.chats[chatAbierto] || S.bloqueados.includes(chatAbierto)){ caja.innerHTML = ""; return; }
   const p = PERFILES.find(x => x.id === chatAbierto);
-  const msgs = S.chats[chatAbierto];
-  caja.innerHTML = `
-    <div class="card chatwrap">
+  const r = recorrido(p.id), ch = r.ch;
+  const revelado = ch.pidoFoto && ch.pidenFoto;
+  const pct = Math.round(r.hechos / r.total * 100);
+
+  let bloqueReveal = "";
+  if(revelado){
+    bloqueReveal = `<div class="reveal">
+      <h3>Se mostraron</h3>
+      <p>Las dos personas dijeron que sí. En la app real acá se verían las fotos; en la demo el sello se completa con color.</p>
+      <div class="actions" style="border-top:0; padding:12px 0 0"><button class="btn sm ghost" data-retirar="${p.id}">Retirar mi foto</button></div>
+    </div>`;
+  }else if(r.completo){
+    bloqueReveal = `<div class="reveal">
+      <h3>Ya se conocen un poco</h3>
+      <p>${ch.pidoFoto ? `Vos ya dijiste que sí. Falta que ${esc(p.n)} también quiera; hasta entonces no se ve nada.`
+        : ch.pidenFoto ? `${esc(p.n)} pidió intercambiar fotos. Sólo se ven si vos también querés.`
+        : "Si quieren, pueden intercambiar fotos. Es opcional: pueden seguir charlando así."}</p>
+      <div class="actions" style="border-top:0; padding:12px 0 0">
+        ${ch.pidoFoto ? `<button class="btn sm ghost" data-retirar="${p.id}">Retirar mi sí</button>`
+                      : `<button class="btn sm like" data-pedirfoto="${p.id}">Quiero mostrar mi foto</button>`}
+        <span style="font-size:.8rem; color:var(--ink-soft); align-self:center">Nadie está obligado.</span>
+      </div>
+    </div>`;
+  }
+
+  const consigna = !ch.consignaYo ? `<div class="gate" style="background:var(--brass-wash)">
+      <div style="font-size:.84rem"><b>Consigna para los dos:</b> ${esc(CONSIGNA_CHAT)}</div>
+      <div class="actions" style="border-top:0; padding:10px 0 0">
+        <button class="btn sm" data-consigna="${p.id}">Responder la consigna</button>
+      </div></div>` : "";
+
+  caja.innerHTML = `<div class="card chatwrap">
       <div class="chathead">
-        <div class="av sm" style="background:${tono(p.h)}">${esc(iniciales(p.n))}</div>
+        ${sello(p, "sm", revelado)}
         <div style="flex:1; min-width:0">
           <div style="font-weight:700">${esc(p.n)}</div>
-          <div class="sub" style="font-size:.78rem; color:var(--muted)">${esc(p.c)} · afinidad ${afinidad(p).total}</div>
+          <div style="font-size:.78rem; color:var(--muted)">${esc(p.c)} · afinidad ${afinidad(p).total}</div>
         </div>
         <button class="btn sm ghost" data-menu="${p.id}" aria-label="Opciones de seguridad">···</button>
         <button class="btn sm ghost" id="cerrar-chat" aria-label="Cerrar conversación">✕</button>
       </div>
       <div class="msgs" id="msgs">
-        <p class="note" style="align-self:center; text-align:center">Conversación de demostración: las respuestas son automáticas.</p>
-        ${msgs.map(m => `<div class="msg ${m.de === "yo" ? "me" : "them"}">${esc(m.t)}</div>`).join("")}
+        <div class="msg sys">Conversación de demostración: las respuestas son automáticas. Las fotos y los contactos están bloqueados hasta completar los seis pasos.</div>
+        ${ch.msgs.map(m => `<div class="msg ${m.de === "yo" ? "me" : m.de === "sys" ? "sys" : "them"}">${esc(m.t)}</div>`).join("")}
       </div>
+      ${consigna}
+      <div class="gate">
+        <div class="gatehead">
+          <span class="lbl">Recorrido</span>
+          <span class="gatebar"><span style="width:${pct}%"></span></span>
+          <span class="mono">${r.hechos}/${r.total}</span>
+        </div>
+        <ul class="steps">${r.pasos.map(s => `<li class="${s.ok?"ok":""}"><span class="mk">${s.ok?"✓":"○"}</span><span>${esc(s.t)}</span></li>`).join("")}</ul>
+      </div>
+      ${bloqueReveal}
       <form class="composer" id="form-msg">
         <input type="text" id="in-msg" placeholder="Escribí un mensaje" autocomplete="off" aria-label="Mensaje">
         <button class="btn like" type="submit">Enviar</button>
+        <div class="blocked" id="aviso-bloqueo" hidden></div>
       </form>
     </div>`;
+
   const m = $("#msgs"); m.scrollTop = m.scrollHeight;
   $("#cerrar-chat").onclick = () => { chatAbierto = null; pintarChat(); };
   $("#form-msg").onsubmit = ev => {
     ev.preventDefault();
     const campo = $("#in-msg"), txt = campo.value.trim();
     if(!txt) return;
-    S.chats[p.id].push({de:"yo", t:txt});
-    campo.value = ""; guardar(); pintarChat();
-    setTimeout(() => {
-      const dichas = S.chats[p.id].filter(x => x.de === "ellos").length;
-      S.chats[p.id].push({de:"ellos", t:p.f[dichas % p.f.length]});
-      guardar(); if(chatAbierto === p.id) pintarChat();
-    }, 800);
+    const motivo = filtrar(txt);
+    if(motivo && !r.completo){
+      const av = $("#aviso-bloqueo");
+      av.textContent = `Mensaje no enviado: parece contener ${motivo}. Las fotos y los contactos se habilitan al completar los seis pasos.`;
+      av.hidden = false;
+      return;
+    }
+    responder(p, txt);
   };
 }
 
-/* ---------------- vista: perfil ---------------- */
+function responder(p, txt){
+  const ch = S.chats[p.id];
+  ch.msgs.push({de:"yo", t:txt});
+  guardar(); pintarChat();
+  setTimeout(() => {
+    const dichas = ch.msgs.filter(x => x.de === "ellos").length;
+    ch.msgs.push({de:"ellos", t:p.f[dichas % p.f.length]});
+    if(ch.consignaYo && !ch.consignaEllos){
+      ch.consignaEllos = p.c3;
+      ch.msgs.push({de:"ellos", t:`Sobre la consigna: ${p.c3}`});
+    }
+    const r = recorrido(p.id);
+    if(r.completo && !ch.pidenFoto && !ch.avisoCompleto){
+      ch.avisoCompleto = true;
+      ch.msgs.push({de:"sys", t:"Charla completa. Ya pueden, si quieren, intercambiar fotos."});
+      if(((p.h*11) % 10) < 7) ch.pidenFoto = true;
+    }
+    guardar();
+    if(chatAbierto === p.id) pintarChat();
+    pintarMatches();
+  }, 850);
+}
+
+/* ================= mi perfil ================= */
 function pintarPerfil(){
   const yo = S.yo;
   $("#p-nombre").value = yo.n; $("#p-edad").value = yo.e; $("#p-ciudad").value = yo.c;
   $("#p-busca").value = yo.q; $("#p-interes").value = yo.interes; $("#p-bio").value = yo.b;
   $("#p-prefkm").value = yo.prefKm; $("#o-prefkm").textContent = yo.prefKm + " km";
+  $("#lab-r1").textContent = CONSIGNAS[0]; $("#lab-r2").textContent = CONSIGNAS[1];
+  $("#p-r1").value = yo.r[0]; $("#p-r2").value = yo.r[1];
 
   $("#p-intereses").innerHTML = INTERESES.map(t =>
     `<button class="pick" type="button" data-pint="${esc(t)}" aria-pressed="${yo.i.includes(t)}">${esc(t)}</button>`).join("");
 
-  $("#axes").innerHTML = EJES.map((e,k) => `
-    <div class="axis">
+  $("#axes").innerHTML = EJES.map((e,k) => `<div class="axis">
       <div class="axisname">${esc(e.nombre)}</div>
-      <input type="range" id="ax-${e.clave}" min="0" max="100" value="${yo.x[k]}" data-ax="${k}" aria-label="${esc(e.nombre)}: ${esc(e.izq)} a ${esc(e.der)}">
+      <input type="range" min="0" max="100" value="${yo.x[k]}" data-ax="${k}" aria-label="${esc(e.nombre)}: ${esc(e.izq)} a ${esc(e.der)}">
       <div class="axislabels"><span>${esc(e.izq)}</span><span style="text-align:right">${esc(e.der)}</span></div>
     </div>`).join("");
 
   $("#blocklist").innerHTML = S.bloqueados.length
     ? `<div class="card">${S.bloqueados.map(id => {
         const p = PERFILES.find(x => x.id === id); if(!p) return "";
-        return `<div class="mrow" style="cursor:default">
-          <div class="av sm" style="background:${tono(p.h)}">${esc(iniciales(p.n))}</div>
+        return `<div class="mrow" style="cursor:default">${sello(p,"sm",false)}
           <div class="resmeta"><div class="nm">${esc(p.n)}, ${p.e}</div><div class="sub">Bloqueada</div></div>
-          <button class="btn sm" data-desbloquear="${p.id}">Desbloquear</button>
-        </div>`;
+          <button class="btn sm" data-desbloquear="${p.id}">Desbloquear</button></div>`;
       }).join("")}</div>`
     : `<p style="color:var(--muted); font-size:.88rem">No bloqueaste a nadie.</p>`;
 }
 
-/* ---------------- modales ---------------- */
+/* ================= modales ================= */
 function abrirModal(html){
-  $("#modal").innerHTML = html;
-  $("#overlay").hidden = false;
-  const foco = $("#modal").querySelector("button, input");
+  $("#modal").innerHTML = html; $("#overlay").hidden = false;
+  const foco = $("#modal").querySelector("button, input, textarea");
   if(foco) foco.focus();
 }
 function cerrarModal(){ $("#overlay").hidden = true; $("#modal").innerHTML = ""; }
 
 function modalMatch(p, n){
-  abrirModal(`
-    <div class="matchcard">
-      <div class="eyebrow">Coincidencia mutua</div>
-      <h2 style="font-size:1.6rem; margin-top:6px">Se gustaron</h2>
-      <div class="avs">
-        <div class="av" style="background:${tono(200)}">${esc(iniciales(S.yo.n))}</div>
-        <div class="av" style="background:${tono(p.h)}">${esc(iniciales(p.n))}</div>
-      </div>
-      <p>Vos y ${esc(p.n)} tienen <b class="mono">${n}</b> de afinidad. La conversación ya está abierta.</p>
+  abrirModal(`<div class="matchcard">
+      <div class="eyebrow">Interés mutuo</div>
+      <h2 style="font-size:1.55rem; margin-top:6px">Se abrió la charla</h2>
+      <div class="avs">${sello({n:S.yo.n,h:30},"lg",false)}${sello(p,"lg",false)}</div>
+      <p>Vos y ${esc(p.n)} tienen <b class="mono">${n}</b> de afinidad. Todavía no se vieron las caras, y así va a seguir hasta que los dos quieran.</p>
       <div class="actions">
         <button class="btn grow ghost" data-cerrar>Seguir mirando</button>
         <button class="btn grow like" data-abrirchat="${p.id}">Escribirle</button>
-      </div>
-    </div>`);
+      </div></div>`);
 }
 
 function modalSeguridad(id){
   const p = PERFILES.find(x => x.id === id);
-  abrirModal(`
-    <h2>${esc(p.n)}</h2>
+  abrirModal(`<h2>${esc(p.n)}</h2>
     <p>Podés dejar de ver este perfil o reportarlo al equipo de moderación.</p>
     <div class="actions" style="flex-direction:column">
       <button class="btn grow" data-reportar="${p.id}">Reportar perfil</button>
@@ -894,20 +971,26 @@ function modalSeguridad(id){
 
 function modalReporte(id){
   const p = PERFILES.find(x => x.id === id);
-  const causas = ["Fotos o datos falsos","Mensajes agresivos o acoso","Contenido sexual no solicitado","Parece una estafa","Es menor de edad","Otro motivo"];
-  abrirModal(`
-    <h2>Reportar a ${esc(p.n)}</h2>
+  const causas = ["Datos falsos o suplantación","Mensajes agresivos u hostigamiento","Contenido sexual no solicitado","Insistió con pasar fotos o contactos","Parece una estafa","Es menor de edad","Otro motivo"];
+  abrirModal(`<h2>Reportar a ${esc(p.n)}</h2>
     <p>Contanos qué pasó. El reporte es anónimo y se revisa dentro de las 24 horas.</p>
-    <div class="radiolist">
-      ${causas.map((c,k) => `<label><input type="radio" name="causa" value="${esc(c)}" ${k===0?"checked":""}> ${esc(c)}</label>`).join("")}
-    </div>
-    <div class="field" style="margin-top:12px">
-      <label for="r-detalle">Detalle (opcional)</label>
-      <textarea id="r-detalle" placeholder="Contá lo que consideres necesario"></textarea>
-    </div>
+    <div class="radiolist">${causas.map((c,k) => `<label><input type="radio" name="causa" value="${esc(c)}" ${k===0?"checked":""}> ${esc(c)}</label>`).join("")}</div>
+    <div class="field" style="margin-top:12px"><label for="r-detalle">Detalle (opcional)</label><textarea id="r-detalle" placeholder="Contá lo que consideres necesario"></textarea></div>
     <div class="actions">
       <button class="btn grow ghost" data-cerrar>Cancelar</button>
       <button class="btn grow like" data-enviarreporte="${p.id}">Enviar reporte</button>
+    </div>`);
+}
+
+function modalConsigna(id){
+  const p = PERFILES.find(x => x.id === id);
+  abrirModal(`<h2>Consigna</h2>
+    <p>${esc(CONSIGNA_CHAT)}</p>
+    <p style="margin-top:8px; font-size:.85rem">La responden los dos. Es el último paso del recorrido.</p>
+    <div class="field" style="margin-top:12px"><label for="c-resp">Tu respuesta</label><textarea id="c-resp" maxlength="220" placeholder="Escribí algo que sea tuyo"></textarea></div>
+    <div class="actions">
+      <button class="btn grow ghost" data-cerrar>Ahora no</button>
+      <button class="btn grow like" data-guardaconsigna="${p.id}">Responder</button>
     </div>`);
 }
 
@@ -921,17 +1004,16 @@ function bloquear(id){
   aviso(`Bloqueaste a ${p.n}. No vuelve a aparecer.`);
 }
 
-/* ---------------- navegación y eventos ---------------- */
+/* ================= navegación ================= */
 function irA(v){
   $$(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.view === v)));
   $$(".view").forEach(s => s.classList.toggle("on", s.id === "view-" + v));
   window.scrollTo({top:0, behavior:"instant"});
 }
-
 function pintarTodo(){ pintarDeck(); pintarResultados(); pintarMatches(); pintarPerfil(); }
 
 document.addEventListener("click", ev => {
-  const t = ev.target.closest("[data-view],[data-ir],[data-like],[data-pasar],[data-menu],[data-bloquear],[data-reportar],[data-enviarreporte],[data-desbloquear],[data-cerrar],[data-abrirchat],[data-chat],[data-ver],[data-fint],[data-pint]");
+  const t = ev.target.closest("[data-view],[data-ir],[data-like],[data-pasar],[data-menu],[data-bloquear],[data-reportar],[data-enviarreporte],[data-desbloquear],[data-cerrar],[data-abrirchat],[data-chat],[data-ver],[data-fint],[data-pint],[data-pedirfoto],[data-retirar],[data-consigna],[data-guardaconsigna]");
   if(!t) return;
   const d = t.dataset;
 
@@ -942,6 +1024,27 @@ document.addEventListener("click", ev => {
   if(d.menu) return modalSeguridad(d.menu);
   if(d.bloquear) return bloquear(d.bloquear);
   if(d.reportar) return modalReporte(d.reportar);
+  if(d.consigna) return modalConsigna(d.consigna);
+
+  if(d.guardaconsigna){
+    const campo = $("#c-resp"), txt = (campo.value || "").trim();
+    if(txt.length < 15){ aviso("Escribí un poco más: la consigna es el paso que abre el final."); return; }
+    const p = PERFILES.find(x => x.id === d.guardaconsigna);
+    S.chats[p.id].consignaYo = txt;
+    cerrarModal();
+    responder(p, `Sobre la consigna: ${txt}`);
+    return;
+  }
+  if(d.pedirfoto){
+    const ch = S.chats[d.pedirfoto];
+    ch.pidoFoto = true; guardar(); pintarChat(); pintarMatches();
+    return aviso(ch.pidenFoto ? "Las dos personas dijeron que sí." : "Queda registrado. No se ve nada hasta que la otra persona también quiera.");
+  }
+  if(d.retirar){
+    const ch = S.chats[d.retirar];
+    ch.pidoFoto = false; guardar(); pintarChat(); pintarMatches();
+    return aviso("Retiraste tu sí. La foto deja de verse.");
+  }
   if(d.desbloquear){
     S.bloqueados = S.bloqueados.filter(x => x !== d.desbloquear);
     guardar(); pintarTodo(); return aviso("Perfil desbloqueado.");
@@ -957,12 +1060,12 @@ document.addEventListener("click", ev => {
   if(d.chat){ chatAbierto = d.chat; return pintarChat(); }
   if(d.ver){
     const p = PERFILES.find(x => x.id === d.ver), a = afinidad(p);
-    return abrirModal(`
-      <div style="display:flex; gap:12px; align-items:center">
-        <div class="av" style="background:${tono(p.h)}">${esc(iniciales(p.n))}</div>
+    return abrirModal(`<div style="display:flex; gap:12px; align-items:center">
+        ${sello(p,"lg",false)}
         <div><h2>${esc(p.n)}, ${p.e}</h2><div class="where">${esc(p.c)} · ${p.km} km</div></div>
       </div>
-      <p style="margin-top:12px">${esc(p.b)}</p>
+      <p style="margin-top:12px; color:var(--ink-soft)">${esc(p.b)}</p>
+      <div class="prompts">${p.r.map((resp,k)=>`<div class="prompt"><div class="q">${esc(CONSIGNAS[k])}</div><div class="a">${esc(resp)}</div></div>`).join("")}</div>
       <div class="chips">${p.i.map(x=>`<span class="chip ${a.comunes.includes(x)?"match":""}">${esc(x)}</span>`).join("")}</div>
       <div class="seek">Busca <b>${esc(p.q)}</b> · afinidad <b class="mono">${a.total}</b></div>
       <div class="actions">
@@ -982,7 +1085,6 @@ document.addEventListener("click", ev => {
     S.yo.i = on ? S.yo.i.filter(x => x !== d.pint) : S.yo.i.concat(d.pint);
     t.setAttribute("aria-pressed", String(!on));
     guardar(); pintarDeck(); pintarResultados(); pintarMatches();
-    return;
   }
 });
 
@@ -1000,10 +1102,8 @@ function enlazarFiltro(id, clave, fmt){
     pintarResultados();
   });
 }
-enlazarFiltro("#f-texto","texto");
-enlazarFiltro("#f-busca","busca");
-enlazarFiltro("#f-orden","orden");
-enlazarFiltro("#f-verif","verif");
+enlazarFiltro("#f-texto","texto"); enlazarFiltro("#f-busca","busca");
+enlazarFiltro("#f-orden","orden"); enlazarFiltro("#f-verif","verif");
 enlazarFiltro("#f-edadmin","edadmin",{salida:"#o-edadmin", txt:v=>v});
 enlazarFiltro("#f-edadmax","edadmax",{salida:"#o-edadmax", txt:v=>v});
 enlazarFiltro("#f-km","km",{salida:"#o-km", txt:v=>v+" km"});
@@ -1026,34 +1126,34 @@ document.addEventListener("input", ev => {
     S.yo.x[Number(el.dataset.ax)] = Number(el.value);
     guardar(); pintarDeck(); pintarResultados(); pintarMatches(); return;
   }
+  if(el.id === "p-r1" || el.id === "p-r2"){
+    S.yo.r[el.id === "p-r1" ? 0 : 1] = el.value; guardar(); return;
+  }
   const mapa = {"p-nombre":"n","p-edad":"e","p-ciudad":"c","p-bio":"b","p-busca":"q","p-interes":"interes"};
   if(mapa[el.id]){
     S.yo[mapa[el.id]] = el.id === "p-edad" ? Number(el.value) : el.value;
     guardar(); pintarDeck(); pintarResultados(); pintarMatches(); return;
   }
   if(el.id === "p-prefkm"){
-    S.yo.prefKm = Number(el.value);
-    $("#o-prefkm").textContent = el.value + " km";
+    S.yo.prefKm = Number(el.value); $("#o-prefkm").textContent = el.value + " km";
     guardar(); pintarDeck(); pintarResultados(); pintarMatches();
   }
 });
 
 $("#p-reset").onclick = () => {
-  abrirModal(`
-    <h2>¿Borrar todo?</h2>
-    <p>Se van tus respuestas, tus likes, tus matches y tus conversaciones. No se puede deshacer.</p>
+  abrirModal(`<h2>¿Borrar todo?</h2>
+    <p>Se van tus respuestas, tus likes, tus charlas y tus conversaciones. No se puede deshacer.</p>
     <div class="actions">
       <button class="btn grow ghost" data-cerrar>Cancelar</button>
       <button class="btn grow danger" id="confirmar-reset">Sí, borrar</button>
     </div>`);
   $("#confirmar-reset").onclick = () => {
-    try{ localStorage.removeItem(CLAVE); }catch(err){ /* nada que borrar */ }
+    try{ localStorage.removeItem(CLAVE); }catch(err){}
     S = cargar(); chatAbierto = null; cerrarModal(); pintarTodo();
     aviso("Listo, quedó como recién instalada.");
   };
 };
 
-/* arranque */
 pintarFiltros();
 pintarTodo();
 </script>

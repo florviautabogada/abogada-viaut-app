@@ -1,0 +1,451 @@
+<title>Lanzar Brújula Afín</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Karla:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#ECEEF2; --surface:#FFFFFF; --surface-2:#F5F6F9; --surface-3:#E4E8EF;
+  --ink:#141B2B; --ink-soft:#3F4A61; --muted:#6F7A93;
+  --line:#D6DCE6; --line-strong:#BCC5D4;
+  --brass:#9A6A1F; --brass-ink:#75500F; --brass-wash:#F4EADA;
+  --rose:#A8304C; --rose-wash:#F9E4E8;
+  --teal:#156256; --teal-wash:#DEF0EC;
+  --shadow:0 1px 2px rgba(20,27,43,.05), 0 10px 28px -16px rgba(20,27,43,.25);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0D121C; --surface:#161D2B; --surface-2:#1B2333; --surface-3:#232D40;
+    --ink:#E9ECF3; --ink-soft:#BCC4D4; --muted:#8894AB;
+    --line:#2A3447; --line-strong:#3A475F;
+    --brass:#DDA754; --brass-ink:#EDC98E; --brass-wash:#302718;
+    --rose:#E8879C; --rose-wash:#381F26;
+    --teal:#5FC0AE; --teal-wash:#14302C;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 30px -18px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0D121C; --surface:#161D2B; --surface-2:#1B2333; --surface-3:#232D40;
+  --ink:#E9ECF3; --ink-soft:#BCC4D4; --muted:#8894AB;
+  --line:#2A3447; --line-strong:#3A475F;
+  --brass:#DDA754; --brass-ink:#EDC98E; --brass-wash:#302718;
+  --rose:#E8879C; --rose-wash:#381F26;
+  --teal:#5FC0AE; --teal-wash:#14302C;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 30px -18px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+body{background:var(--paper); color:var(--ink); font-family:"Karla","Helvetica Neue",Arial,sans-serif; font-size:16px; line-height:1.62; -webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:"Fraunces","Iowan Old Style",Georgia,serif; margin:0; text-wrap:balance; letter-spacing:-.012em}
+p{margin:0}
+a{color:var(--brass-ink); text-underline-offset:2px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+:focus-visible{outline:2px solid var(--brass); outline-offset:2px; border-radius:5px}
+
+.wrap{max-width:760px; margin:0 auto; padding-inline:20px; padding-block:0 64px}
+
+/* portada */
+.cover{border-bottom:2px solid var(--ink); padding-block:44px 22px; margin-bottom:36px}
+.kicker{font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.18em; text-transform:uppercase; color:var(--brass); margin-bottom:14px}
+.cover h1{font-size:clamp(2rem,6vw,3.1rem); font-weight:600; line-height:1.05}
+.cover .lead{font-size:1.1rem; color:var(--ink-soft); margin-top:16px; max-width:60ch}
+.meta{display:flex; gap:18px; flex-wrap:wrap; margin-top:22px; font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--muted); text-transform:uppercase; letter-spacing:.08em}
+
+/* índice */
+.toc{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:40px; box-shadow:var(--shadow)}
+.toc h2{font-size:.78rem; font-family:"IBM Plex Mono",monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:500; margin-bottom:12px}
+.toc ol{margin:0; padding-left:0; list-style:none; counter-reset:t; display:flex; flex-direction:column; gap:7px}
+.toc li{counter-increment:t; font-size:.94rem}
+.toc li::before{content:counter(t,decimal-leading-zero); font-family:"IBM Plex Mono",monospace; color:var(--brass); margin-right:10px; font-size:.8rem}
+.toc a{color:var(--ink); text-decoration:none}
+.toc a:hover{text-decoration:underline}
+
+section{margin-bottom:46px; scroll-margin-top:20px}
+section > h2{font-size:1.75rem; font-weight:600; padding-bottom:10px; border-bottom:1px solid var(--line-strong); margin-bottom:20px}
+section > h2 .num{font-family:"IBM Plex Mono",monospace; font-size:.85rem; color:var(--brass); display:block; letter-spacing:.14em; margin-bottom:4px; font-weight:500}
+h3{font-size:1.16rem; font-weight:600; margin-top:28px; margin-bottom:9px}
+h4{font-size:1rem; font-weight:600; margin-top:20px; margin-bottom:6px; color:var(--ink)}
+section p{margin-bottom:13px; color:var(--ink-soft); max-width:68ch}
+section p strong, li strong{color:var(--ink); font-weight:700}
+ul.body, ol.body{margin:0 0 15px; padding-left:20px; color:var(--ink-soft); max-width:68ch; display:flex; flex-direction:column; gap:7px}
+ul.body li::marker{color:var(--brass)}
+
+.callout{border-left:3px solid var(--brass); background:var(--surface); padding:15px 18px; border-radius:0 10px 10px 0; margin:20px 0; box-shadow:var(--shadow)}
+.callout .tag{font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--brass-ink); font-weight:500; display:block; margin-bottom:6px}
+.callout p{margin-bottom:0; color:var(--ink-soft)}
+.callout.alerta{border-left-color:var(--rose); background:var(--rose-wash)}
+.callout.alerta .tag{color:var(--rose)}
+.callout.ok{border-left-color:var(--teal); background:var(--teal-wash)}
+.callout.ok .tag{color:var(--teal)}
+
+.tabla{width:100%; border-collapse:collapse; font-size:.9rem; margin:18px 0}
+.tabla th{text-align:left; font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:500; padding:0 12px 8px 0; border-bottom:1px solid var(--line-strong); vertical-align:bottom}
+.tabla td{padding:11px 12px 11px 0; border-bottom:1px solid var(--line); color:var(--ink-soft); vertical-align:top}
+.tabla td:first-child{color:var(--ink); font-weight:700; white-space:nowrap}
+.tabla td .mono{font-variant-numeric:tabular-nums}
+.scrollx{overflow-x:auto}
+
+.fases{display:flex; flex-direction:column; gap:0; margin:22px 0}
+.fase{display:grid; grid-template-columns:64px 1fr; gap:16px; padding:16px 0; border-bottom:1px solid var(--line)}
+.fase:last-child{border-bottom:0}
+.fase .id{font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--brass); letter-spacing:.1em; padding-top:3px}
+.fase h4{margin:0 0 5px}
+.fase p{margin-bottom:7px; font-size:.93rem}
+.fase .cierre{font-size:.84rem; color:var(--ink); background:var(--surface-2); border-radius:7px; padding:7px 10px; display:inline-block}
+
+.cifras{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden; margin:22px 0}
+.cifra{background:var(--surface); padding:16px}
+.cifra .n{font-family:"IBM Plex Mono",monospace; font-size:1.5rem; color:var(--ink); line-height:1; font-variant-numeric:tabular-nums}
+.cifra .n.baja{color:var(--rose)}
+.cifra .d{font-size:.78rem; color:var(--muted); margin-top:7px; line-height:1.4}
+
+.fuentes{font-size:.86rem}
+.fuentes ol{padding-left:22px; display:flex; flex-direction:column; gap:9px; color:var(--ink-soft)}
+.fuentes li::marker{font-family:"IBM Plex Mono",monospace; color:var(--muted); font-size:.8rem}
+
+footer.cierre{border-top:2px solid var(--ink); margin-top:48px; padding-top:18px; font-size:.82rem; color:var(--muted)}
+
+@media (max-width:520px){
+  .fase{grid-template-columns:1fr; gap:6px}
+  body{font-size:15.5px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<div class="cover">
+  <div class="kicker">Documento de trabajo · Florencia Viaut</div>
+  <h1>Lanzar Brújula Afín</h1>
+  <p class="lead">Qué hace falta para que una app de citas sin fotos exista de verdad en Argentina: el marco legal aplicable, el camino de lanzamiento, la estrategia de difusión y una evaluación honesta de si vale la pena.</p>
+  <div class="meta">
+    <span>Septiembre 2026</span>
+    <span>Buenos Aires</span>
+    <span>Borrador para decidir</span>
+  </div>
+</div>
+
+<nav class="toc">
+  <h2>Contenido</h2>
+  <ol>
+    <li><a href="#verdades">Las verdades, primero</a></li>
+    <li><a href="#producto">Qué es exactamente el producto</a></li>
+    <li><a href="#legal">Marco legal argentino</a></li>
+    <li><a href="#incompatibilidad">La alerta que te toca personalmente</a></li>
+    <li><a href="#camino">El camino de lanzamiento</a></li>
+    <li><a href="#marketing">Difusión y marca</a></li>
+    <li><a href="#plata">Los números, sin maquillaje</a></li>
+    <li><a href="#decision">Las tres decisiones posibles</a></li>
+    <li><a href="#fuentes">Fuentes</a></li>
+  </ol>
+</nav>
+
+<section id="verdades">
+  <h2><span class="num">01</span>Las verdades, primero</h2>
+
+  <p>Pediste que no te endulce nada. Empiezo por lo que puede matar el proyecto, y después vemos qué queda en pie.</p>
+
+  <h3>El mercado se está achicando, no creciendo</h3>
+  <p>2025 fue el primer año en que los ingresos anuales del mercado global de apps de citas <strong>cayeron</strong>. Tinder perdió 5,2 % de ingresos y Bumble 9,5 %. Match Group (dueño de Tinder y Hinge) cerró el segundo trimestre con 13,3 millones de usuarios pagos, 6 % menos que el año anterior, y los usuarios activos mensuales de Tinder bajaron 7 %. Bumble perdió 16,4 % de sus usuarios pagos.</p>
+
+  <div class="cifras">
+    <div class="cifra"><div class="n baja">−5,2 %</div><div class="d">Ingresos de Tinder en 2025</div></div>
+    <div class="cifra"><div class="n baja">−9,5 %</div><div class="d">Ingresos de Bumble en 2025</div></div>
+    <div class="cifra"><div class="n baja">−16,4 %</div><div class="d">Usuarios pagos de Bumble</div></div>
+    <div class="cifra"><div class="n">+25 %</div><div class="d">Ingresos de Hinge, que juega distinto</div></div>
+  </div>
+
+  <p>Entrar a un mercado en contracción no es imposible, pero cambia todo: no vas a surfear una ola, vas a remar contra ella.</p>
+
+  <h3>Tu idea ya se intentó, y la que más se le parecía cerró</h3>
+  <p>Esto es lo que más necesitás saber antes de poner un peso. <strong>Taffy</strong> (2017) mostraba la foto borrosa y la revelaba a medida que avanzaba la conversación, midiendo incluso la calidad del intercambio. <strong>S'More</strong> se presentaba explícitamente como app "anti-superficial", con fotos y hasta videollamadas difuminadas que se revelaban al conversar: en 2023 discontinuó su app y su fundador pasó a Tawkify, un servicio de <em>matchmaking</em> humano.</p>
+  <p>Que hayan fracasado no prueba que la idea esté mal. Prueba otra cosa, más incómoda: <strong>la diferenciación de producto no resuelve el problema de distribución</strong>. Podés tener la mejor mecánica del mundo y morir igual, porque el problema no es la mecánica.</p>
+
+  <h3>El problema real se llama arranque en frío</h3>
+  <p>Una app de citas no sirve para nada hasta que hay gente. Y no "gente": gente <em>de tu zona</em>, <em>de tu franja etaria</em>, <em>activa esta semana</em>. Si conseguís mil usuarios repartidos por todo el país, tenés volumen y cero liquidez: cada persona que entra ve un desierto, se va, y no vuelve. Ahí se quema el presupuesto de publicidad entero sin mover una aguja.</p>
+  <p>Además, estas plataformas se desbalancean casi siempre hacia el mismo lado: muchos más varones que mujeres. Cuando eso pasa, ellas reciben una avalancha y se van; ellos no reciben nada y se van. El equilibrio de la comunidad no es un detalle de moderación: es el producto.</p>
+
+  <div class="callout alerta">
+    <span class="tag">Lo que no se puede tercerizar</span>
+    <p>Una app de citas es, antes que software, una operación de <strong>moderación y seguridad</strong>. Vas a tener denuncias, perfiles falsos, estafas románticas, acoso y, tarde o temprano, un caso grave donde alguien diga que se conocieron en tu app. Si no tenés cómo responder a eso en 24 horas, todos los días, no lances.</p>
+  </div>
+
+  <h3>Ahora la parte buena, que también es cierta</h3>
+  <ul class="body">
+    <li><strong>Los nichos están creciendo mientras los gigantes caen.</strong> En 2025 Grindr, PURE y Feeld aumentaron ingresos, y Hinge creció 25 %. El que juega distinto y para alguien específico está mejor que el que juega para todos.</li>
+    <li><strong>El hartazgo es real y está en la conversación pública.</strong> El descontento con el swipe superficial no es una intuición tuya: es el motivo por el que el mercado se está contrayendo. Tu propuesta le habla exactamente a la gente que se está yendo.</li>
+    <li><strong>Argentina es un mercado de alto consumo de estas apps</strong>, según coberturas periodísticas que la ubican entre los países que más las usan. Eso significa audiencia disponible y prensa interesada en el tema.</li>
+    <li><strong>Tu historia es prensa.</strong> Una abogada argentina que hace una app donde está prohibido mandar fotos hasta que haya conversación es una nota que los medios publican gratis. Eso vale más que cualquier presupuesto de anuncios chico.</li>
+  </ul>
+
+  <div class="callout">
+    <span class="tag">El veredicto</span>
+    <p><strong>No es pérdida de tiempo si lo hacés chico, local y humano.</strong> Es pérdida de tiempo si lo encarás como "Tinder pero mejor", a escala nacional, con una app en las tiendas y plata en publicidad. La diferencia entre las dos cosas es todo lo que sigue en este documento.</p>
+  </div>
+</section>
+
+<section id="producto">
+  <h2><span class="num">02</span>Qué es exactamente el producto</h2>
+
+  <p>La regla que pediste ya está implementada en el prototipo. La escribo como definición de producto, porque de acá sale todo lo demás, incluido lo legal.</p>
+
+  <ul class="body">
+    <li><strong>Los perfiles no tienen foto.</strong> Ni borrosa ni oculta: no existe. Lo que se ve es lo que la persona escribió, sus intereses y su puntaje de afinidad.</li>
+    <li><strong>Se elige por afinidad.</strong> Un puntaje de 0 a 100 con cuatro componentes visibles (ejes del cuestionario 40 %, intereses 30 %, intención 20 %, cercanía 10 %). El usuario ve de dónde sale el número: es una promesa que se puede auditar.</li>
+    <li><strong>El diálogo mínimo es obligatorio.</strong> Seis pasos: que escriban los dos, cuatro mensajes de cada lado, al menos una pregunta, mensajes con contenido real (no "hola" x4) y una consigna común respondida por ambos.</li>
+    <li><strong>La foto es opcional y con doble sí.</strong> Completado el recorrido, aparece la opción. Si sólo una persona la pide, no se ve nada. El sí se puede retirar y la foto deja de verse.</li>
+    <li><strong>El chat bloquea la evasión.</strong> Links, usuarios de redes, teléfonos y pedidos de foto están bloqueados hasta completar los pasos. Sin esto, la regla se esquiva en el segundo mensaje pidiendo el Instagram.</li>
+  </ul>
+
+  <div class="callout ok">
+    <span class="tag">Por qué esto importa legalmente</span>
+    <p>El doble consentimiento no es sólo diseño: es tu mejor defensa. Si nunca circulan imágenes sin el acuerdo expreso de las dos partes, reducís de raíz la exposición por derecho a la imagen (arts. 53 y 1770 del Código Civil y Comercial) y por difusión de material íntimo, que es hoy el principal foco de litigio en plataformas.</p>
+  </div>
+
+  <h3>Lo que todavía hay que decidir</h3>
+  <ul class="body">
+    <li>¿Cuántas charlas abiertas se permiten a la vez? Sin límite, se vuelve Tinder con más pasos. Con límite (tres o cuatro), se fuerza la atención. <strong>Mi recomendación: límite bajo.</strong></li>
+    <li>¿Qué pasa si una persona nunca quiere mostrar foto? Debe poder seguir indefinidamente, y hay que decirlo en la interfaz, no esconderlo.</li>
+    <li>¿Caducan las charlas sin actividad? Sí, conviene: una charla muerta ocupa un cupo y ensucia la métrica.</li>
+    <li>¿Hay verificación de identidad obligatoria u opcional? Ver el punto 3.</li>
+  </ul>
+</section>
+
+<section id="legal">
+  <h2><span class="num">03</span>Marco legal argentino</h2>
+
+  <p>Esto es lo que hay que cumplir para operar. Lo ordeno por riesgo: primero lo que puede cerrarte la app o generarte responsabilidad, después lo formal.</p>
+
+  <h3>3.1. Datos personales: el frente más pesado</h3>
+  <p>Sigue vigente la <strong>Ley 25.326</strong>. Hay varios proyectos de reforma en trámite en el Congreso desde 2025 —entre ellos uno que la derogaría expresamente y la reemplazaría por un régimen al estilo del RGPD europeo— pero <strong>ninguno fue sancionado</strong>. Hay que seguir el trámite parlamentario, porque si se aprueba cambia el tablero (notificación de brechas, portabilidad, privacidad por diseño, decisiones automatizadas).</p>
+
+  <div class="callout alerta">
+    <span class="tag">El punto crítico</span>
+    <p>Una app de citas trata <strong>datos sensibles</strong>. El art. 2 de la Ley 25.326 incluye expresamente entre ellos los datos referidos a la <strong>vida sexual</strong>, y el art. 7 establece un régimen restrictivo: nadie puede ser obligado a proporcionarlos, y su recolección y tratamiento está prohibido salvo excepciones, apoyándose en la práctica en el consentimiento <strong>expreso, libre, informado y por escrito</strong> del art. 5. Tu diseño debe minimizar: pedir lo mínimo indispensable, con un consentimiento separado y específico para ese campo, nunca dentro del "acepto los términos" general.</p>
+  </div>
+
+  <h4>Qué hay que hacer, concretamente</h4>
+  <ul class="body">
+    <li><strong>Inscribirse en el Registro Nacional de Bases de Datos de la AAIP.</strong> Se hace por la plataforma de Trámites a Distancia: primero se registra el responsable, después cada base con su finalidad y sus medidas de seguridad. El trámite es gratuito y hay que mantenerlo actualizado.</li>
+    <li><strong>Política de privacidad real</strong>, que informe finalidad, destinatarios, existencia de la base, identidad y domicilio del responsable, y cómo ejercer acceso, rectificación y supresión.</li>
+    <li><strong>Circuito para responder esos derechos</strong>, con plazos y registro de lo actuado. No alcanza con un mail que nadie lee.</li>
+    <li><strong>Minimización por diseño:</strong> no guardar geolocalización precisa si alcanza con un radio aproximado; no conservar chats de cuentas eliminadas más allá de lo necesario; cifrar en tránsito y en reposo.</li>
+    <li><strong>Transferencia internacional:</strong> si el servidor está fuera del país, hay que revisar el régimen de transferencia internacional de datos de la ley y sus normas complementarias antes de contratar el proveedor de nube.</li>
+  </ul>
+
+  <h3>3.2. Menores: hoy es lo que te frena la publicación en las tiendas</h3>
+  <p>Esto cambió y es operativo, no teórico. <strong>Desde el 28 de enero de 2026</strong>, Google Play exige que las apps de citas usen la configuración de restricción de menores declarados en Play Console, bloqueando a quienes tengan señales de edad inferior a 18. Y desde marzo de 2025 rige la política de estándares de seguridad infantil, que obliga a las apps sociales y de citas a <strong>publicar sus estándares de prevención de abuso, designar un contacto de seguridad y tener un mecanismo de denuncia dentro de la app</strong>.</p>
+  <p>En el plano penal argentino, la app debe estar diseñada para que no ingresen menores: el grooming está tipificado en el art. 131 del Código Penal, y una plataforma que facilita el contacto sin ningún control de edad queda en una posición indefendible.</p>
+
+  <div class="callout">
+    <span class="tag">Verificación de identidad</span>
+    <p>RENAPER ofrece el <strong>Sistema de Identidad Digital (SID)</strong>, que permite validar identidad a distancia contra sus bases, con reconocimiento facial y foto del DNI. Fuentes públicas mencionan aranceles por operación del orden de $5 (verificación de foto facial), $15 (huella) y $100 (validación múltiple con DNI frente y dorso). <strong>Hay que confirmar los aranceles y requisitos vigentes directamente con RENAPER</strong>, y tener en cuenta que para acceder al servicio la entidad debe cumplir con la Ley 25.326. Mi recomendación: verificación <em>opcional pero destacada</em> con un distintivo visible, como ya está en el prototipo. Obligatoria espanta usuarios en el registro; ausente, la app se llena de perfiles falsos.</p>
+  </div>
+
+  <h3>3.3. Violencia digital: la Ley Olimpia te aplica de lleno</h3>
+  <p>La <strong>Ley 27.736</strong> (sancionada el 10 de octubre de 2023) incorporó la <strong>violencia digital o telemática</strong> como modalidad de violencia de género en la Ley 26.485, y contempla expresamente la posibilidad de <strong>ordenar a las plataformas la eliminación de contenidos</strong> que constituyan ejercicio de violencia digital.</p>
+  <p>Traducido a obligaciones prácticas para vos:</p>
+  <ul class="body">
+    <li>Un <strong>protocolo de bajada urgente</strong> de contenido, con plazo comprometido y responsable identificado.</li>
+    <li><strong>Preservación de prueba</strong> cuando se denuncia: no borrar y listo, sino resguardar lo necesario para que la víctima pueda usarlo en sede judicial.</li>
+    <li>Un <strong>canal de denuncia</strong> dentro de la app, con respuesta escrita y trazable.</li>
+    <li>Capacidad de <strong>responder oficios judiciales</strong> con domicilio y persona designada.</li>
+  </ul>
+  <p>Tu prohibición de fotos juega a favor acá: el material más sensible directamente no circula en el 90 % de las interacciones.</p>
+
+  <h3>3.4. Responsabilidad por lo que hacen los usuarios</h3>
+  <p>La Corte Suprema, en <strong>"Rodríguez, María Belén c/ Google Inc."</strong> (2014), fijó el criterio de que los intermediarios de internet no responden por un factor objetivo de atribución, sino <strong>subjetivo</strong>: hay responsabilidad cuando, tomando conocimiento efectivo del contenido lesivo, no actúan con diligencia. La línea se reafirmó en <strong>"Denegri c/ Google"</strong> (2022).</p>
+  <p>La consecuencia práctica es directa: <strong>tu defensa es el expediente</strong>. Todo reporte debe quedar registrado con fecha, contenido, decisión y plazo de respuesta. Si podés mostrar que actuaste rápido cada vez que supiste, estás en una posición sólida. Si no tenés registro, no tenés nada.</p>
+
+  <h3>3.5. Consumidor: aplica desde el primer peso que cobres</h3>
+  <ul class="body">
+    <li><strong>Ley 24.240 y art. 42 de la Constitución.</strong> Los términos y condiciones son un contrato de adhesión de consumo: rigen los arts. 984 a 989 y 1092 a 1122 del Código Civil y Comercial, con control de cláusulas abusivas.</li>
+    <li><strong>La publicidad integra el contrato.</strong> Si prometés "encontrá pareja", eso es exigible. Prometé <em>mecánica</em>, no <em>resultado</em>.</li>
+    <li><strong>Botón de arrepentimiento.</strong> Si hay suscripción paga, la Resolución 424/2020 de la Secretaría de Comercio Interior obliga a publicar un enlace de acceso fácil y directo desde la página de inicio, en lugar visible, sin exigir registro previo; hay 24 horas para informar el código del trámite. El plazo de revocación es de 10 días corridos.</li>
+    <li><strong>Jurisdicción.</strong> En contratos de consumo no podés imponer la jurisdicción que te convenga: la demanda tramita ante el juez del domicilio del consumidor. Poner "Tribunales de CABA" en los términos es una cláusula que no te va a servir.</li>
+  </ul>
+
+  <h3>3.6. Estructura, marca e impuestos</h3>
+  <div class="scrollx">
+  <table class="tabla">
+    <thead><tr><th>Tema</th><th>Qué hacer</th><th>Nota</th></tr></thead>
+    <tbody>
+      <tr><td>Sociedad</td><td>SAS (Ley 27.349) ante IGJ, o SRL si preferís un tipo más tradicional y previsible</td><td>La SAS con estatuto modelo se inscribe en pocos días hábiles y obtiene CUIT automático. Al momento de este documento, la vía con firma digital presenta problemas y se opera con firma certificada por escribano</td></tr>
+      <tr><td>Costo de constitución</td><td>Presupuestos de mercado del orden de <span class="mono">$730.000</span> por la vía notarial</td><td>Es la cotización de un proveedor privado a septiembre de 2026, no un arancel oficial. Pedí dos o tres presupuestos</td></tr>
+      <tr><td>Impuestos</td><td>Inscripción ante ARCA, Ingresos Brutos, y definir si arrancás como monotributista hasta facturar</td><td>Mientras no cobres, el costo fiscal es mínimo. No constituyas sociedad antes de tener algo que facturar</td></tr>
+      <tr><td>Marca</td><td>Registro en INPI. Clases relevantes: 9 (software), 42 (software como servicio) y 45 (servicios de citas)</td><td>Hacé la búsqueda de antecedentes <strong>antes</strong> de gastar un peso en diseño de marca</td></tr>
+      <tr><td>Dominio</td><td>Registrar el .com.ar y el .com al mismo tiempo que la marca</td><td>Barato y evita disgustos</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout">
+    <span class="tag">Orden recomendado</span>
+    <p>No constituyas la sociedad todavía. El orden sensato es: <strong>validar con gente real → registrar la marca → constituir cuando haya algo que proteger o facturar</strong>. Constituir primero es gastar plata y generar obligaciones fiscales mensuales para un proyecto que quizás no pase la validación.</p>
+  </div>
+</section>
+
+<section id="incompatibilidad">
+  <h2><span class="num">04</span>La alerta que te toca personalmente</h2>
+
+  <p>No me lo preguntaste, pero sos agente pública del INAES y abogada matriculada. Esto hay que resolverlo <strong>antes</strong> de figurar en ningún papel, no después.</p>
+
+  <div class="callout alerta">
+    <span class="tag">Verificar antes de constituir</span>
+    <p>La <strong>Ley 25.188 de Ética en el Ejercicio de la Función Pública</strong> establece deberes, prohibiciones e incompatibilidades para todo el personal del sector público nacional, con régimen de declaración jurada patrimonial y normas sobre conflicto de intereses. A eso se suma el régimen general de incompatibilidades del empleo público (Decreto 8566/1961 y sus modificatorias, y el Decreto 894/2001 en lo que hace a las declaraciones juradas y sus consecuencias por falsedad u omisión).</p>
+  </div>
+
+  <p>Qué significa esto en tu caso concreto:</p>
+  <ul class="body">
+    <li><strong>Tener una actividad privada lucrativa no es, por sí solo, incompatible</strong> con el empleo público. Lo que genera problemas es la superposición horaria, el uso de recursos del organismo, y que la actividad privada se vincule con la materia sobre la que ejercés función pública.</li>
+    <li><strong>Una app de citas no tiene relación con la materia del INAES</strong> (cooperativas y mutuales). Ese es un punto claramente a tu favor.</li>
+    <li><strong>Aun así, consultá formalmente y por escrito</strong> a Recursos Humanos del organismo antes de aparecer como socia o administradora. Una respuesta por escrito te cubre; una interpretación propia, no.</li>
+    <li><strong>Evaluá no ser administradora ni representante legal.</strong> Podés participar societariamente y declararlo en tu declaración jurada, dejando la administración en otra persona. Es menos exposición por el mismo resultado económico.</li>
+    <li><strong>Cero cruce de recursos:</strong> nada de mail institucional, horario laboral, equipos ni contactos del organismo. Esto no es formalismo: es lo primero que se mira en un sumario.</li>
+    <li><strong>Matrícula:</strong> ser socia de una empresa no afecta tu matrícula del CPACF, pero si la app se publicita usando tu condición de abogada, revisá las reglas de publicidad profesional del Código de Ética del Colegio antes de hacerlo.</li>
+  </ul>
+
+  <p>Esto lo marco con énfasis porque es el único riesgo del proyecto que <strong>te afecta a vos personalmente</strong> y no a la sociedad. El resto se pierde plata; acá se pierde otra cosa.</p>
+</section>
+
+<section id="camino">
+  <h2><span class="num">05</span>El camino de lanzamiento</h2>
+
+  <p>La secuencia importa más que la velocidad. El error clásico es empezar por la app en las tiendas: es la parte más cara, más lenta y más regulada, y es la que menos te enseña.</p>
+
+  <div class="fases">
+    <div class="fase">
+      <div class="id">FASE 0<br>4-6 sem</div>
+      <div>
+        <h4>Validar sin app</h4>
+        <p>Corré tres rondas de "citas a ciegas por escrito" <strong>a mano</strong>, con 40 a 60 personas de una comunidad concreta y una sola zona. Formulario de inscripción con el cuestionario de afinidad, emparejás vos, y la conversación pasa por un canal donde no se pueden mandar fotos. Costo: tu tiempo.</p>
+        <p class="cierre">Se pasa de fase si: más del 40 % completa el diálogo mínimo y al menos 5 parejas quieren conocerse.</p>
+      </div>
+    </div>
+    <div class="fase">
+      <div class="id">FASE 1<br>2-4 meses</div>
+      <div>
+        <h4>Web, por invitación, una sola ciudad</h4>
+        <p>El prototipo que ya tenés, con backend real, registro, y moderación manual. <strong>Sin tiendas de apps</strong>: es una web que se usa desde el celular. Así evitás por ahora todo el régimen de Apple y Google, y sus comisiones. Acceso por invitación para concentrar la densidad en un barrio y una franja etaria.</p>
+        <p class="cierre">Se pasa de fase si: hay charlas completas todas las semanas y la gente vuelve sin que la empujes.</p>
+      </div>
+    </div>
+    <div class="fase">
+      <div class="id">FASE 2<br>3-6 meses</div>
+      <div>
+        <h4>Cumplimiento y monetización</h4>
+        <p>Inscripción en el registro de la AAIP, términos y política de privacidad redactados en serio, protocolo de moderación escrito, verificación de identidad, botón de arrepentimiento si cobrás. Recién acá constituís la sociedad.</p>
+        <p class="cierre">Se pasa de fase si: alguien paga sin que se lo ruegues.</p>
+      </div>
+    </div>
+    <div class="fase">
+      <div class="id">FASE 3</div>
+      <div>
+        <h4>Apps nativas, si hace falta</h4>
+        <p>Publicación en Google Play y App Store, con restricción de menores declarados, estándares de seguridad infantil publicados y contacto de seguridad designado. Asumiendo la comisión de las tiendas sobre todo lo que se cobre dentro de la app.</p>
+        <p class="cierre">Sólo si la web ya funciona. Nunca antes.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout ok">
+    <span class="tag">La métrica única</span>
+    <p>No mires descargas ni registros. Mirá <strong>charlas completas por semana dentro de un mismo radio</strong>. Es el único número que dice si el producto funciona. Todo lo demás es vanidad.</p>
+  </div>
+</section>
+
+<section id="marketing">
+  <h2><span class="num">06</span>Difusión y marca</h2>
+
+  <h3>El mensaje</h3>
+  <p>Tenés una ventaja rarísima: la propuesta se explica en una frase y genera reacción inmediata. <strong>"Acá nadie te elige por la foto."</strong> Todo lo demás es consecuencia de eso.</p>
+  <p>El posicionamiento no es "otra app de citas". Es <strong>lo contrario de una app de citas</strong>: menos perfiles, menos velocidad, menos fotos, más conversación. El público objetivo no es el que está feliz con Tinder; es el que se fue de Tinder cansado.</p>
+
+  <h3>Lo que sí funciona para esto</h3>
+  <ul class="body">
+    <li><strong>Prensa.</strong> Es la palanca más barata que tenés. "Una abogada argentina creó una app de citas donde está prohibido mandar fotos" es una nota publicable. Preparate la historia, tres o cuatro datos duros y una demo que funcione antes de contactar a nadie.</li>
+    <li><strong>Eventos presenciales.</strong> Citas a ciegas por escrito en un bar, con papel. Son baratos, generan contenido, y resuelven el arranque en frío porque concentran gente en un mismo lugar y momento.</li>
+    <li><strong>Lista de espera con escasez real.</strong> No falsa: si abrís de a 100 personas por barrio, decilo. La escasez honesta funciona y además te protege de crecer más rápido de lo que podés moderar.</li>
+    <li><strong>Comunidades que ya existen.</strong> Clubes de lectura, running, huerta, teatro independiente. Gente que ya se define por lo que hace, que es exactamente la materia prima de tu algoritmo.</li>
+    <li><strong>Contenido sobre el problema, no sobre el producto.</strong> Escribir sobre por qué las apps de citas dejaron de funcionar te posiciona mejor que cualquier anuncio.</li>
+  </ul>
+
+  <h3>Lo que no funciona</h3>
+  <ul class="body">
+    <li><strong>Publicidad paga con presupuesto chico.</strong> Vas a competir por el mismo público contra empresas que gastan millones. Traés usuarios a un desierto, se van, y perdiste la plata dos veces: en el anuncio y en la mala primera impresión.</li>
+    <li><strong>Lanzar en todo el país.</strong> Densidad, no cobertura.</li>
+    <li><strong>Influencers de a uno.</strong> Caro y de efecto instantáneo que no retiene.</li>
+  </ul>
+
+  <div class="callout alerta">
+    <span class="tag">Cuidado con lo que prometés</span>
+    <p>La publicidad integra el contrato de consumo (art. 8 de la Ley 24.240), y rige además el régimen de lealtad comercial. No prometas resultados afectivos ni "seguridad garantizada". Prometé la <strong>mecánica</strong>: sin fotos en el perfil, conversación antes que imagen, doble consentimiento. Eso podés cumplirlo siempre.</p>
+  </div>
+</section>
+
+<section id="plata">
+  <h2><span class="num">07</span>Los números, sin maquillaje</h2>
+
+  <h3>De dónde puede salir plata</h3>
+  <ul class="body">
+    <li><strong>Suscripción mensual</strong> por funciones que no rompan la premisa: más charlas simultáneas, ver quién te marcó, filtros avanzados. Nunca "saltarse la conversación": eso sería vender la destrucción de tu propio producto.</li>
+    <li><strong>Eventos pagos.</strong> Probablemente sea tu primer ingreso real y el más fácil de cobrar.</li>
+    <li><strong>Verificación premium.</strong> Un distintivo con validación de identidad.</li>
+  </ul>
+
+  <h3>De dónde se va la plata</h3>
+  <ul class="body">
+    <li><strong>Comisión de las tiendas:</strong> Apple y Google se quedan un porcentaje de lo que cobres dentro de la app. Es el mejor argumento para quedarte en la web todo lo que puedas.</li>
+    <li><strong>Moderación:</strong> es trabajo humano y es el costo que más crece con los usuarios. Presupuestalo desde el día uno.</li>
+    <li><strong>Verificación de identidad</strong> por operación.</li>
+    <li><strong>Infraestructura y desarrollo:</strong> el costo más visible y, curiosamente, no el más peligroso.</li>
+    <li><strong>Legal y contable:</strong> constitución, términos, registro AAIP, marca, contador mensual.</li>
+  </ul>
+
+  <div class="callout">
+    <span class="tag">La cuenta que define todo</span>
+    <p>Lo que tiene que cerrar es simple: <strong>lo que te cuesta traer una persona tiene que ser bastante menor que lo que esa persona te deja</strong> a lo largo del tiempo. En apps de citas esa cuenta es especialmente dura, porque el producto funciona bien cuando la gente <em>se va</em> —encontró a alguien— y eso acorta la vida del cliente. Si la Fase 0 y la Fase 1 salen casi gratis, podés equivocarte varias veces sin consecuencias. Si empezás gastando, tenés un solo intento.</p>
+  </div>
+</section>
+
+<section id="decision">
+  <h2><span class="num">08</span>Las tres decisiones posibles</h2>
+
+  <h4>A. Dejarlo acá</h4>
+  <p>Tenés un prototipo que funciona y una idea clara. Si no vas a poder sostener moderación y comunidad durante meses, cerrarlo ahora es una decisión racional y no una derrota. Perdiste una tarde, no un año.</p>
+
+  <h4>B. Hacerlo como proyecto de comunidad, sin app</h4>
+  <p>Citas a ciegas por escrito como formato, con eventos y un grupo curado. Costo casi nulo, ingreso posible por eventos, y te enseña todo lo que necesitás saber antes de invertir. <strong>Es lo que yo haría primero, sí o sí, pase lo que pase después.</strong></p>
+
+  <h4>C. Hacerlo como empresa</h4>
+  <p>Requiere tres cosas que hoy no tenés resueltas: <strong>un socio técnico</strong> que se haga cargo del producto, <strong>alguien que more</strong> todos los días, y <strong>la consulta formal al INAES</strong> por la incompatibilidad. Sin las tres, no arranques por acá.</p>
+
+  <div class="callout ok">
+    <span class="tag">Mi recomendación</span>
+    <p>Empezá por <strong>B</strong>, con fecha puesta: tres rondas en seis semanas. Si la gente completa las conversaciones y quiere conocerse, tenés una respuesta que ningún documento te puede dar, y recién ahí discutimos <strong>C</strong> con datos propios en la mano. Mientras tanto: hacé la búsqueda de marca en INPI y mandá la consulta al INAES. Son las dos cosas que tardan y no dependen de vos.</p>
+  </div>
+</section>
+
+<section id="fuentes" class="fuentes">
+  <h2><span class="num">09</span>Fuentes</h2>
+  <p>Todo lo afirmado arriba sobre normativa y mercado sale de estas fuentes, consultadas en septiembre de 2026. Lo que está marcado como "verificar" es porque la fuente es secundaria o el dato puede haber cambiado.</p>
+  <ol>
+    <li>Ley 25.326 de Protección de los Datos Personales — <a href="https://www.oas.org/juridico/pdfs/arg_ley25326.pdf">texto oficial</a> y <a href="https://www3.hcdn.gob.ar/dependencias/secparl/dgral_info_parlamentaria/dip/archivos/Ley_25326.pdf">texto actualizado, HCDN</a>.</li>
+    <li>Estado de la reforma de datos personales — <a href="https://www.diariojudicial.com/news-103126-proteccion-de-datos-personales-sigue-siendo-suficiente-la-ley-25326-en-2026">Diario Judicial</a> y <a href="https://leydedatospersonales.tech/">seguimiento del proyecto 1751-D-2026</a>.</li>
+    <li>Inscripción en el Registro Nacional de Bases de Datos — <a href="https://jbbabogados.com.ar/registro-de-bases-de-datos-personales-en-argentina-cuando-corresponde-inscribirlas-ante-la-aaip-y-como-hacerlo/">JBB Abogados</a>.</li>
+    <li>Tratamiento de datos sensibles — <a href="https://legalcoregroup.com.ar/tratamiento-de-datos-sensibles-en-argentina-requisitos-legales-y-mejores-practicas/">Legal Core Group</a> y <a href="https://estudionunes.com.ar/proteccion-de-datos-sensibles-lo-que-las-empresas-deben-saber/">Estudio Nunes</a>.</li>
+    <li>Ley 27.736 "Olimpia" — <a href="https://www.boletinoficial.gob.ar/detalleAviso/primera/296572/20231023">Boletín Oficial</a>, <a href="https://www.argentina.gob.ar/normativa/nacional/ley-27736-391774/texto">texto oficial</a> y <a href="https://genero.hcdn.gob.ar/normativa/detalle/LEY-OLIMPIA-DE-INCORPORACION-DE-LA-VIOLENCIA-DIGITAL-A-LA-LEY-26.485-N27.736/">ficha HCDN</a>.</li>
+    <li>CSJN, "Rodríguez, María Belén c/ Google Inc." (2014) — <a href="https://sj.csjn.gov.ar/homeSJ/notas/nota/189/documento">Secretaría de Jurisprudencia CSJN</a>. "Denegri c/ Google" (2022) — <a href="https://www.eldial.com/nuevo/nuevo_diseno/v2/fallo4.asp?id=56592&base=14&referencia=398">elDial</a>.</li>
+    <li>Botón de arrepentimiento, Resolución 424/2020 — <a href="https://www.argentina.gob.ar/normativa/nacional/resoluci%C3%B3n-424-2020-342869/texto">texto oficial</a> y <a href="https://www.argentina.gob.ar/justicia/derechofacil/leysimple/boton-arrepentimiento">Ley Simple</a>.</li>
+    <li>Ley 25.188 y régimen de incompatibilidades — <a href="https://www.argentina.gob.ar/normativa/nacional/norma-67817/texto">Decreto 894/2001</a> y <a href="https://servicios.infoleg.gob.ar/infolegInternet/anexos/65000-69999/67830/texact.htm">Decreto 8566/1961, texto actualizado</a>.</li>
+    <li>SAS ante IGJ — <a href="https://www.argentina.gob.ar/justicia/igj/sociedad-por-acciones-simplificada">IGJ</a>, <a href="https://www.argentina.gob.ar/justicia/igj/paso-paso-para-crear-tu-sas">paso a paso</a>; costos de referencia de mercado en <a href="https://portalsocietario.com.ar/constitucionsas-caba.shtml">Portal Societario</a>. <strong>Verificar aranceles vigentes.</strong></li>
+    <li>RENAPER, Sistema de Identidad Digital — <a href="https://www.argentina.gob.ar/interior/renaper/sid-sistema-de-identidad-digital">SID</a> y <a href="https://www.argentina.gob.ar/sid/modalidades-y-productos">modalidades y productos</a>. Aranceles citados por <a href="https://www.infobae.com/economia/2020/07/19/como-acceden-las-empresas-y-los-organismos-publicos-a-los-datos-de-los-45-millones-de-argentinos/">Infobae</a>: <strong>verificar valores actuales.</strong></li>
+    <li>Políticas de tiendas para apps de citas y verificación de edad — <a href="https://qawerk.com/blog/google-play-age-verification-usa-state-laws/">QAwerk</a> y <a href="https://xident.io/blog/age-verification-dating-apps-compliance-guide-2026/">Xident</a>. Fuentes secundarias: <strong>contrastar con la documentación oficial de Google Play y App Store antes de publicar.</strong></li>
+    <li>Contracción del mercado — <a href="https://www.businessofapps.com/news/dating-app-market-first-annual-revenue-decline/">Business of Apps</a>, <a href="https://fortune.com/2026/08/14/gen-z-dating-apps-swiping-irl/">Fortune</a> y <a href="https://quillette.com/2026/05/11/the-death-of-the-dating-app-match-tinder-bumble/">Quillette</a>.</li>
+    <li>Apps sin fotos que ya se intentaron — <a href="https://www.datingsitesreviews.com/article.php?story=taffy-is-a-chat-first-dating-app-that-makes-you-work-to-see-your-match-s-face">Taffy</a> y <a href="https://techcrunch.com/2023/02/13/tawkify-matchmaking-acquistion-smore-dating-app/">S'More / Tawkify, TechCrunch</a>.</li>
+    <li>Arranque en frío y liquidez — <a href="https://andrewchen.com/why-investors-dont-fund-dating/">Andrew Chen</a> y <a href="https://oyelabs.com/overcoming-the-cold-start-issue-in-dating-marketplaces/">Oyelabs</a>.</li>
+    <li>Consumo de apps de citas en Argentina — <a href="https://www.perfil.com/noticias/tecnologia/argentina-es-el-segundo-pais-que-mas-usa-apps-de-citas-en-el-mundo-alertan-por-el-aumento-de-estafas-romanticas-a35.phtml">Perfil</a>. Dato periodístico, no medición propia.</li>
+  </ol>
+</section>
+
+<footer class="cierre">
+  Documento de trabajo preparado para decidir, no dictamen. El encuadre legal es orientativo y está sujeto a verificación de vigencia normativa al momento de ejecutar cada paso; los datos de mercado provienen de fuentes públicas citadas. Las cuestiones de incompatibilidad del punto 4 requieren consulta formal al organismo antes de cualquier acto societario.
+</footer>
+
+</div>

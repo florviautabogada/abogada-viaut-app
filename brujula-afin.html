@@ -1,0 +1,1059 @@
+<title>Brújula Afín</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Karla:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#ECEEF2; --surface:#FFFFFF; --surface-2:#F5F6F9; --surface-3:#E4E8EF;
+  --ink:#141B2B; --ink-soft:#455068; --muted:#77819A;
+  --line:#D6DCE6; --line-strong:#BCC5D4;
+  --brass:#9A6A1F; --brass-ink:#7A5316; --brass-wash:#F2E7D2;
+  --rose:#B33A55; --rose-wash:#F7E2E7;
+  --teal:#186A5F; --teal-wash:#DCEFEA;
+  --shadow:0 1px 2px rgba(20,27,43,.06), 0 8px 24px -12px rgba(20,27,43,.22);
+  --radius:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0D121C; --surface:#161D2B; --surface-2:#1C2434; --surface-3:#242E42;
+    --ink:#E9ECF3; --ink-soft:#B6BFD0; --muted:#8894AB;
+    --line:#2A3447; --line-strong:#3A475F;
+    --brass:#DDA754; --brass-ink:#EBC383; --brass-wash:#33291A;
+    --rose:#E67C93; --rose-wash:#3A222A;
+    --teal:#5CBCAB; --teal-wash:#16332F;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0D121C; --surface:#161D2B; --surface-2:#1C2434; --surface-3:#242E42;
+  --ink:#E9ECF3; --ink-soft:#B6BFD0; --muted:#8894AB;
+  --line:#2A3447; --line-strong:#3A475F;
+  --brass:#DDA754; --brass-ink:#EBC383; --brass-wash:#33291A;
+  --rose:#E67C93; --rose-wash:#3A222A;
+  --teal:#5CBCAB; --teal-wash:#16332F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:"Karla","Helvetica Neue",Arial,sans-serif;
+  font-size:15.5px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:"Fraunces","Iowan Old Style",Georgia,serif; margin:0; text-wrap:balance; letter-spacing:-.01em}
+h1{font-size:1.5rem; font-weight:600}
+h2{font-size:1.25rem; font-weight:600}
+h3{font-size:1.02rem; font-weight:600}
+p{margin:0}
+button{font:inherit; color:inherit; cursor:pointer}
+input,select,textarea{font:inherit; color:inherit}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.68rem;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--muted);
+}
+:focus-visible{outline:2px solid var(--brass); outline-offset:2px; border-radius:6px}
+
+/* ---------- shell ---------- */
+.shell{max-width:880px; margin:0 auto; padding-inline:16px; padding-block:0 56px}
+header.top{
+  position:sticky; top:0; z-index:30; background:var(--paper);
+  border-bottom:1px solid var(--line); margin-inline:-16px; padding:14px 16px 0;
+}
+.brandrow{display:flex; align-items:center; gap:12px; max-width:848px; margin:0 auto; flex-wrap:wrap}
+.mark{
+  width:34px; height:34px; border-radius:50%; flex:none;
+  background:var(--surface); border:1.5px solid var(--brass);
+  display:grid; place-items:center;
+}
+.mark span{
+  display:block; width:2px; height:15px; border-radius:2px;
+  background:linear-gradient(var(--rose) 0 50%, var(--ink-soft) 50% 100%);
+  transform:rotate(34deg);
+}
+.brandname{font-family:"Fraunces",Georgia,serif; font-size:1.18rem; font-weight:600; letter-spacing:-.015em}
+.brandsub{font-size:.78rem; color:var(--muted); margin-left:auto; text-align:right}
+nav.tabs{display:flex; gap:2px; max-width:848px; margin:10px auto 0; overflow-x:auto; scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{
+  border:0; background:none; padding:9px 13px 11px; white-space:nowrap;
+  color:var(--muted); border-bottom:2px solid transparent; font-weight:500; font-size:.92rem;
+}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink); border-bottom-color:var(--brass)}
+.tab .badge{
+  display:inline-block; min-width:18px; padding:0 5px; margin-left:6px; border-radius:9px;
+  background:var(--rose); color:var(--paper); font-size:.7rem; font-weight:700; line-height:18px; text-align:center;
+}
+
+main{padding-top:20px}
+.view{display:none}
+.view.on{display:block}
+.stack{display:flex; flex-direction:column; gap:16px}
+.viewhead{display:flex; flex-direction:column; gap:3px; margin-bottom:2px}
+.viewhead p{color:var(--ink-soft); font-size:.92rem}
+
+/* ---------- cards ---------- */
+.card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow)}
+.pad{padding:18px}
+
+/* profile card */
+.profile{overflow:hidden}
+.portrait{
+  height:172px; display:flex; align-items:flex-end; justify-content:space-between;
+  padding:14px 16px; gap:10px; position:relative;
+}
+.portrait::after{
+  content:""; position:absolute; inset:0;
+  background:radial-gradient(120% 90% at 80% 0%, rgba(255,255,255,.30), transparent 60%);
+  pointer-events:none;
+}
+.initials{
+  font-family:"Fraunces",Georgia,serif; font-size:2.6rem; font-weight:600; color:#fff;
+  text-shadow:0 2px 12px rgba(0,0,0,.35); line-height:1; position:relative; z-index:1;
+}
+.portrait .kmtag{
+  position:relative; z-index:1; background:rgba(12,16,26,.62); color:#fff; backdrop-filter:blur(4px);
+  font-family:"IBM Plex Mono",monospace; font-size:.72rem; padding:4px 9px; border-radius:99px;
+}
+.idrow{display:flex; align-items:baseline; gap:9px; flex-wrap:wrap}
+.idrow .age{font-family:"IBM Plex Mono",monospace; color:var(--muted); font-size:.95rem}
+.verif{
+  display:inline-flex; align-items:center; gap:4px; font-size:.72rem; font-weight:700;
+  color:var(--teal); background:var(--teal-wash); padding:2px 8px; border-radius:99px;
+}
+.where{color:var(--muted); font-size:.88rem}
+.bio{color:var(--ink-soft); margin-top:10px}
+.chips{display:flex; flex-wrap:wrap; gap:6px; margin-top:12px}
+.chip{
+  font-size:.8rem; padding:4px 10px; border-radius:99px;
+  border:1px solid var(--line-strong); color:var(--ink-soft); background:var(--surface-2);
+}
+.chip.match{border-color:var(--brass); color:var(--brass-ink); background:var(--brass-wash); font-weight:700}
+.chip.match::before{content:"◆ "; font-size:.7em}
+.seek{
+  margin-top:12px; display:inline-flex; align-items:center; gap:7px;
+  font-size:.86rem; color:var(--ink-soft);
+}
+.seek b{color:var(--ink)}
+
+/* affinity block */
+.affinity{display:grid; grid-template-columns:170px 1fr; gap:18px; align-items:center; border-top:1px solid var(--line); padding:16px 18px; background:var(--surface-2)}
+.dial{position:relative; text-align:center}
+.dial svg{width:100%; height:auto; display:block; max-width:170px; margin-inline:auto}
+.dial .score{font-family:"IBM Plex Mono",monospace; font-size:1.85rem; font-weight:500; line-height:1; margin-top:4px}
+.dial .grade{font-size:.74rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-family:"IBM Plex Mono",monospace; margin-top:4px}
+.bars{display:flex; flex-direction:column; gap:9px}
+.bar{display:grid; grid-template-columns:96px 1fr 36px; gap:9px; align-items:center; font-size:.82rem}
+.bar .lb{color:var(--ink-soft)}
+.bar .track{display:block; height:6px; border-radius:99px; background:var(--surface-3); overflow:hidden}
+.bar .fill{display:block; height:100%; border-radius:99px; background:var(--brass)}
+.bar .vl{font-family:"IBM Plex Mono",monospace; color:var(--muted); text-align:right; font-variant-numeric:tabular-nums}
+.reasons{list-style:none; padding:0; margin:12px 18px 0; display:flex; flex-direction:column; gap:5px}
+.reasons li{font-size:.87rem; color:var(--ink-soft); padding-left:16px; position:relative}
+.reasons li::before{content:"—"; position:absolute; left:0; color:var(--brass)}
+
+/* actions */
+.actions{display:flex; gap:10px; padding:16px 18px; border-top:1px solid var(--line); flex-wrap:wrap}
+.btn{
+  border:1px solid var(--line-strong); background:var(--surface); border-radius:10px;
+  padding:11px 16px; font-weight:700; font-size:.92rem; transition:transform .12s ease, background .15s ease;
+}
+.btn:hover{background:var(--surface-2)}
+.btn:active{transform:translateY(1px)}
+.btn.grow{flex:1; min-width:120px; text-align:center}
+.btn.like{background:var(--rose); border-color:var(--rose); color:#fff}
+.btn.like:hover{filter:brightness(1.06)}
+.btn.ghost{background:none}
+.btn.sm{padding:7px 12px; font-size:.85rem; font-weight:500}
+.btn.danger{color:var(--rose); border-color:var(--rose)}
+
+/* filters */
+.filters{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px}
+.field{display:flex; flex-direction:column; gap:5px}
+.field label{font-size:.78rem; font-weight:700; color:var(--ink-soft)}
+.field input[type="text"], .field input[type="number"], .field select, .field textarea{
+  background:var(--surface-2); border:1px solid var(--line-strong); border-radius:9px; padding:9px 10px;
+}
+.field textarea{resize:vertical; min-height:76px}
+.range{display:flex; align-items:center; gap:9px}
+.range input[type="range"]{flex:1; accent-color:var(--brass)}
+.range output{font-family:"IBM Plex Mono",monospace; font-size:.84rem; color:var(--muted); min-width:56px; text-align:right; font-variant-numeric:tabular-nums}
+.pickchips{display:flex; flex-wrap:wrap; gap:6px}
+.pick{font-size:.82rem; padding:5px 11px; border-radius:99px; border:1px solid var(--line-strong); background:var(--surface-2); color:var(--ink-soft)}
+.pick[aria-pressed="true"]{background:var(--brass-wash); border-color:var(--brass); color:var(--brass-ink); font-weight:700}
+
+/* results */
+.results{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px}
+.rescard{display:flex; gap:12px; padding:13px; align-items:flex-start}
+.av{width:52px; height:52px; border-radius:12px; flex:none; display:grid; place-items:center; color:#fff; font-family:"Fraunces",Georgia,serif; font-size:1.2rem; font-weight:600}
+.av.sm{width:40px; height:40px; border-radius:10px; font-size:.95rem}
+.resmeta{min-width:0; flex:1}
+.resmeta .nm{font-weight:700; display:flex; align-items:center; gap:6px; flex-wrap:wrap}
+.resmeta .sub{font-size:.8rem; color:var(--muted)}
+.resmeta .line{font-size:.82rem; color:var(--ink-soft); margin-top:5px; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical}
+.pct{font-family:"IBM Plex Mono",monospace; font-size:.9rem; font-weight:500; padding:3px 8px; border-radius:8px; background:var(--surface-3); color:var(--ink); font-variant-numeric:tabular-nums}
+.pct.hi{background:var(--teal-wash); color:var(--teal)}
+.pct.mid{background:var(--brass-wash); color:var(--brass-ink)}
+
+/* matches + chat */
+.mrow{display:flex; gap:12px; align-items:center; padding:12px 14px; width:100%; text-align:left; border:0; background:none; border-bottom:1px solid var(--line)}
+.mrow:last-child{border-bottom:0}
+.mrow:hover{background:var(--surface-2)}
+.chatwrap{display:flex; flex-direction:column; height:min(66vh,540px)}
+.chathead{display:flex; align-items:center; gap:11px; padding:12px 14px; border-bottom:1px solid var(--line)}
+.msgs{flex:1; overflow-y:auto; padding:16px 14px; display:flex; flex-direction:column; gap:9px; background:var(--surface-2)}
+.msg{max-width:76%; padding:9px 13px; border-radius:14px; font-size:.92rem; line-height:1.45}
+.msg.them{align-self:flex-start; background:var(--surface); border:1px solid var(--line); border-bottom-left-radius:5px}
+.msg.me{align-self:flex-end; background:var(--brass-wash); border:1px solid var(--brass); color:var(--brass-ink); border-bottom-right-radius:5px}
+.composer{display:flex; gap:9px; padding:12px 14px; border-top:1px solid var(--line)}
+.composer input{flex:1; background:var(--surface-2); border:1px solid var(--line-strong); border-radius:10px; padding:10px 12px}
+
+.note{
+  font-size:.82rem; color:var(--ink-soft); background:var(--surface-2);
+  border:1px dashed var(--line-strong); border-radius:10px; padding:10px 12px;
+}
+.empty{text-align:center; padding:40px 20px; color:var(--muted)}
+.empty h3{color:var(--ink); margin-bottom:6px}
+
+/* axes editor */
+.axis{display:grid; grid-template-columns:1fr; gap:4px; padding:10px 0; border-bottom:1px solid var(--line)}
+.axis:last-child{border-bottom:0}
+.axislabels{display:flex; justify-content:space-between; font-size:.78rem; color:var(--muted); gap:10px}
+.axis input[type="range"]{width:100%; accent-color:var(--brass)}
+.axisname{font-size:.78rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--brass-ink); font-family:"IBM Plex Mono",monospace}
+
+/* modal */
+.overlay{
+  position:fixed; inset:0; z-index:60; background:rgba(10,14,22,.62);
+  display:grid; place-items:center; padding:18px;
+}
+.overlay[hidden]{display:none}
+.modal{background:var(--surface); border:1px solid var(--line); border-radius:16px; max-width:400px; width:100%; padding:22px; box-shadow:var(--shadow)}
+.modal h2{margin-bottom:8px}
+.modal p{color:var(--ink-soft); font-size:.92rem}
+.modal .actions{border-top:0; padding:16px 0 0}
+.radiolist{display:flex; flex-direction:column; gap:8px; margin-top:14px}
+.radiolist label{display:flex; gap:9px; align-items:flex-start; font-size:.9rem; color:var(--ink-soft)}
+.matchcard{text-align:center}
+.matchcard .avs{display:flex; justify-content:center; margin:14px 0 10px}
+.matchcard .avs .av{width:66px; height:66px; border-radius:50%; border:3px solid var(--surface); font-size:1.5rem}
+.matchcard .avs .av:last-child{margin-left:-16px}
+
+.toast{
+  position:fixed; left:50%; bottom:22px; transform:translateX(-50%); z-index:70;
+  background:var(--ink); color:var(--paper); padding:11px 18px; border-radius:99px;
+  font-size:.88rem; box-shadow:var(--shadow); max-width:calc(100% - 32px);
+}
+.toast[hidden]{display:none}
+
+footer.foot{max-width:848px; margin:34px auto 0; padding-top:16px; border-top:1px solid var(--line); color:var(--muted); font-size:.8rem}
+
+@media (max-width:560px){
+  .affinity{grid-template-columns:1fr; gap:14px}
+  .dial svg{max-width:200px}
+  .bar{grid-template-columns:86px 1fr 34px}
+  .brandsub{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}
+</style>
+
+<header class="top">
+  <div class="brandrow">
+    <div class="mark" aria-hidden="true"><span></span></div>
+    <div>
+      <div class="brandname">Brújula Afín</div>
+      <div class="eyebrow">Citas por afinidad</div>
+    </div>
+    <div class="brandsub">Demo · perfiles ficticios</div>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Secciones">
+    <button class="tab" role="tab" data-view="descubrir" aria-selected="true">Descubrir</button>
+    <button class="tab" role="tab" data-view="buscar" aria-selected="false">Buscar</button>
+    <button class="tab" role="tab" data-view="matches" aria-selected="false">Matches<span class="badge" id="mcount" hidden>0</span></button>
+    <button class="tab" role="tab" data-view="perfil" aria-selected="false">Mi perfil</button>
+  </nav>
+</header>
+
+<div class="shell">
+<main>
+
+  <section class="view on" id="view-descubrir">
+    <div class="stack">
+      <div class="viewhead">
+        <h1>Descubrir</h1>
+        <p>Un perfil por vez, ordenado por afinidad con tus respuestas. La brújula muestra de dónde sale ese número.</p>
+      </div>
+      <div id="deck"></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-buscar">
+    <div class="stack">
+      <div class="viewhead">
+        <h1>Buscar</h1>
+        <p>Filtrá por lo que te importa y ordená por afinidad, cercanía o edad.</p>
+      </div>
+
+      <div class="card pad">
+        <div class="filters">
+          <div class="field">
+            <label for="f-texto">Palabra clave</label>
+            <input type="text" id="f-texto" placeholder="nombre, barrio, algo de la bio">
+          </div>
+          <div class="field">
+            <label for="f-busca">Qué busca</label>
+            <select id="f-busca">
+              <option value="">Cualquiera</option>
+              <option>Algo serio</option>
+              <option>Conocer gente</option>
+              <option>Amistad</option>
+              <option>Sin definir</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-orden">Ordenar por</label>
+            <select id="f-orden">
+              <option value="afin">Afinidad</option>
+              <option value="km">Cercanía</option>
+              <option value="edad">Edad</option>
+              <option value="nombre">Nombre</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-edadmin">Edad mínima <span class="mono" id="o-edadmin">25</span></label>
+            <div class="range"><input type="range" id="f-edadmin" min="18" max="70" value="25"></div>
+          </div>
+          <div class="field">
+            <label for="f-edadmax">Edad máxima <span class="mono" id="o-edadmax">48</span></label>
+            <div class="range"><input type="range" id="f-edadmax" min="18" max="70" value="48"></div>
+          </div>
+          <div class="field">
+            <label for="f-km">Distancia máxima <span class="mono" id="o-km">30 km</span></label>
+            <div class="range"><input type="range" id="f-km" min="1" max="60" value="30"></div>
+          </div>
+          <div class="field">
+            <label for="f-afin">Afinidad mínima <span class="mono" id="o-afin">0</span></label>
+            <div class="range"><input type="range" id="f-afin" min="0" max="95" step="5" value="0"></div>
+          </div>
+          <div class="field">
+            <label for="f-verif">Solo perfiles verificados</label>
+            <select id="f-verif"><option value="no">No, mostrar todos</option><option value="si">Sí, solo verificados</option></select>
+          </div>
+        </div>
+        <div class="field" style="margin-top:14px">
+          <label>Intereses en común (elegí los que quieras)</label>
+          <div class="pickchips" id="f-intereses"></div>
+        </div>
+        <div class="actions" style="padding-inline:0; padding-bottom:0">
+          <button class="btn sm ghost" id="f-reset">Limpiar filtros</button>
+          <span class="mono" id="f-count" style="margin-left:auto; align-self:center; color:var(--muted); font-size:.84rem"></span>
+        </div>
+      </div>
+
+      <div class="results" id="results"></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-matches">
+    <div class="stack">
+      <div class="viewhead">
+        <h1>Matches</h1>
+        <p>Cuando a las dos personas les interesa, se abre la conversación.</p>
+      </div>
+      <div id="matchlist"></div>
+      <div id="chatbox"></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-perfil">
+    <div class="stack">
+      <div class="viewhead">
+        <h1>Mi perfil</h1>
+        <p>Todo lo que cambies acá recalcula la afinidad al instante.</p>
+      </div>
+
+      <div class="card pad stack">
+        <div class="filters">
+          <div class="field"><label for="p-nombre">Nombre</label><input type="text" id="p-nombre"></div>
+          <div class="field"><label for="p-edad">Edad</label><input type="number" id="p-edad" min="18" max="99"></div>
+          <div class="field"><label for="p-ciudad">Dónde vivís</label><input type="text" id="p-ciudad"></div>
+          <div class="field">
+            <label for="p-busca">Qué buscás</label>
+            <select id="p-busca"><option>Algo serio</option><option>Conocer gente</option><option>Amistad</option><option>Sin definir</option></select>
+          </div>
+          <div class="field">
+            <label for="p-interes">Me interesan</label>
+            <select id="p-interes"><option value="F">Mujeres</option><option value="M">Varones</option><option value="T">Todas las personas</option></select>
+          </div>
+          <div class="field">
+            <label for="p-prefkm">Hasta qué distancia <span class="mono" id="o-prefkm">25 km</span></label>
+            <div class="range"><input type="range" id="p-prefkm" min="1" max="60" value="25"></div>
+          </div>
+        </div>
+        <div class="field"><label for="p-bio">Tu bio</label><textarea id="p-bio" maxlength="240"></textarea></div>
+        <div class="field">
+          <label>Tus intereses</label>
+          <div class="pickchips" id="p-intereses"></div>
+        </div>
+      </div>
+
+      <div class="card pad stack">
+        <div>
+          <h2>Cuestionario de afinidad</h2>
+          <p style="color:var(--ink-soft); font-size:.9rem; margin-top:4px">Cinco ejes. Movés la barra hacia el lado con el que más te identificás; pesa el 40&nbsp;% del puntaje.</p>
+        </div>
+        <div id="axes"></div>
+      </div>
+
+      <div class="card pad stack">
+        <h2>Seguridad</h2>
+        <p class="note">Podés bloquear o reportar desde el menú <b>···</b> de cualquier perfil. Quien bloqueás desaparece de Descubrir, de Buscar y de tus matches.</p>
+        <div id="blocklist"></div>
+      </div>
+
+      <div class="card pad stack">
+        <h2>Datos</h2>
+        <p style="color:var(--ink-soft); font-size:.9rem">Todo se guarda solo en este navegador. Nada se envía a ningún servidor.</p>
+        <div><button class="btn sm danger" id="p-reset">Borrar todo y empezar de cero</button></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+<footer class="foot">
+  Brújula Afín — demostración funcional. Los 16 perfiles son ficticios y fueron inventados para esta demo: no representan a personas reales. Las respuestas del chat son automáticas.
+</footer>
+</div>
+
+<div class="overlay" id="overlay" hidden><div class="modal" id="modal"></div></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+"use strict";
+
+/* ---------------- datos de demo ---------------- */
+const INTERESES = ["Cine","Cocinar","Correr","Yoga","Libros","Música en vivo","Viajar","Perros","Gatos","Teatro","Política","Ciencia","Fotografía","Café de especialidad","Montaña","Bailar","Videojuegos","Huerta"];
+
+const EJES = [
+  {clave:"ritmo",  nombre:"Ritmo",  izq:"Plan tranquilo en casa", der:"Salir todo lo que se pueda"},
+  {clave:"vinculo",nombre:"Vínculo",izq:"Mucha independencia",    der:"Mucho tiempo juntos"},
+  {clave:"mundo",  nombre:"Mundo",  izq:"Reservada, de a pocos",  der:"Muy social, grupos grandes"},
+  {clave:"rumbo",  nombre:"Rumbo",  izq:"Improvisar sobre la marcha", der:"Planificar con tiempo"},
+  {clave:"fuego",  nombre:"Fuego",  izq:"Evitar el conflicto",    der:"Debatir a fondo"}
+];
+
+const PERFILES = [
+  {id:"p1",n:"Malena",e:34,g:"F",c:"Villa Crespo, CABA",km:4,v:true,b:"Editora. Me levanto temprano aunque nadie me obligue, corro por el parque y después desayuno tres horas leyendo.",i:["Libros","Correr","Café de especialidad","Cine","Perros"],q:"Algo serio",x:[35,60,40,70,55],h:12,f:["Hola! Qué bueno que coincidimos.","Te cuento: estoy terminando un libro que me tiene obsesionada.","¿Sos de madrugar o te levanto de prepo un sábado?","Hay una feria de editoriales el finde, por si te tienta."]},
+  {id:"p2",n:"Julieta",e:31,g:"F",c:"Caballito, CABA",km:6,v:true,b:"Bióloga, trabajo con plantas nativas. Tengo una huerta en el balcón que ya es un problema de espacio.",i:["Huerta","Ciencia","Montaña","Perros","Cocinar"],q:"Algo serio",x:[30,55,35,65,45],h:41,f:["Hola, me gustó tu perfil.","Te aviso que hablo de plantas más de lo socialmente aceptable.","¿Conocés algún vivero bueno por tu zona?","¿Te gusta caminar largo o te aburrís?"]},
+  {id:"p3",n:"Camila",e:29,g:"F",c:"Palermo, CABA",km:2,v:false,b:"Diseñadora. Vivo entre muestras de color y recitales chicos. Mi plan ideal termina bailando.",i:["Música en vivo","Bailar","Fotografía","Cine","Viajar"],q:"Conocer gente",x:[80,35,85,25,60],h:7,f:["Holaa!","Toca una banda que me encanta el jueves, aviso nomás.","¿Bailás o sos de los que miran?","Contame algo raro tuyo, arranco yo si querés."]},
+  {id:"p4",n:"Rocío",e:37,g:"F",c:"San Isidro, GBA",km:18,v:true,b:"Médica pediatra. Guardias de por medio, pero cuando estoy libre desaparezco a la montaña.",i:["Montaña","Correr","Libros","Yoga","Perros"],q:"Algo serio",x:[40,50,30,75,40],h:23,f:["Hola! Perdón la demora, venía de guardia.","¿Hiciste alguna travesía larga alguna vez?","Mi plan perfecto es sin señal de celular.","¿Café o te caigo directamente con mate?"]},
+  {id:"p5",n:"Agustina",e:42,g:"F",c:"Almagro, CABA",km:5,v:false,b:"Abogada laboralista. Me gusta discutir, pero de buena fe. Cocino bien y lo sé.",i:["Política","Cocinar","Teatro","Libros","Café de especialidad"],q:"Algo serio",x:[45,65,55,60,85],h:58,f:["Hola, buen perfil.","Aviso: si decís algo con lo que no estoy de acuerdo, lo vamos a hablar.","¿Qué comés cuando cocinás para vos sola?","Vi una obra buenísima en el Cervantes, te la recomiendo."]},
+  {id:"p6",n:"Delfina",e:27,g:"F",c:"Nuñez, CABA",km:9,v:false,b:"Estudio cine y trabajo en producción. Vivo con dos gatos que me toleran.",i:["Cine","Gatos","Fotografía","Música en vivo","Videojuegos"],q:"Conocer gente",x:[65,40,60,35,50],h:15,f:["Hola :)","¿Última peli que te gustó de verdad?","Mis gatos se llaman Fassbinder y Nube.","¿Te va un ciclo de cine el domingo?"]},
+  {id:"p7",n:"Victoria",e:39,g:"F",c:"Vicente López, GBA",km:12,v:true,b:"Arquitecta. Me fascinan las ciudades ajenas: planifico viajes que a veces hago.",i:["Viajar","Fotografía","Café de especialidad","Teatro","Cocinar"],q:"Algo serio",x:[50,60,50,80,45],h:33,f:["Hola! Qué tal.","Tengo un Excel de viajes, no juzgues.","¿Ciudad o playa? Es una pregunta con trampa.","¿Te copa caminar sin destino un domingo?"]},
+  {id:"p8",n:"Mariana",e:45,g:"F",c:"Belgrano, CABA",km:8,v:true,b:"Profesora de literatura. Dos hijos grandes, una perra vieja y muchas ganas de conversar de verdad.",i:["Libros","Teatro","Política","Perros","Yoga"],q:"Algo serio",x:[35,55,40,60,70],h:47,f:["Hola, gracias por escribir.","¿Qué estás leyendo?","Prefiero una charla larga antes que veinte mensajes cortos.","Si te gusta el teatro independiente, tengo recomendaciones."]},
+  {id:"p9",n:"Sofía",e:33,g:"F",c:"Tigre, GBA",km:28,v:false,b:"Programadora, remoto. Entreno crossfit y juego demasiado. Honesta hasta que incomoda.",i:["Videojuegos","Correr","Ciencia","Gatos","Música en vivo"],q:"Conocer gente",x:[55,30,45,40,75],h:61,f:["Hola!","¿Jugás algo o me vas a decir que no tenés tiempo?","Trabajo remoto, así que mi horario es un caos elegido.","Te digo las cosas de frente, aviso antes."]},
+  {id:"p10",n:"Bruno",e:36,g:"M",c:"Colegiales, CABA",km:5,v:true,b:"Chef de un lugar chico. Trabajo cuando todos salen, así que mis domingos son sagrados.",i:["Cocinar","Música en vivo","Libros","Perros","Café de especialidad"],q:"Algo serio",x:[45,55,50,55,50],h:19,f:["Hola! Qué gusto.","Si venís al local te cocino algo que no está en la carta.","¿Comés de todo o tenés alguna guerra declarada?","Los domingos los tengo libres, por si pinta plan."]},
+  {id:"p11",n:"Tomás",e:30,g:"M",c:"Boedo, CABA",km:7,v:false,b:"Músico y profe de guitarra. Toco los jueves en un bar de la esquina de mi casa.",i:["Música en vivo","Bailar","Cine","Videojuegos","Viajar"],q:"Conocer gente",x:[75,40,70,30,55],h:9,f:["Hola!!","Toco el jueves, estás invitada.","¿Qué escuchás cuando nadie te ve?","Soy malísimo para planificar, aviso."]},
+  {id:"p12",n:"Ignacio",e:41,g:"M",c:"Martínez, GBA",km:16,v:true,b:"Ingeniero. Corro maratones con más entusiasmo que talento. Padre de Lola, una golden.",i:["Correr","Perros","Montaña","Ciencia","Libros"],q:"Algo serio",x:[30,50,35,85,40],h:52,f:["Hola, cómo andás.","Mañana salgo a correr temprano, es mi terapia.","¿Te gustan los perros o los tolerás?","Soy de planificar bastante, lo admito."]},
+  {id:"p13",n:"Martín",e:38,g:"M",c:"San Telmo, CABA",km:6,v:false,b:"Fotógrafo. Vivo en un PH con luz de la buena. Mucho café, poca rutina.",i:["Fotografía","Café de especialidad","Viajar","Teatro","Gatos"],q:"Sin definir",x:[60,35,55,25,50],h:28,f:["Hola, buenas fotos las tuyas.","Mi casa tiene una luz de las 6 de la tarde que es un show.","¿Te dejarías retratar o odiás la cámara?","No tengo mucha rutina, para bien y para mal."]},
+  {id:"p14",n:"Facundo",e:44,g:"M",c:"Flores, CABA",km:10,v:true,b:"Docente y sindicalista. Discuto por deporte, pero escucho. Huerta comunitaria los sábados.",i:["Política","Huerta","Libros","Cocinar","Teatro"],q:"Algo serio",x:[35,60,60,65,90],h:44,f:["Hola! Buen perfil el tuyo.","Los sábados estoy en la huerta del barrio, sumate.","¿Te interesa la discusión política o te agota?","Prometo escuchar más de lo que hablo. Prometo."]},
+  {id:"p15",n:"Emilia",e:35,g:"F",c:"Barracas, CABA",km:11,v:false,b:"Psicóloga. Silencio, yoga y libros durante la semana; los sábados, teatro.",i:["Yoga","Libros","Teatro","Gatos","Cine"],q:"Amistad",x:[25,45,25,55,35],h:36,f:["Hola, gracias por escribir.","Estoy buscando gente para hacer cosas, lo digo de entrada.","¿Hacés algo para bajar un cambio?","Hay una obra en el Abasto que quiero ver."]},
+  {id:"p16",n:"Nicolás",e:32,g:"M",c:"Villa Urquiza, CABA",km:13,v:false,b:"Ciencia de datos de día, huerta de balcón de noche. Bailo mal y no me importa.",i:["Ciencia","Huerta","Bailar","Videojuegos","Correr"],q:"Conocer gente",x:[60,45,55,50,60],h:5,f:["Hola!","Tengo tomates cherry que son mi orgullo.","¿Te animás a una clase de baile aunque seamos un desastre?","Pregunto todo, es deformación profesional."]}
+];
+
+const YO_DEFECTO = {
+  n:"Vos", e:34, c:"Palermo, CABA", b:"Me gusta el plan largo: una comida que se estira, una caminata sin rumbo y una conversación que no mira el reloj.",
+  i:["Libros","Cocinar","Cine","Perros","Café de especialidad"],
+  q:"Algo serio", interes:"T", prefKm:25, x:[40,55,45,60,55]
+};
+
+/* ---------------- estado ---------------- */
+const CLAVE = "brujula-afin.v1";
+let S = cargar();
+
+function cargar(){
+  const base = {yo:{...YO_DEFECTO}, likes:[], pases:[], bloqueados:[], chats:{}, reportes:[]};
+  try{
+    const crudo = localStorage.getItem(CLAVE);
+    if(!crudo) return base;
+    const g = JSON.parse(crudo);
+    return {...base, ...g, yo:{...base.yo, ...(g.yo||{})}};
+  }catch(err){ return base; }
+}
+function guardar(){
+  try{ localStorage.setItem(CLAVE, JSON.stringify(S)); }catch(err){ /* modo privado: seguimos en memoria */ }
+}
+
+/* ---------------- afinidad ---------------- */
+const PESOS = {ejes:0.40, intereses:0.30, intencion:0.20, cercania:0.10};
+
+function afinidad(p){
+  const yo = S.yo;
+  let d = 0;
+  for(let k=0;k<5;k++) d += Math.abs(yo.x[k] - p.x[k]);
+  const ejes = 1 - (d/5)/100;
+
+  const comunes = p.i.filter(t => yo.i.includes(t));
+  const denom = Math.max(1, Math.min(p.i.length, yo.i.length));
+  const intereses = Math.min(1, comunes.length / denom);
+
+  let intencion;
+  if(yo.q === p.q) intencion = 1;
+  else if(yo.q === "Sin definir" || p.q === "Sin definir") intencion = 0.55;
+  else if([yo.q,p.q].includes("Amistad")) intencion = 0.25;
+  else intencion = 0.6;
+
+  const margen = Math.max(0, p.km - yo.prefKm);
+  const cercania = Math.max(0, 1 - margen/25);
+
+  const total = ejes*PESOS.ejes + intereses*PESOS.intereses + intencion*PESOS.intencion + cercania*PESOS.cercania;
+  return {
+    total: Math.round(total*100),
+    partes: [
+      {lb:"Ejes", v:Math.round(ejes*100)},
+      {lb:"Intereses", v:Math.round(intereses*100)},
+      {lb:"Intención", v:Math.round(intencion*100)},
+      {lb:"Cercanía", v:Math.round(cercania*100)}
+    ],
+    comunes
+  };
+}
+
+function grado(n){
+  if(n>=78) return "Afinidad muy alta";
+  if(n>=62) return "Afinidad alta";
+  if(n>=45) return "Afinidad media";
+  return "Afinidad baja";
+}
+
+function motivos(p, a){
+  const out = [];
+  if(a.comunes.length >= 3) out.push(`Comparten ${a.comunes.length} intereses: ${a.comunes.slice(0,3).join(", ").toLowerCase()}.`);
+  else if(a.comunes.length) out.push(`Coinciden en ${a.comunes.join(" y ").toLowerCase()}.`);
+  else out.push("No comparten intereses declarados: puede ser un buen contraste o un problema.");
+
+  if(S.yo.q === p.q) out.push(`Los dos buscan lo mismo: ${p.q.toLowerCase()}.`);
+  else out.push(`Vos buscás ${S.yo.q.toLowerCase()} y ${p.n} busca ${p.q.toLowerCase()}.`);
+
+  let mejor = 0, peor = 0;
+  for(let k=1;k<5;k++){
+    if(Math.abs(S.yo.x[k]-p.x[k]) < Math.abs(S.yo.x[mejor]-p.x[mejor])) mejor = k;
+    if(Math.abs(S.yo.x[k]-p.x[k]) > Math.abs(S.yo.x[peor]-p.x[peor])) peor = k;
+  }
+  out.push(`Se parecen mucho en ${EJES[mejor].nombre.toLowerCase()}; donde más se diferencian es en ${EJES[peor].nombre.toLowerCase()}.`);
+  if(p.km > S.yo.prefKm) out.push(`Está a ${p.km} km, más lejos de los ${S.yo.prefKm} km que pusiste como límite.`);
+  return out;
+}
+
+/* corresponde: determinista por perfil, más probable cuanto mayor la afinidad */
+function correspondido(p, puntaje){ return ((p.h*7) % 100) < (puntaje + 12); }
+
+function visibles(){
+  const yo = S.yo;
+  return PERFILES.filter(p => {
+    if(S.bloqueados.includes(p.id)) return false;
+    if(yo.interes !== "T" && p.g !== yo.interes) return false;
+    return true;
+  });
+}
+
+/* ---------------- utilidades de UI ---------------- */
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function tono(h){ return `linear-gradient(148deg, hsl(${h} 52% 58%), hsl(${(h+42)%360} 44% 34%))`; }
+function iniciales(n){ return n.trim().slice(0,2).toUpperCase(); }
+
+let tToast;
+function aviso(txt){
+  const t = $("#toast");
+  t.textContent = txt; t.hidden = false;
+  clearTimeout(tToast);
+  tToast = setTimeout(()=>{ t.hidden = true; }, 2600);
+}
+
+function dial(n){
+  const largo = 251.33, p = Math.max(0, Math.min(100, n))/100;
+  const color = n>=62 ? "var(--teal)" : n>=45 ? "var(--brass)" : "var(--muted)";
+  return `
+  <svg viewBox="0 0 200 110" role="img" aria-label="Afinidad ${n} sobre 100">
+    <path d="M20,100 A80,80 0 0 1 180,100" fill="none" stroke="var(--surface-3)" stroke-width="12" stroke-linecap="round"></path>
+    <path d="M20,100 A80,80 0 0 1 180,100" fill="none" stroke="${color}" stroke-width="12" stroke-linecap="round"
+          stroke-dasharray="${(largo*p).toFixed(1)} ${largo}"></path>
+    <g transform="rotate(${((n-50)*1.8).toFixed(1)} 100 100)">
+      <line x1="100" y1="100" x2="100" y2="40" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"></line>
+    </g>
+    <circle cx="100" cy="100" r="5" fill="var(--ink)"></circle>
+  </svg>`;
+}
+
+function bloqueAfinidad(a){
+  return `
+  <div class="affinity">
+    <div class="dial">
+      ${dial(a.total)}
+      <div class="score">${a.total}</div>
+      <div class="grade">${esc(grado(a.total))}</div>
+    </div>
+    <div class="bars">
+      ${a.partes.map(x => `
+        <div class="bar">
+          <span class="lb">${esc(x.lb)}</span>
+          <span class="track"><span class="fill" style="width:${x.v}%"></span></span>
+          <span class="vl">${x.v}</span>
+        </div>`).join("")}
+    </div>
+  </div>`;
+}
+
+/* ---------------- vista: descubrir ---------------- */
+function candidatos(){
+  return visibles()
+    .filter(p => !S.likes.includes(p.id) && !S.pases.includes(p.id))
+    .map(p => ({p, a:afinidad(p)}))
+    .sort((u,w) => w.a.total - u.a.total);
+}
+
+function pintarDeck(){
+  const cola = candidatos();
+  const cont = $("#deck");
+  if(!cola.length){
+    cont.innerHTML = `
+      <div class="card empty">
+        <h3>Por ahora no queda nadie</h3>
+        <p>Revisaste todos los perfiles que entran en tus preferencias.</p>
+        <div style="margin-top:16px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap">
+          <button class="btn sm" id="d-volver">Volver a ver los que pasé</button>
+          <button class="btn sm ghost" data-ir="perfil">Ajustar mis preferencias</button>
+        </div>
+      </div>`;
+    const v = $("#d-volver");
+    if(v) v.onclick = () => { S.pases = []; guardar(); pintarDeck(); aviso("Los perfiles que pasaste vuelven a la lista."); };
+    return;
+  }
+  const {p, a} = cola[0];
+  cont.innerHTML = `
+    <article class="card profile">
+      <div class="portrait" style="background:${tono(p.h)}">
+        <div class="initials">${esc(iniciales(p.n))}</div>
+        <div class="kmtag">${p.km} km</div>
+      </div>
+      <div class="pad">
+        <div style="display:flex; gap:10px; align-items:flex-start">
+          <div style="flex:1; min-width:0">
+            <div class="idrow">
+              <h2>${esc(p.n)}</h2>
+              <span class="age">${p.e}</span>
+              ${p.v ? '<span class="verif">✓ Verificada</span>' : ''}
+            </div>
+            <div class="where">${esc(p.c)}</div>
+          </div>
+          <button class="btn sm ghost" data-menu="${p.id}" aria-label="Opciones de seguridad para ${esc(p.n)}">···</button>
+        </div>
+        <p class="bio">${esc(p.b)}</p>
+        <div class="chips">
+          ${p.i.map(t => `<span class="chip ${a.comunes.includes(t)?"match":""}">${esc(t)}</span>`).join("")}
+        </div>
+        <div class="seek">Busca <b>${esc(p.q)}</b></div>
+      </div>
+      ${bloqueAfinidad(a)}
+      <ul class="reasons">${motivos(p,a).map(m=>`<li>${esc(m)}</li>`).join("")}</ul>
+      <div class="actions">
+        <button class="btn grow ghost" data-pasar="${p.id}">Pasar</button>
+        <button class="btn grow like" data-like="${p.id}">Me interesa</button>
+      </div>
+    </article>
+    <p class="mono" style="color:var(--muted); font-size:.78rem; margin-top:10px; text-align:center">
+      Quedan ${cola.length} perfil${cola.length===1?"":"es"} en tu cola
+    </p>`;
+}
+
+function darLike(id){
+  const p = PERFILES.find(x => x.id === id);
+  if(!p) return;
+  cerrarModal();
+  const a = afinidad(p);
+  if(!S.likes.includes(id)) S.likes.push(id);
+  guardar();
+  if(correspondido(p, a.total)){
+    if(!S.chats[id]) S.chats[id] = [{de:"ellos", t:p.f[0]}];
+    guardar();
+    modalMatch(p, a.total);
+  }else{
+    aviso(`Le dijiste que sí a ${p.n}. Si corresponde, aparece en Matches.`);
+  }
+  pintarTodo();
+}
+
+function pasar(id){
+  if(!S.pases.includes(id)) S.pases.push(id);
+  guardar(); pintarDeck();
+}
+
+/* ---------------- vista: buscar ---------------- */
+const F = {texto:"", busca:"", orden:"afin", edadmin:25, edadmax:48, km:30, afin:0, verif:"no", intereses:[]};
+
+function pintarFiltros(){
+  $("#f-intereses").innerHTML = INTERESES.map(t =>
+    `<button class="pick" type="button" data-fint="${esc(t)}" aria-pressed="${F.intereses.includes(t)}">${esc(t)}</button>`).join("");
+}
+
+function pintarResultados(){
+  const lista = visibles()
+    .map(p => ({p, a:afinidad(p)}))
+    .filter(({p,a}) => {
+      if(p.e < F.edadmin || p.e > F.edadmax) return false;
+      if(p.km > F.km) return false;
+      if(a.total < F.afin) return false;
+      if(F.busca && p.q !== F.busca) return false;
+      if(F.verif === "si" && !p.v) return false;
+      if(F.intereses.length && !F.intereses.every(t => p.i.includes(t))) return false;
+      if(F.texto){
+        const t = F.texto.toLowerCase();
+        const heno = (p.n+" "+p.c+" "+p.b+" "+p.i.join(" ")).toLowerCase();
+        if(!heno.includes(t)) return false;
+      }
+      return true;
+    })
+    .sort((u,w) => {
+      if(F.orden === "afin") return w.a.total - u.a.total;
+      if(F.orden === "km") return u.p.km - w.p.km;
+      if(F.orden === "edad") return u.p.e - w.p.e;
+      return u.p.n.localeCompare(w.p.n, "es");
+    });
+
+  $("#f-count").textContent = `${lista.length} de ${visibles().length} perfiles`;
+
+  $("#results").innerHTML = lista.length ? lista.map(({p,a}) => `
+    <article class="card rescard">
+      <div class="av" style="background:${tono(p.h)}">${esc(iniciales(p.n))}</div>
+      <div class="resmeta">
+        <div class="nm">${esc(p.n)}, ${p.e} ${p.v ? '<span class="verif">✓</span>' : ''}</div>
+        <div class="sub">${esc(p.c)} · ${p.km} km · ${esc(p.q)}</div>
+        <div class="line">${esc(p.b)}</div>
+        <div style="display:flex; gap:8px; align-items:center; margin-top:10px; flex-wrap:wrap">
+          <span class="pct ${a.total>=62?"hi":a.total>=45?"mid":""}">${a.total}</span>
+          <span style="font-size:.78rem; color:var(--muted)">${a.comunes.length} en común</span>
+          <button class="btn sm" data-ver="${p.id}" style="margin-left:auto">Ver</button>
+        </div>
+      </div>
+    </article>`).join("") : `
+    <div class="card empty" style="grid-column:1/-1">
+      <h3>Ningún perfil entra en esos filtros</h3>
+      <p>Probá ampliar la distancia, bajar la afinidad mínima o sacar algún interés.</p>
+    </div>`;
+}
+
+/* ---------------- vista: matches y chat ---------------- */
+let chatAbierto = null;
+
+function misMatches(){
+  return S.likes
+    .filter(id => S.chats[id] && !S.bloqueados.includes(id))
+    .map(id => PERFILES.find(p => p.id === id))
+    .filter(Boolean);
+}
+
+function pintarMatches(){
+  const ms = misMatches();
+  const n = ms.length;
+  const badge = $("#mcount");
+  badge.hidden = n === 0; badge.textContent = n;
+
+  $("#matchlist").innerHTML = n ? `<div class="card">${ms.map(p => {
+      const c = S.chats[p.id] || [];
+      const ultimo = c.length ? c[c.length-1] : null;
+      const prev = ultimo ? (ultimo.de === "yo" ? "Vos: " : "") + ultimo.t : "Todavía no se escribieron";
+      return `
+      <button class="mrow" data-chat="${p.id}">
+        <div class="av sm" style="background:${tono(p.h)}">${esc(iniciales(p.n))}</div>
+        <div class="resmeta">
+          <div class="nm">${esc(p.n)}, ${p.e}</div>
+          <div class="line" style="-webkit-line-clamp:1; margin-top:2px">${esc(prev)}</div>
+        </div>
+        <span class="pct ${afinidad(p).total>=62?"hi":"mid"}">${afinidad(p).total}</span>
+      </button>`;
+    }).join("")}</div>` : `
+    <div class="card empty">
+      <h3>Todavía no hay matches</h3>
+      <p>Andá a Descubrir y marcá los perfiles que te interesen. El match aparece cuando es mutuo.</p>
+      <div style="margin-top:14px"><button class="btn sm" data-ir="descubrir">Ir a Descubrir</button></div>
+    </div>`;
+
+  pintarChat();
+}
+
+function pintarChat(){
+  const caja = $("#chatbox");
+  if(!chatAbierto || !S.chats[chatAbierto] || S.bloqueados.includes(chatAbierto)){ caja.innerHTML = ""; return; }
+  const p = PERFILES.find(x => x.id === chatAbierto);
+  const msgs = S.chats[chatAbierto];
+  caja.innerHTML = `
+    <div class="card chatwrap">
+      <div class="chathead">
+        <div class="av sm" style="background:${tono(p.h)}">${esc(iniciales(p.n))}</div>
+        <div style="flex:1; min-width:0">
+          <div style="font-weight:700">${esc(p.n)}</div>
+          <div class="sub" style="font-size:.78rem; color:var(--muted)">${esc(p.c)} · afinidad ${afinidad(p).total}</div>
+        </div>
+        <button class="btn sm ghost" data-menu="${p.id}" aria-label="Opciones de seguridad">···</button>
+        <button class="btn sm ghost" id="cerrar-chat" aria-label="Cerrar conversación">✕</button>
+      </div>
+      <div class="msgs" id="msgs">
+        <p class="note" style="align-self:center; text-align:center">Conversación de demostración: las respuestas son automáticas.</p>
+        ${msgs.map(m => `<div class="msg ${m.de === "yo" ? "me" : "them"}">${esc(m.t)}</div>`).join("")}
+      </div>
+      <form class="composer" id="form-msg">
+        <input type="text" id="in-msg" placeholder="Escribí un mensaje" autocomplete="off" aria-label="Mensaje">
+        <button class="btn like" type="submit">Enviar</button>
+      </form>
+    </div>`;
+  const m = $("#msgs"); m.scrollTop = m.scrollHeight;
+  $("#cerrar-chat").onclick = () => { chatAbierto = null; pintarChat(); };
+  $("#form-msg").onsubmit = ev => {
+    ev.preventDefault();
+    const campo = $("#in-msg"), txt = campo.value.trim();
+    if(!txt) return;
+    S.chats[p.id].push({de:"yo", t:txt});
+    campo.value = ""; guardar(); pintarChat();
+    setTimeout(() => {
+      const dichas = S.chats[p.id].filter(x => x.de === "ellos").length;
+      S.chats[p.id].push({de:"ellos", t:p.f[dichas % p.f.length]});
+      guardar(); if(chatAbierto === p.id) pintarChat();
+    }, 800);
+  };
+}
+
+/* ---------------- vista: perfil ---------------- */
+function pintarPerfil(){
+  const yo = S.yo;
+  $("#p-nombre").value = yo.n; $("#p-edad").value = yo.e; $("#p-ciudad").value = yo.c;
+  $("#p-busca").value = yo.q; $("#p-interes").value = yo.interes; $("#p-bio").value = yo.b;
+  $("#p-prefkm").value = yo.prefKm; $("#o-prefkm").textContent = yo.prefKm + " km";
+
+  $("#p-intereses").innerHTML = INTERESES.map(t =>
+    `<button class="pick" type="button" data-pint="${esc(t)}" aria-pressed="${yo.i.includes(t)}">${esc(t)}</button>`).join("");
+
+  $("#axes").innerHTML = EJES.map((e,k) => `
+    <div class="axis">
+      <div class="axisname">${esc(e.nombre)}</div>
+      <input type="range" id="ax-${e.clave}" min="0" max="100" value="${yo.x[k]}" data-ax="${k}" aria-label="${esc(e.nombre)}: ${esc(e.izq)} a ${esc(e.der)}">
+      <div class="axislabels"><span>${esc(e.izq)}</span><span style="text-align:right">${esc(e.der)}</span></div>
+    </div>`).join("");
+
+  $("#blocklist").innerHTML = S.bloqueados.length
+    ? `<div class="card">${S.bloqueados.map(id => {
+        const p = PERFILES.find(x => x.id === id); if(!p) return "";
+        return `<div class="mrow" style="cursor:default">
+          <div class="av sm" style="background:${tono(p.h)}">${esc(iniciales(p.n))}</div>
+          <div class="resmeta"><div class="nm">${esc(p.n)}, ${p.e}</div><div class="sub">Bloqueada</div></div>
+          <button class="btn sm" data-desbloquear="${p.id}">Desbloquear</button>
+        </div>`;
+      }).join("")}</div>`
+    : `<p style="color:var(--muted); font-size:.88rem">No bloqueaste a nadie.</p>`;
+}
+
+/* ---------------- modales ---------------- */
+function abrirModal(html){
+  $("#modal").innerHTML = html;
+  $("#overlay").hidden = false;
+  const foco = $("#modal").querySelector("button, input");
+  if(foco) foco.focus();
+}
+function cerrarModal(){ $("#overlay").hidden = true; $("#modal").innerHTML = ""; }
+
+function modalMatch(p, n){
+  abrirModal(`
+    <div class="matchcard">
+      <div class="eyebrow">Coincidencia mutua</div>
+      <h2 style="font-size:1.6rem; margin-top:6px">Se gustaron</h2>
+      <div class="avs">
+        <div class="av" style="background:${tono(200)}">${esc(iniciales(S.yo.n))}</div>
+        <div class="av" style="background:${tono(p.h)}">${esc(iniciales(p.n))}</div>
+      </div>
+      <p>Vos y ${esc(p.n)} tienen <b class="mono">${n}</b> de afinidad. La conversación ya está abierta.</p>
+      <div class="actions">
+        <button class="btn grow ghost" data-cerrar>Seguir mirando</button>
+        <button class="btn grow like" data-abrirchat="${p.id}">Escribirle</button>
+      </div>
+    </div>`);
+}
+
+function modalSeguridad(id){
+  const p = PERFILES.find(x => x.id === id);
+  abrirModal(`
+    <h2>${esc(p.n)}</h2>
+    <p>Podés dejar de ver este perfil o reportarlo al equipo de moderación.</p>
+    <div class="actions" style="flex-direction:column">
+      <button class="btn grow" data-reportar="${p.id}">Reportar perfil</button>
+      <button class="btn grow danger" data-bloquear="${p.id}">Bloquear a ${esc(p.n)}</button>
+      <button class="btn grow ghost" data-cerrar>Cancelar</button>
+    </div>`);
+}
+
+function modalReporte(id){
+  const p = PERFILES.find(x => x.id === id);
+  const causas = ["Fotos o datos falsos","Mensajes agresivos o acoso","Contenido sexual no solicitado","Parece una estafa","Es menor de edad","Otro motivo"];
+  abrirModal(`
+    <h2>Reportar a ${esc(p.n)}</h2>
+    <p>Contanos qué pasó. El reporte es anónimo y se revisa dentro de las 24 horas.</p>
+    <div class="radiolist">
+      ${causas.map((c,k) => `<label><input type="radio" name="causa" value="${esc(c)}" ${k===0?"checked":""}> ${esc(c)}</label>`).join("")}
+    </div>
+    <div class="field" style="margin-top:12px">
+      <label for="r-detalle">Detalle (opcional)</label>
+      <textarea id="r-detalle" placeholder="Contá lo que consideres necesario"></textarea>
+    </div>
+    <div class="actions">
+      <button class="btn grow ghost" data-cerrar>Cancelar</button>
+      <button class="btn grow like" data-enviarreporte="${p.id}">Enviar reporte</button>
+    </div>`);
+}
+
+function bloquear(id){
+  const p = PERFILES.find(x => x.id === id);
+  if(!S.bloqueados.includes(id)) S.bloqueados.push(id);
+  S.likes = S.likes.filter(x => x !== id);
+  delete S.chats[id];
+  if(chatAbierto === id) chatAbierto = null;
+  guardar(); cerrarModal(); pintarTodo();
+  aviso(`Bloqueaste a ${p.n}. No vuelve a aparecer.`);
+}
+
+/* ---------------- navegación y eventos ---------------- */
+function irA(v){
+  $$(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.view === v)));
+  $$(".view").forEach(s => s.classList.toggle("on", s.id === "view-" + v));
+  window.scrollTo({top:0, behavior:"instant"});
+}
+
+function pintarTodo(){ pintarDeck(); pintarResultados(); pintarMatches(); pintarPerfil(); }
+
+document.addEventListener("click", ev => {
+  const t = ev.target.closest("[data-view],[data-ir],[data-like],[data-pasar],[data-menu],[data-bloquear],[data-reportar],[data-enviarreporte],[data-desbloquear],[data-cerrar],[data-abrirchat],[data-chat],[data-ver],[data-fint],[data-pint]");
+  if(!t) return;
+  const d = t.dataset;
+
+  if(d.view) return irA(d.view);
+  if(d.ir) return irA(d.ir);
+  if(d.like) return darLike(d.like);
+  if(d.pasar) return pasar(d.pasar);
+  if(d.menu) return modalSeguridad(d.menu);
+  if(d.bloquear) return bloquear(d.bloquear);
+  if(d.reportar) return modalReporte(d.reportar);
+  if(d.desbloquear){
+    S.bloqueados = S.bloqueados.filter(x => x !== d.desbloquear);
+    guardar(); pintarTodo(); return aviso("Perfil desbloqueado.");
+  }
+  if(d.enviarreporte){
+    const causa = ($("#modal").querySelector('input[name="causa"]:checked')||{}).value || "Sin especificar";
+    S.reportes.push({id:d.enviarreporte, causa, fecha:new Date().toISOString()});
+    guardar(); cerrarModal();
+    return aviso("Reporte enviado. Lo revisamos dentro de las 24 horas.");
+  }
+  if("cerrar" in d) return cerrarModal();
+  if(d.abrirchat){ cerrarModal(); chatAbierto = d.abrirchat; irA("matches"); return pintarMatches(); }
+  if(d.chat){ chatAbierto = d.chat; return pintarChat(); }
+  if(d.ver){
+    const p = PERFILES.find(x => x.id === d.ver), a = afinidad(p);
+    return abrirModal(`
+      <div style="display:flex; gap:12px; align-items:center">
+        <div class="av" style="background:${tono(p.h)}">${esc(iniciales(p.n))}</div>
+        <div><h2>${esc(p.n)}, ${p.e}</h2><div class="where">${esc(p.c)} · ${p.km} km</div></div>
+      </div>
+      <p style="margin-top:12px">${esc(p.b)}</p>
+      <div class="chips">${p.i.map(x=>`<span class="chip ${a.comunes.includes(x)?"match":""}">${esc(x)}</span>`).join("")}</div>
+      <div class="seek">Busca <b>${esc(p.q)}</b> · afinidad <b class="mono">${a.total}</b></div>
+      <div class="actions">
+        <button class="btn grow ghost" data-menu="${p.id}">···</button>
+        <button class="btn grow ghost" data-cerrar>Cerrar</button>
+        ${S.likes.includes(p.id) ? '' : `<button class="btn grow like" data-like="${p.id}">Me interesa</button>`}
+      </div>`);
+  }
+  if(d.fint){
+    const on = t.getAttribute("aria-pressed") === "true";
+    F.intereses = on ? F.intereses.filter(x => x !== d.fint) : F.intereses.concat(d.fint);
+    t.setAttribute("aria-pressed", String(!on));
+    return pintarResultados();
+  }
+  if(d.pint){
+    const on = t.getAttribute("aria-pressed") === "true";
+    S.yo.i = on ? S.yo.i.filter(x => x !== d.pint) : S.yo.i.concat(d.pint);
+    t.setAttribute("aria-pressed", String(!on));
+    guardar(); pintarDeck(); pintarResultados(); pintarMatches();
+    return;
+  }
+});
+
+$("#overlay").addEventListener("click", ev => { if(ev.target.id === "overlay") cerrarModal(); });
+document.addEventListener("keydown", ev => { if(ev.key === "Escape") cerrarModal(); });
+
+/* filtros */
+function enlazarFiltro(id, clave, fmt){
+  const el = $(id);
+  el.addEventListener("input", () => {
+    F[clave] = el.type === "range" ? Number(el.value) : el.value;
+    if(fmt) $(fmt.salida).textContent = fmt.txt(el.value);
+    if(clave === "edadmin" && F.edadmin > F.edadmax){ F.edadmax = F.edadmin; $("#f-edadmax").value = F.edadmin; $("#o-edadmax").textContent = F.edadmin; }
+    if(clave === "edadmax" && F.edadmax < F.edadmin){ F.edadmin = F.edadmax; $("#f-edadmin").value = F.edadmax; $("#o-edadmin").textContent = F.edadmax; }
+    pintarResultados();
+  });
+}
+enlazarFiltro("#f-texto","texto");
+enlazarFiltro("#f-busca","busca");
+enlazarFiltro("#f-orden","orden");
+enlazarFiltro("#f-verif","verif");
+enlazarFiltro("#f-edadmin","edadmin",{salida:"#o-edadmin", txt:v=>v});
+enlazarFiltro("#f-edadmax","edadmax",{salida:"#o-edadmax", txt:v=>v});
+enlazarFiltro("#f-km","km",{salida:"#o-km", txt:v=>v+" km"});
+enlazarFiltro("#f-afin","afin",{salida:"#o-afin", txt:v=>v});
+
+$("#f-reset").onclick = () => {
+  Object.assign(F, {texto:"",busca:"",orden:"afin",edadmin:25,edadmax:48,km:30,afin:0,verif:"no",intereses:[]});
+  $("#f-texto").value=""; $("#f-busca").value=""; $("#f-orden").value="afin"; $("#f-verif").value="no";
+  $("#f-edadmin").value=25; $("#o-edadmin").textContent=25;
+  $("#f-edadmax").value=48; $("#o-edadmax").textContent=48;
+  $("#f-km").value=30; $("#o-km").textContent="30 km";
+  $("#f-afin").value=0; $("#o-afin").textContent=0;
+  pintarFiltros(); pintarResultados();
+};
+
+/* perfil */
+document.addEventListener("input", ev => {
+  const el = ev.target;
+  if(el.dataset && el.dataset.ax !== undefined){
+    S.yo.x[Number(el.dataset.ax)] = Number(el.value);
+    guardar(); pintarDeck(); pintarResultados(); pintarMatches(); return;
+  }
+  const mapa = {"p-nombre":"n","p-edad":"e","p-ciudad":"c","p-bio":"b","p-busca":"q","p-interes":"interes"};
+  if(mapa[el.id]){
+    S.yo[mapa[el.id]] = el.id === "p-edad" ? Number(el.value) : el.value;
+    guardar(); pintarDeck(); pintarResultados(); pintarMatches(); return;
+  }
+  if(el.id === "p-prefkm"){
+    S.yo.prefKm = Number(el.value);
+    $("#o-prefkm").textContent = el.value + " km";
+    guardar(); pintarDeck(); pintarResultados(); pintarMatches();
+  }
+});
+
+$("#p-reset").onclick = () => {
+  abrirModal(`
+    <h2>¿Borrar todo?</h2>
+    <p>Se van tus respuestas, tus likes, tus matches y tus conversaciones. No se puede deshacer.</p>
+    <div class="actions">
+      <button class="btn grow ghost" data-cerrar>Cancelar</button>
+      <button class="btn grow danger" id="confirmar-reset">Sí, borrar</button>
+    </div>`);
+  $("#confirmar-reset").onclick = () => {
+    try{ localStorage.removeItem(CLAVE); }catch(err){ /* nada que borrar */ }
+    S = cargar(); chatAbierto = null; cerrarModal(); pintarTodo();
+    aviso("Listo, quedó como recién instalada.");
+  };
+};
+
+/* arranque */
+pintarFiltros();
+pintarTodo();
+</script>

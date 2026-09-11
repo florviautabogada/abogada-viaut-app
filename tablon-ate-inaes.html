@@ -1,0 +1,763 @@
+<title>Tablón ATE INAES</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Black&family=Archivo+Narrow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --papel:#F3F4F1; --hoja:#FFFFFF; --hoja2:#F6F7F4; --hoja3:#E8EAE5;
+  --tinta:#111111; --tinta-2:#33352F; --gris:#6B6E68;
+  --filete:#D3D5CF; --filete-2:#B7BAB2;
+  --verde:#0B8A3C; --verde-osc:#076B2E; --verde-lav:#E1F2E7;
+  --azul:var(--verde); --azul-lav:var(--verde-lav);
+  --rojo:#111111; --rojo-lav:#E8EAE5;
+  --sombra:0 1px 0 var(--filete);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --papel:#0F110F; --hoja:#171917; --hoja2:#1E211E; --hoja3:#282C28;
+    --tinta:#F1F2EE; --tinta-2:#C6C9C2; --gris:#8E928B;
+    --filete:#2E322E; --filete-2:#434841;
+    --verde:#3ECF7A; --verde-osc:#2FB868; --verde-lav:#15301F;
+    --rojo:#F1F2EE; --rojo-lav:#282C28;
+    --sombra:0 1px 0 var(--filete);
+  }
+}
+:root[data-theme="dark"]{
+  --papel:#0F110F; --hoja:#171917; --hoja2:#1E211E; --hoja3:#282C28;
+  --tinta:#F1F2EE; --tinta-2:#C6C9C2; --gris:#8E928B;
+  --filete:#2E322E; --filete-2:#434841;
+  --verde:#3ECF7A; --verde-osc:#2FB868; --verde-lav:#15301F;
+  --rojo:#F1F2EE; --rojo-lav:#282C28;
+  --sombra:0 1px 0 var(--filete);
+}
+
+*{box-sizing:border-box}
+body{background:var(--papel); color:var(--tinta); font-family:"Archivo","Helvetica Neue",Arial,sans-serif; font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased}
+p{margin:0}
+h1,h2,h3{margin:0; letter-spacing:-.01em}
+button{font:inherit; color:inherit; cursor:pointer}
+input,select,textarea{font:inherit; color:inherit}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.narrow{font-family:"Archivo Narrow","Archivo",sans-serif}
+:focus-visible{outline:2px solid var(--verde); outline-offset:2px}
+
+.hoja{max-width:1080px; margin:0 auto; padding-inline:18px; padding-block:0 60px}
+
+/* ---------- cabecera de la publicación ---------- */
+.cabecera{border-bottom:4px double var(--tinta); padding-block:22px 10px; margin-bottom:0}
+.cabtop{display:flex; align-items:flex-end; gap:16px; flex-wrap:wrap}
+.titulo{font-family:"Archivo Black",Impact,sans-serif; font-size:clamp(2.1rem,7vw,3.6rem); line-height:.92; letter-spacing:-.03em; text-transform:uppercase}
+.bajada{font-family:"Archivo Narrow",sans-serif; font-size:.82rem; text-transform:uppercase; letter-spacing:.2em; color:var(--gris); margin-top:8px}
+.cabmeta{margin-left:auto; text-align:right; font-family:"IBM Plex Mono",monospace; font-size:.68rem; color:var(--gris); line-height:1.7; text-transform:uppercase; letter-spacing:.06em}
+
+/* ---------- barra de círculo ---------- */
+.circulo{display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:11px 0; border-bottom:1px solid var(--filete-2)}
+.circulo .et{font-family:"Archivo Narrow",sans-serif; font-weight:700; font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gris)}
+.circulo select{background:var(--hoja); border:1px solid var(--filete-2); padding:6px 9px; font-family:"Archivo Narrow",sans-serif; font-weight:600; font-size:.9rem}
+.circulo .cuenta{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--gris)}
+
+/* ---------- navegación ---------- */
+nav.secc{display:flex; gap:0; border-bottom:2px solid var(--tinta); overflow-x:auto; scrollbar-width:none; position:sticky; top:0; background:var(--papel); z-index:20}
+nav.secc::-webkit-scrollbar{display:none}
+.sec{border:0; background:none; padding:11px 15px; white-space:nowrap; font-family:"Archivo Narrow",sans-serif; font-weight:700; font-size:.88rem; text-transform:uppercase; letter-spacing:.07em; color:var(--gris); border-bottom:3px solid transparent; margin-bottom:-2px}
+.sec:hover{color:var(--tinta)}
+.sec[aria-selected="true"]{color:var(--tinta); border-bottom-color:var(--verde)}
+.sec .n{font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--verde); margin-left:5px}
+
+main{padding-top:18px}
+.vista{display:none}
+.vista.on{display:block}
+
+/* ---------- filtros ---------- */
+.filtros{background:var(--hoja); border:1px solid var(--filete-2); padding:14px; margin-bottom:20px}
+.filtros-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(165px,1fr)); gap:12px}
+.campo{display:flex; flex-direction:column; gap:4px}
+.campo label{font-family:"Archivo Narrow",sans-serif; font-weight:700; font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; color:var(--gris)}
+.campo input[type="text"], .campo select, .campo textarea, .campo input[type="number"]{
+  background:var(--hoja2); border:1px solid var(--filete-2); padding:8px 9px; font-size:.92rem; border-radius:0;
+}
+.campo textarea{resize:vertical; min-height:88px; line-height:1.5}
+.campo .ayuda{font-size:.76rem; color:var(--gris)}
+
+.tipos{display:flex; gap:0; border:1px solid var(--tinta)}
+.tipos button{flex:1; border:0; background:var(--hoja); padding:8px 6px; font-family:"Archivo Narrow",sans-serif; font-weight:700; font-size:.8rem; text-transform:uppercase; letter-spacing:.08em; color:var(--gris); border-right:1px solid var(--filete-2)}
+.tipos button:last-child{border-right:0}
+.tipos button[aria-pressed="true"]{background:var(--tinta); color:var(--papel)}
+.tipos button[aria-pressed="true"][data-t="ofrezco"]{background:var(--verde); color:var(--hoja)}
+.tipos button[aria-pressed="true"][data-t="busco"]{background:var(--tinta); color:var(--papel)}
+
+.rubros{display:flex; flex-wrap:wrap; gap:5px; margin-top:12px}
+.rub{font-family:"Archivo Narrow",sans-serif; font-size:.8rem; font-weight:600; padding:3px 9px; border:1px solid var(--filete-2); background:var(--hoja2); color:var(--tinta-2)}
+.rub[aria-pressed="true"]{background:var(--tinta); color:var(--papel); border-color:var(--tinta)}
+
+/* ---------- columnas de avisos ---------- */
+.columnas{column-count:3; column-gap:22px; column-rule:1px solid var(--filete)}
+@media (max-width:900px){.columnas{column-count:2}}
+@media (max-width:600px){.columnas{column-count:1; column-rule:0}}
+
+.aviso{break-inside:avoid; page-break-inside:avoid; background:var(--hoja); border:1px solid var(--filete-2); padding:12px 13px; margin-bottom:16px; display:inline-block; width:100%}
+.aviso.mio{border-color:var(--tinta); border-width:2px; background:var(--hoja2)}
+.avtop{display:flex; align-items:center; gap:7px; margin-bottom:7px; flex-wrap:wrap}
+.sello{font-family:"Archivo Black",sans-serif; font-size:.66rem; letter-spacing:.1em; text-transform:uppercase; padding:4px 13px 4px 9px; color:var(--hoja); display:inline-flex; align-items:center; gap:5px}
+.sello.of{background:var(--verde); clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%)}
+.sello.bu{background:var(--tinta); padding:4px 9px 4px 13px; clip-path:polygon(8px 0, 100% 0, 100% 100%, 8px 100%, 0 50%)}
+.sello .fl{font-family:"Archivo",sans-serif; font-weight:700; font-size:.85rem; line-height:1}
+/* paleta y muestras */
+.swatches{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:14px 0}
+.sw{border:1px solid var(--filete-2); background:var(--hoja)}
+.sw .col{height:72px; border-bottom:1px solid var(--filete-2)}
+.sw .inf{padding:9px 11px}
+.sw .nm{font-family:"Archivo Narrow",sans-serif; font-weight:700; font-size:.82rem; text-transform:uppercase; letter-spacing:.06em}
+.sw .hx{font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--gris)}
+.sw .uso{font-size:.78rem; color:var(--tinta-2); margin-top:3px}
+.muestra-dos{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin-top:12px}
+.muestra-dos .aviso{margin-bottom:0}
+.variantes{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin-top:14px}
+.var{border:1px solid var(--filete-2); background:var(--hoja); padding:14px}
+.var .et{font-family:"Archivo Narrow",sans-serif; font-weight:700; font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gris); margin-bottom:10px}
+.var .fila{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:8px}
+.var p{font-size:.82rem; color:var(--tinta-2)}
+.v-b .sello{clip-path:none; padding:4px 9px}
+.v-c .sello{clip-path:none; padding:4px 9px; background:none; color:var(--tinta); border:1.5px solid currentColor}
+.v-c .sello.of{color:var(--verde)}
+.banda{background:var(--verde); color:#fff; font-family:"Archivo Narrow",sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:.16em; font-size:.74rem; padding:7px 0; margin-inline:-18px; padding-inline:18px}
+:root[data-theme="dark"] .banda, :root:not([data-theme="light"]) .banda{color:#0F110F}
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]) .banda{color:#fff} }
+.rubroet{font-family:"Archivo Narrow",sans-serif; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.09em; color:var(--gris)}
+.cod{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:.66rem; color:var(--gris)}
+.avtexto{font-size:.93rem; line-height:1.52; color:var(--tinta-2)}
+.avtexto b{font-family:"Archivo",sans-serif; font-weight:700; color:var(--tinta); text-transform:uppercase; letter-spacing:.01em}
+.avdatos{margin-top:9px; padding-top:8px; border-top:1px solid var(--filete); display:flex; flex-wrap:wrap; gap:4px 12px; font-family:"IBM Plex Mono",monospace; font-size:.71rem; color:var(--gris)}
+.avdatos .d b{color:var(--tinta-2); font-weight:500}
+.avpie{margin-top:10px; display:flex; gap:6px; flex-wrap:wrap}
+.mini{border:1px solid var(--filete-2); background:var(--hoja2); padding:5px 10px; font-family:"Archivo Narrow",sans-serif; font-weight:700; font-size:.78rem; text-transform:uppercase; letter-spacing:.06em}
+.mini:hover{background:var(--hoja3)}
+.mini.fuerte{background:var(--tinta); color:var(--papel); border-color:var(--tinta)}
+.mini.fuerte:hover{filter:brightness(1.25)}
+.mini.act{background:var(--verde-lav); border-color:var(--verde); color:var(--verde-osc)}
+.mini.peligro{color:var(--tinta); border-color:var(--tinta); text-decoration:underline}
+.tuaviso{font-family:"Archivo Black",sans-serif; font-size:.62rem; letter-spacing:.12em; text-transform:uppercase; background:var(--tinta); color:var(--papel); padding:3px 7px}
+
+.vacio{border:2px dashed var(--filete-2); padding:44px 20px; text-align:center; color:var(--gris)}
+.vacio b{display:block; font-family:"Archivo Black",sans-serif; font-size:1.05rem; color:var(--tinta); text-transform:uppercase; letter-spacing:.02em; margin-bottom:7px}
+
+/* ---------- formularios y bloques de texto ---------- */
+.bloque{background:var(--hoja); border:1px solid var(--filete-2); padding:18px; margin-bottom:20px}
+.bloque > h2{font-family:"Archivo Black",sans-serif; font-size:1.12rem; text-transform:uppercase; letter-spacing:.01em; margin-bottom:5px}
+.bloque > .sub{color:var(--gris); font-size:.88rem; margin-bottom:16px}
+.form-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:13px}
+.ancho{grid-column:1/-1}
+.acciones{display:flex; gap:9px; flex-wrap:wrap; margin-top:16px; align-items:center}
+.btn{border:1px solid var(--tinta); background:var(--hoja); padding:10px 18px; font-family:"Archivo Narrow",sans-serif; font-weight:700; font-size:.9rem; text-transform:uppercase; letter-spacing:.08em}
+.btn:hover{background:var(--hoja3)}
+.btn.principal{background:var(--tinta); color:var(--papel)}
+.btn.principal:hover{filter:brightness(1.3)}
+.btn.tenue{border-color:var(--filete-2); color:var(--gris)}
+
+.previa{border:1px solid var(--filete-2); background:var(--hoja2); padding:13px; margin-top:14px}
+.previa .et{font-family:"Archivo Narrow",sans-serif; font-size:.7rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--gris); margin-bottom:9px}
+
+.nota{border-left:3px solid var(--verde); background:var(--verde-lav); padding:11px 13px; font-size:.86rem; color:var(--tinta-2)}
+.nota b{color:var(--tinta)}
+.nota.aten{border-left-color:var(--tinta); background:var(--hoja3)}
+
+.lista{margin:0; padding-left:19px; display:flex; flex-direction:column; gap:8px; color:var(--tinta-2); font-size:.93rem; max-width:66ch}
+.lista li::marker{color:var(--verde)}
+.lista b{color:var(--tinta)}
+
+.pasos{display:grid; gap:0; margin:16px 0}
+.paso{display:grid; grid-template-columns:46px 1fr; gap:14px; padding:14px 0; border-bottom:1px solid var(--filete)}
+.paso:last-child{border-bottom:0}
+.paso .np{font-family:"Archivo Black",sans-serif; font-size:1.5rem; color:var(--filete-2); line-height:1}
+.paso h3{font-family:"Archivo Narrow",sans-serif; font-weight:700; font-size:1rem; text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px}
+.paso p{font-size:.9rem; color:var(--tinta-2); max-width:62ch}
+
+.hilo{border:1px solid var(--filete-2); background:var(--hoja); padding:13px; margin-bottom:13px}
+.hilo .enc{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:8px; font-family:"IBM Plex Mono",monospace; font-size:.7rem; color:var(--gris)}
+.hilo .cuerpo{font-size:.9rem; color:var(--tinta-2); border-left:2px solid var(--filete-2); padding-left:11px}
+
+/* ---------- modal ---------- */
+.telon{position:fixed; inset:0; z-index:60; background:rgba(12,13,15,.7); display:grid; place-items:center; padding:18px; overflow-y:auto}
+.telon[hidden]{display:none}
+.dialogo{background:var(--hoja); border:2px solid var(--tinta); max-width:480px; width:100%; padding:20px}
+.dialogo h2{font-family:"Archivo Black",sans-serif; font-size:1.05rem; text-transform:uppercase; margin-bottom:9px}
+.dialogo p{color:var(--tinta-2); font-size:.9rem}
+
+.aviso-flotante{position:fixed; left:50%; bottom:20px; transform:translateX(-50%); z-index:70; background:var(--tinta); color:var(--papel); padding:11px 18px; font-family:"Archivo Narrow",sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:.06em; font-size:.85rem; max-width:calc(100% - 30px)}
+.aviso-flotante[hidden]{display:none}
+
+footer.pie{border-top:4px double var(--tinta); margin-top:40px; padding-top:14px; font-family:"IBM Plex Mono",monospace; font-size:.7rem; color:var(--gris); line-height:1.8; text-transform:uppercase; letter-spacing:.05em}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
+</style>
+
+<div class="hoja">
+
+<div class="banda">Junta Interna ATE · INAES</div>
+<header class="cabecera">
+  <div class="cabtop">
+    <div>
+      <h1 class="titulo">El Tablón</h1>
+      <div class="bajada">Ofrezco · Busco · Trabajo entre compañeras y compañeros</div>
+    </div>
+    <div class="cabmeta">
+      Prueba piloto · Muestra<br>
+      Avisos ficticios<br>
+      <span id="fecha-hoy"></span>
+    </div>
+  </div>
+</header>
+
+<div class="circulo">
+  <span class="et">Círculo</span>
+  <select id="sel-circulo" aria-label="Elegir círculo"></select>
+  <span class="cuenta" id="cuenta-circulo"></span>
+</div>
+
+<nav class="secc" role="tablist" aria-label="Secciones">
+  <button class="sec" role="tab" data-vista="tablon" aria-selected="true">Tablón</button>
+  <button class="sec" role="tab" data-vista="publicar" aria-selected="false">Publicar aviso</button>
+  <button class="sec" role="tab" data-vista="guardados" aria-selected="false">Guardados<span class="n" id="n-guardados"></span></button>
+  <button class="sec" role="tab" data-vista="actividad" aria-selected="false">Mi actividad<span class="n" id="n-actividad"></span></button>
+  <button class="sec" role="tab" data-vista="como" aria-selected="false">Cómo funciona</button>
+  <button class="sec" role="tab" data-vista="paleta" aria-selected="false">Paleta</button>
+</nav>
+
+<main>
+
+  <section class="vista on" id="v-tablon">
+    <div class="filtros">
+      <div class="tipos" role="group" aria-label="Tipo de aviso">
+        <button type="button" data-t="todos" aria-pressed="true">Todos</button>
+        <button type="button" data-t="ofrezco" aria-pressed="false">Ofrezco</button>
+        <button type="button" data-t="busco" aria-pressed="false">Busco</button>
+      </div>
+      <div class="filtros-grid" style="margin-top:12px">
+        <div class="campo"><label for="f-texto">Buscar</label><input type="text" id="f-texto" placeholder="viandas, clases, Natura, electricista…"></div>
+        <div class="campo"><label for="f-modo">Modalidad</label>
+          <select id="f-modo"><option value="">Cualquiera</option><option>Presencial</option><option>A domicilio</option><option>Online</option><option>Mixta</option></select>
+        </div>
+        <div class="campo"><label for="f-orden">Ordenar</label>
+          <select id="f-orden"><option value="nuevo">Más recientes</option><option value="rubro">Por rubro</option><option value="zona">Por lugar</option></select>
+        </div>
+      </div>
+      <div class="rubros" id="f-rubros"></div>
+      <div class="acciones" style="margin-top:12px">
+        <button class="btn tenue" id="f-limpiar">Limpiar</button>
+        <span class="mono" id="f-cuenta" style="margin-left:auto; font-size:.75rem; color:var(--gris)"></span>
+      </div>
+    </div>
+    <div class="columnas" id="tablon"></div>
+  </section>
+
+  <section class="vista" id="v-publicar">
+    <div class="bloque">
+      <h2>Poner un aviso</h2>
+      <p class="sub">Como en la revista: dos líneas bien escritas valen más que un párrafo largo. Tu aviso aparece arriba de todo, marcado como tuyo.</p>
+
+      <div class="tipos" role="group" aria-label="Tipo de aviso a publicar" id="p-tipos">
+        <button type="button" data-pt="ofrezco" aria-pressed="true">Ofrezco</button>
+        <button type="button" data-pt="busco" aria-pressed="false">Busco</button>
+      </div>
+
+      <div class="form-grid" style="margin-top:14px">
+        <div class="campo"><label for="p-titulo">Encabezado del aviso</label>
+          <input type="text" id="p-titulo" maxlength="46" placeholder="Electricista matriculada">
+          <span class="ayuda">Va en mayúsculas al principio, como en los clasificados.</span>
+        </div>
+        <div class="campo"><label for="p-rubro">Rubro</label><select id="p-rubro"></select></div>
+        <div class="campo ancho"><label for="p-texto">El aviso</label>
+          <textarea id="p-texto" maxlength="280" placeholder="Instalaciones, tableros y certificados. Trabajo en el día, presupuesto sin cargo."></textarea>
+          <span class="ayuda"><span class="mono" id="p-restan">280</span> caracteres disponibles.</span>
+        </div>
+        <div class="campo"><label for="p-zona">Dónde</label><input type="text" id="p-zona" maxlength="40" placeholder="Sede central · 2.º piso, o tu barrio"></div>
+        <div class="campo"><label for="p-modo">Modalidad</label>
+          <select id="p-modo"><option>Presencial</option><option>A domicilio</option><option>Online</option><option>Mixta</option></select>
+        </div>
+        <div class="campo"><label for="p-disp">Disponibilidad</label><input type="text" id="p-disp" maxlength="40" placeholder="Lunes a viernes, tarde"></div>
+        <div class="campo"><label for="p-precio">Referencia de precio</label><input type="text" id="p-precio" maxlength="40" placeholder="A convenir / por hora / por trabajo"></div>
+        <div class="campo"><label for="p-nombre">Cómo te nombramos</label><input type="text" id="p-nombre" maxlength="30" placeholder="Flor V. · Jurídicos"></div>
+        <div class="campo"><label for="p-circulo">Círculo donde se publica</label><select id="p-circulo"></select></div>
+      </div>
+
+      <div class="nota" style="margin-top:14px"><b>Tus datos de contacto no se publican.</b> Quien se interese te escribe por el tablón y vos decidís si le pasás tu teléfono. Es la diferencia con pegar un papel en la puerta del almacén.</div>
+
+      <div class="previa" id="p-previa"></div>
+
+      <div class="acciones">
+        <button class="btn principal" id="p-publicar">Publicar el aviso</button>
+        <button class="btn tenue" id="p-borrarform">Vaciar el formulario</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="vista" id="v-guardados">
+    <div id="guardados"></div>
+  </section>
+
+  <section class="vista" id="v-actividad">
+    <div class="bloque">
+      <h2>Mis avisos</h2>
+      <p class="sub">Los que publicaste desde este navegador.</p>
+      <div id="mis-avisos"></div>
+    </div>
+    <div class="bloque">
+      <h2>Mensajes que mandé</h2>
+      <p class="sub">Respuestas a avisos de otras personas. En la demo nadie contesta.</p>
+      <div id="mis-mensajes"></div>
+    </div>
+  </section>
+
+  <section class="vista" id="v-como">
+    <div class="bloque">
+      <h2>Qué es esto</h2>
+      <p class="sub">Una revista de clasificados de trabajo entre compañeras y compañeros, impulsada por la Junta Interna.</p>
+      <ul class="lista">
+        <li><b>Dos lados.</b> Avisos de <b>ofrezco</b> (el que tiene un oficio, una profesión, un producto, una hora libre) y de <b>busco</b> (el que necesita). Los dos valen lo mismo.</li>
+        <li><b>Todo entra.</b> Oficios, profesiones, changas, cuidados, clases, costura, reventa, trabajo online. No hace falta ser empresa para publicar.</li>
+        <li><b>Es de la Junta.</b> No es una herramienta del organismo: la administra la Junta Interna, con sus propios medios, y la usa quien quiere.</li>
+        <li><b>El contacto es tuyo.</b> Nadie ve tu teléfono. Te escriben por el tablón y vos decidís a quién le respondés.</li>
+      </ul>
+    </div>
+
+    <div class="bloque">
+      <h2>El plan</h2>
+      <p class="sub">Primero adentro. Si funciona, se abre.</p>
+      <div class="pasos">
+        <div class="paso"><div class="np">01</div><div>
+          <h3>Piloto: Junta Interna ATE — INAES</h3>
+          <p>Un solo tablón, para las trabajadoras y los trabajadores del organismo. Se mide una cosa: cuántos avisos se responden por semana. Tres meses.</p>
+        </div></div>
+        <div class="paso"><div class="np">02</div><div>
+          <h3>Inter-organismos</h3>
+          <p>Si el piloto funciona, se suman las juntas internas de otros organismos. Cada una con su tablón, y un tablón común para lo que conviene compartir.</p>
+        </div></div>
+        <div class="paso"><div class="np">03</div><div>
+          <h3>Interministerial</h3>
+          <p>La misma herramienta a escala de la administración nacional, con la estructura sindical como red. Es la meta, no el punto de partida.</p>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="bloque">
+      <h2>Tres cosas a cuidar desde el primer día</h2>
+      <ul class="lista">
+        <li><b>Recursos propios, no del organismo.</b> El tablón se aloja y se administra con medios de la Junta o del sindicato, no con servidores, correos ni horario del INAES. Es una herramienta gremial y conviene que se vea como tal.</li>
+        <li><b>Afiliación sindical es dato sensible.</b> La Ley 25.326 la incluye expresamente en el art. 2. Si el tablón es sólo para personas afiliadas, la lista de usuarias revela afiliación. Dos salidas: abrirlo a todo el personal del organismo, o cuidar que nadie pueda ver quién está adentro. Hay que decidirlo antes de abrir.</li>
+        <li><b>El tablón no es intermediario laboral.</b> Conecta, no contrata ni cobra comisión. Conviene dejarlo escrito en las reglas de uso.</li>
+      </ul>
+    </div>
+
+    <div class="bloque">
+      <h2>Las reglas</h2>
+      <ul class="lista">
+        <li><b>Un aviso por oficio.</b> Nada de publicar lo mismo cinco veces para aparecer arriba.</li>
+        <li><b>Fuera del horario de trabajo.</b> Lo que se ofrece se hace en el tiempo propio de cada persona.</li>
+        <li><b>Precio de referencia, no promesa.</b> El acuerdo final es entre las dos personas.</li>
+        <li><b>Los avisos vencen a los sesenta días.</b> Un tablón lleno de avisos viejos no sirve.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="vista" id="v-paleta">
+    <div class="bloque">
+      <h2>La paleta</h2>
+      <p class="sub">Tres tintas, como pediste: negro, blanco y verde. El verde es el que carga el sentido; el negro y el blanco hacen el resto. Si me pasás el manual de marca de ATE, ajusto el verde al tono exacto.</p>
+      <div class="swatches">
+        <div class="sw"><div class="col" style="background:#0B8A3C"></div><div class="inf"><div class="nm">Verde ATE</div><div class="hx">#0B8A3C</div><div class="uso">Ofrezco, banda superior, acentos</div></div></div>
+        <div class="sw"><div class="col" style="background:#111111"></div><div class="inf"><div class="nm">Negro tinta</div><div class="hx">#111111</div><div class="uso">Busco, títulos, texto, filetes fuertes</div></div></div>
+        <div class="sw"><div class="col" style="background:#FFFFFF; border-bottom:1px solid #D3D5CF"></div><div class="inf"><div class="nm">Blanco</div><div class="hx">#FFFFFF</div><div class="uso">Hoja de cada aviso</div></div></div>
+        <div class="sw"><div class="col" style="background:#F3F4F1"></div><div class="inf"><div class="nm">Papel</div><div class="hx">#F3F4F1</div><div class="uso">Fondo general, blanco roto</div></div></div>
+        <div class="sw"><div class="col" style="background:#E1F2E7"></div><div class="inf"><div class="nm">Verde lavado</div><div class="hx">#E1F2E7</div><div class="uso">Notas y estados suaves</div></div></div>
+        <div class="sw"><div class="col" style="background:#6B6E68"></div><div class="inf"><div class="nm">Gris de imprenta</div><div class="hx">#6B6E68</div><div class="uso">Datos secundarios, códigos</div></div></div>
+      </div>
+      <div class="nota"><b>Por qué verde para Ofrezco y negro para Busco.</b> Con dos tintas hay que elegir cuál lleva el color. El verde va en lo que se da (es lo que la organización quiere destacar: gente ofreciendo trabajo a gente); el negro va en lo que se pide, que es igual de importante pero no necesita el color para leerse.</div>
+    </div>
+
+    <div class="bloque">
+      <h2>Las flechitas</h2>
+      <p class="sub">La flecha marca la dirección: hacia afuera cuando ofrezco, hacia adentro cuando busco. Tres maneras de dibujarla, para que elijas.</p>
+      <div class="variantes">
+        <div class="var">
+          <div class="et">A · Etiqueta con punta</div>
+          <div class="fila"><span class="sello of"><span class="fl">→</span>Ofrezco</span><span class="sello bu"><span class="fl">←</span>Busco</span></div>
+          <p>La etiqueta misma tiene forma de flecha. Es la que está aplicada en el tablón. La más de revista.</p>
+        </div>
+        <div class="var v-b">
+          <div class="et">B · Etiqueta recta con flecha</div>
+          <div class="fila"><span class="sello of"><span class="fl">→</span>Ofrezco</span><span class="sello bu"><span class="fl">←</span>Busco</span></div>
+          <p>Bloque rectangular y la flecha adentro, como texto. Más sobria, se imprime mejor.</p>
+        </div>
+        <div class="var v-c">
+          <div class="et">C · Sólo contorno</div>
+          <div class="fila"><span class="sello of"><span class="fl">→</span>Ofrezco</span><span class="sello bu"><span class="fl">←</span>Busco</span></div>
+          <p>Sin relleno, sólo el borde y la flecha en color. La más liviana; conviene si el tablón va a tener muchos avisos.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bloque">
+      <h2>Cómo se ve en un aviso</h2>
+      <p class="sub">Los dos lados, uno al lado del otro.</p>
+      <div class="muestra-dos" id="muestra-avisos"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="pie">
+  El Tablón · Junta Interna ATE — INAES · Muestra de prueba piloto. Los avisos de ejemplo son ficticios y fueron inventados para esta demo; los sectores se usan sólo a modo ilustrativo.<br>
+  Lo que publiques se guarda únicamente en este navegador. No se envía a ningún servidor.
+</footer>
+
+</div>
+
+<div class="telon" id="telon" hidden><div class="dialogo" id="dialogo"></div></div>
+<div class="aviso-flotante" id="flotante" hidden></div>
+
+<script>
+"use strict";
+
+/* ===================== datos ===================== */
+const CIRCULOS = [
+  {id:"inaes",  n:"Junta Interna ATE — INAES (piloto)", d:"Trabajadoras y trabajadores del INAES", activo:true},
+  {id:"inter",  n:"Inter-organismos — próximamente", d:"Se abre si el piloto funciona", activo:false},
+  {id:"minist", n:"Interministerial — próximamente", d:"Etapa siguiente", activo:false}
+];
+
+const RUBROS = ["Oficios","Construcción","Arreglos y reparaciones","Limpieza","Cuidados","Salud","Clases y formación","Profesionales","Administración","Gastronomía","Belleza y estética","Costura y textil","Productos y reventa","Digital y online","Transporte y fletes","Eventos","Mascotas","Changas"];
+
+/* t: tipo, r: rubro, c: círculo, m: modalidad, d: días desde publicación */
+const AVISOS = [
+  {id:1,t:"ofrezco",c:"inaes",r:"Gastronomía",tit:"Viandas para la semana",tx:"Cocino cinco viandas, con opción vegetariana. Las traigo el lunes a la sede y las dejo en la heladera del piso. Menú por mensaje el jueves anterior.",z:"Sede central · 3.º piso",m:"Presencial",disp:"Entrego lunes",pr:"Por semana",q:"Rita M. · Registro",d:1},
+  {id:2,t:"busco",c:"inaes",r:"Cuidados",tit:"Niñera para después del jardín",tx:"Nena de 4 años. Necesito alguien que la retire del jardín a las 17 y se quede hasta las 19, tres veces por semana. Zona Caballito.",z:"Caballito",m:"Presencial",disp:"Lun, mié y vie 17 a 19",pr:"Por hora, a convenir",q:"Marcela P. · Fiscalización",d:1},
+  {id:3,t:"ofrezco",c:"inaes",r:"Productos y reventa",tit:"Consultora Natura",tx:"Tomo pedidos de todo el catálogo y los entrego en la sede, sin cargo. Armo combos para regalo. También busco compañeras que quieran revender.",z:"Sede central",m:"Mixta",disp:"Entrego martes y jueves",pr:"Precio de catálogo",q:"Vanina L. · Mesa de Entradas",d:2},
+  {id:4,t:"busco",c:"inaes",r:"Productos y reventa",tit:"Busco consultora de Natura en la sede",tx:"Quiero hacer pedidos seguidos y retirarlos en el trabajo. Si sos consultora y venís a la sede, escribime.",z:"Sede central",m:"Presencial",disp:"Cualquier día",pr:"—",q:"Dolores F. · Jurídicos",d:1},
+  {id:5,t:"ofrezco",c:"inaes",r:"Clases y formación",tit:"Clases de inglés en el almuerzo",tx:"Conversación en grupos de cuatro, media hora, en la sala chica del segundo piso. Nivel intermedio en adelante.",z:"Sede central · 2.º piso",m:"Presencial",disp:"Mié y vie 13 h",pr:"Por mes",q:"Federico L. · Capacitación",d:3},
+  {id:6,t:"ofrezco",c:"inaes",r:"Oficios",tit:"Electricista matriculado",tx:"Instalaciones, tableros y certificados. Voy a domicilio después del horario de oficina y los sábados. Presupuesto sin cargo para compañeros.",z:"CABA y GBA sur",m:"A domicilio",disp:"Tardes y sábados",pr:"Por trabajo",q:"Héctor G. · Sistemas",d:4},
+  {id:7,t:"busco",c:"inaes",r:"Arreglos y reparaciones",tit:"Alguien que arregle una persiana",tx:"Persiana de madera con la cinta cortada, edificio viejo. Necesito presupuesto antes del frío.",z:"Almagro",m:"A domicilio",disp:"A convenir",pr:"Presupuesto",q:"Jorge A. · Administración",d:2},
+  {id:8,t:"ofrezco",c:"inaes",r:"Costura y textil",tit:"Arreglos de ropa",tx:"Dobladillos, cierres y ajustes de talle. Retiro y entrego en la sede. Cuarenta y ocho horas.",z:"Sede central",m:"Mixta",disp:"Retiro los lunes",pr:"Desde arreglo simple",q:"Carmen D. · Registro",d:5},
+  {id:9,t:"ofrezco",c:"inaes",r:"Profesionales",tit:"Contadora para monotributo",tx:"Altas, recategorizaciones y facturación para compañeras y compañeros. Atiendo por videollamada fuera del horario de trabajo.",z:"—",m:"Online",disp:"Lun a vie después de las 18",pr:"Abono mensual",q:"Paula E. · Fiscalización",d:2},
+  {id:10,t:"busco",c:"inaes",r:"Limpieza",tit:"Limpieza por hora, dos veces por semana",tx:"Departamento de dos ambientes en Boedo, sin mascotas. Busco continuidad y pago en blanco si hace falta.",z:"Boedo",m:"Presencial",disp:"Lunes y jueves",pr:"Por hora",q:"Cecilia R. · Jurídicos",d:3},
+  {id:11,t:"ofrezco",c:"inaes",r:"Belleza y estética",tit:"Manicura en el edificio",tx:"Atiendo en el horario de almuerzo, en la sala del tercer piso. Turnos de cuarenta minutos.",z:"Sede central · 3.º piso",m:"Presencial",disp:"Mar y jue 12 a 15",pr:"Por servicio",q:"Melina F. · Mesa de Entradas",d:4},
+  {id:12,t:"busco",c:"inaes",r:"Changas",tit:"Alguien que me cubra un viaje a La Plata",tx:"Hay que llevar documentación a una sede provincial el viernes a la mañana. Pago el viaje y el tiempo.",z:"La Plata",m:"Presencial",disp:"Viernes a la mañana",pr:"Por única vez",q:"Gabriel S. · Registro",d:1},
+  {id:13,t:"ofrezco",c:"inaes",r:"Digital y online",tit:"Diseño de flyers y placas para redes",tx:"Placas para difusión, flyers de actividades y plantillas. Entrego archivos editables. Trabajo fuera del horario de oficina.",z:"—",m:"Online",disp:"Agenda con una semana",pr:"Por pieza",q:"Juli T. · Capacitación",d:6},
+  {id:14,t:"ofrezco",c:"inaes",r:"Salud",tit:"Kinesiología a domicilio",tx:"Dolores de espalda por trabajo de escritorio y rehabilitación. Atiendo en domicilio con equipo propio, después de las 18.",z:"CABA zona centro y sur",m:"A domicilio",disp:"Tardes",pr:"Por sesión",q:"Lucía M. · Administración",d:3},
+  {id:15,t:"busco",c:"inaes",r:"Clases y formación",tit:"Profe de matemática para secundario",tx:"Mi hijo está en cuarto año y necesita apoyo dos veces por semana. Puede ser online.",z:"Villa Crespo u online",m:"Mixta",disp:"Tardes",pr:"Por hora",q:"Andrea V. · Sistemas",d:2},
+  {id:16,t:"ofrezco",c:"inaes",r:"Transporte y fletes",tit:"Flete chico los fines de semana",tx:"Utilitario cerrado. Mudanzas de monoambiente y traslado de muebles. Cobro por viaje.",z:"CABA y GBA",m:"Presencial",disp:"Sábados y domingos",pr:"Por viaje",q:"Ramiro T. · Mesa de Entradas",d:7},
+  {id:17,t:"busco",c:"inaes",r:"Mascotas",tit:"Quien cuide a mi gata en las vacaciones",tx:"Diez días en enero. Es tranquila, sólo hay que ir a darle de comer y cambiarle el agua. Zona Parque Patricios.",z:"Parque Patricios",m:"Presencial",disp:"Primera quincena de enero",pr:"A convenir",q:"Sol M. · Jurídicos",d:4},
+  {id:18,t:"ofrezco",c:"inaes",r:"Eventos",tit:"Fotografía para cumpleaños y eventos",tx:"Cobertura de cuatro horas y fotos editadas. Muestro trabajos anteriores por mensaje.",z:"CABA",m:"Presencial",disp:"Fines de semana",pr:"Presupuesto cerrado",q:"Martín R. · Fiscalización",d:8},
+  {id:19,t:"ofrezco",c:"inaes",r:"Gastronomía",tit:"Tortas para cumpleaños de la oficina",tx:"Tortas y budines por encargo. Entrego en la sede con dos días de anticipación.",z:"Sede central",m:"Presencial",disp:"Cualquier día",pr:"Según tamaño",q:"Noelia A. · Registro",d:2},
+  {id:20,t:"busco",c:"inaes",r:"Profesionales",tit:"Gestora para un trámite en ANSES",tx:"Necesito alguien que sepa de reconocimiento de servicios y me ayude a armar la carpeta. Pago la consulta.",z:"—",m:"Mixta",disp:"—",pr:"Por consulta",q:"Ana P. · Administración",d:1},
+  {id:21,t:"ofrezco",c:"inaes",r:"Clases y formación",tit:"Yoga por videollamada",tx:"Grupos chicos de cuatro personas. Hatha suave, apto para espaldas de oficina. Fuera del horario de trabajo.",z:"—",m:"Online",disp:"Lun, mié y vie 8 h",pr:"Por mes",q:"Ine R. · Capacitación",d:5},
+  {id:22,t:"busco",c:"inaes",r:"Digital y online",tit:"Alguien que me arme una tienda online",tx:"Vendo cerámica y ya no doy abasto con los mensajes. Quiero algo simple, con pago y envío. Presupuesto acotado.",z:"—",m:"Online",disp:"—",pr:"Presupuesto",q:"Sol M. · Jurídicos",d:3}
+];
+
+/* ===================== estado ===================== */
+const CLAVE = "tablon-ate-inaes.v1";
+let S = cargar();
+S.circulo = "inaes";
+let vistaActual = "tablon";
+let tipoPub = "ofrezco";
+
+function cargar(){
+  const base = {circulo:"almagro", mios:[], guardados:[], mensajes:[], proximoId:1000};
+  try{
+    const crudo = localStorage.getItem(CLAVE);
+    if(!crudo) return base;
+    return {...base, ...JSON.parse(crudo)};
+  }catch(err){ return base; }
+}
+function guardar(){ try{ localStorage.setItem(CLAVE, JSON.stringify(S)); }catch(err){} }
+
+const F = {tipo:"todos", texto:"", modo:"", orden:"nuevo", rubros:[]};
+
+/* ===================== utilidades ===================== */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const codigo = id => "A-" + String(id).padStart(4, "0");
+const hace = d => d === 0 ? "hoy" : d === 1 ? "ayer" : `hace ${d} días`;
+
+let tFlot;
+function flotante(txt){
+  const el = $("#flotante"); el.textContent = txt; el.hidden = false;
+  clearTimeout(tFlot); tFlot = setTimeout(() => { el.hidden = true; }, 2800);
+}
+
+function todos(){ return S.mios.concat(AVISOS); }
+function delCirculo(){ return todos().filter(a => a.c === S.circulo); }
+
+/* ===================== render de un aviso ===================== */
+function pintarAviso(a, opciones){
+  const o = opciones || {};
+  const mio = !!a.mio;
+  const guardado = S.guardados.includes(a.id);
+  return `<article class="aviso ${mio?"mio":""}">
+    <div class="avtop">
+      <span class="sello ${a.t === "ofrezco" ? "of" : "bu"}"><span class="fl" aria-hidden="true">${a.t === "ofrezco" ? "→" : "←"}</span>${a.t === "ofrezco" ? "Ofrezco" : "Busco"}</span>
+      <span class="rubroet">${esc(a.r)}</span>
+      ${mio ? '<span class="tuaviso">Tu aviso</span>' : ''}
+      <span class="cod">${codigo(a.id)}</span>
+    </div>
+    <p class="avtexto"><b>${esc(a.tit)}.</b> ${esc(a.tx)}</p>
+    <div class="avdatos">
+      <span class="d">Dónde <b>${esc(a.z || "—")}</b></span>
+      <span class="d">${esc(a.m)}</span>
+      ${a.disp ? `<span class="d">${esc(a.disp)}</span>` : ""}
+      ${a.pr && a.pr !== "—" ? `<span class="d">${esc(a.pr)}</span>` : ""}
+      <span class="d">${esc(a.q)} · ${hace(a.d)}</span>
+    </div>
+    <div class="avpie">
+      ${mio
+        ? `<button class="mini peligro" data-baja="${a.id}">Dar de baja</button>`
+        : `<button class="mini fuerte" data-responder="${a.id}">Responder</button>
+           <button class="mini ${guardado?"act":""}" data-guardar="${a.id}">${guardado ? "Guardado" : "Guardar"}</button>`}
+      ${o.quitar ? `<button class="mini" data-quitar="${a.id}">Quitar de guardados</button>` : ""}
+    </div>
+  </article>`;
+}
+
+/* ===================== tablón ===================== */
+function pintarTablon(){
+  const base = delCirculo();
+  const lista = base.filter(a => {
+      if(F.tipo !== "todos" && a.t !== F.tipo) return false;
+      if(F.modo && a.m !== F.modo) return false;
+      if(F.rubros.length && !F.rubros.includes(a.r)) return false;
+      if(F.texto){
+        const heno = (a.tit+" "+a.tx+" "+a.r+" "+a.z+" "+a.q).toLowerCase();
+        if(!heno.includes(F.texto.toLowerCase())) return false;
+      }
+      return true;
+    }).sort((x,y) => {
+      if(F.orden === "rubro") return x.r.localeCompare(y.r,"es") || x.d - y.d;
+      if(F.orden === "zona") return String(x.z).localeCompare(String(y.z),"es") || x.d - y.d;
+      return (x.mio ? -1 : y.mio ? 1 : 0) || x.d - y.d;
+    });
+
+  const ofr = lista.filter(a => a.t === "ofrezco").length;
+  $("#f-cuenta").textContent = `${lista.length} avisos · ${ofr} ofrecen · ${lista.length - ofr} buscan`;
+
+  $("#tablon").innerHTML = lista.length
+    ? lista.map(a => pintarAviso(a)).join("")
+    : `<div class="vacio" style="column-span:all"><b>No hay avisos con esos filtros</b>
+        <p>Probá sacar algún rubro, cambiar la modalidad o buscar otra palabra.</p></div>`;
+}
+
+function pintarRubros(){
+  $("#f-rubros").innerHTML = RUBROS.map(r =>
+    `<button class="rub" type="button" data-rubro="${esc(r)}" aria-pressed="${F.rubros.includes(r)}">${esc(r)}</button>`).join("");
+}
+
+/* ===================== guardados y actividad ===================== */
+function pintarGuardados(){
+  const lista = todos().filter(a => S.guardados.includes(a.id));
+  $("#n-guardados").textContent = S.guardados.length ? `(${S.guardados.length})` : "";
+  $("#guardados").innerHTML = lista.length
+    ? `<div class="columnas">${lista.map(a => pintarAviso(a, {quitar:true})).join("")}</div>`
+    : `<div class="vacio"><b>No guardaste ningún aviso</b>
+        <p>El botón Guardar de cada aviso lo deja acá, para volver después.</p></div>`;
+}
+
+function pintarActividad(){
+  $("#n-actividad").textContent = S.mios.length ? `(${S.mios.length})` : "";
+  $("#mis-avisos").innerHTML = S.mios.length
+    ? S.mios.map(a => pintarAviso(a)).join("")
+    : `<p style="color:var(--gris); font-size:.9rem">Todavía no publicaste ninguno.</p>`;
+
+  $("#mis-mensajes").innerHTML = S.mensajes.length
+    ? S.mensajes.slice().reverse().map(m => {
+        const a = todos().find(x => x.id === m.aviso);
+        return `<div class="hilo">
+          <div class="enc"><span>${codigo(m.aviso)}</span><span>·</span><span>${esc(a ? a.tit : "Aviso dado de baja")}</span><span style="margin-left:auto">${esc(m.fecha)}</span></div>
+          <div class="cuerpo">${esc(m.texto)}</div>
+        </div>`;
+      }).join("")
+    : `<p style="color:var(--gris); font-size:.9rem">Todavía no respondiste ningún aviso.</p>`;
+}
+
+/* ===================== publicar ===================== */
+function leerFormulario(){
+  return {
+    t: tipoPub,
+    r: $("#p-rubro").value,
+    tit: $("#p-titulo").value.trim(),
+    tx: $("#p-texto").value.trim(),
+    z: $("#p-zona").value.trim(),
+    m: $("#p-modo").value,
+    disp: $("#p-disp").value.trim(),
+    pr: $("#p-precio").value.trim(),
+    q: $("#p-nombre").value.trim(),
+    c: $("#p-circulo").value
+  };
+}
+
+function pintarPrevia(){
+  const v = leerFormulario();
+  const demo = {...v, id:S.proximoId, d:0, mio:true,
+    tit: v.tit || "Encabezado del aviso", tx: v.tx || "Acá va el texto del aviso.",
+    q: v.q || "Sin nombre", z: v.z || "—"};
+  $("#p-previa").innerHTML = `<div class="et">Así se va a ver en el tablón</div>${pintarAviso(demo)}`;
+  $("#p-restan").textContent = 280 - $("#p-texto").value.length;
+}
+
+function publicar(){
+  const v = leerFormulario();
+  if(v.tit.length < 3) return flotante("Falta el encabezado del aviso");
+  if(v.tx.length < 15) return flotante("El texto del aviso es muy corto");
+  if(!v.q) return flotante("Poné cómo te nombramos");
+
+  const nuevo = {...v, id:S.proximoId++, d:0, mio:true};
+  S.mios.unshift(nuevo);
+  S.circulo = v.c;
+  guardar();
+  $("#sel-circulo").value = S.circulo;
+  vaciarFormulario();
+  irA("tablon");
+  pintarTodo();
+  flotante(`Aviso ${codigo(nuevo.id)} publicado`);
+}
+
+function vaciarFormulario(){
+  ["p-titulo","p-texto","p-zona","p-disp","p-precio","p-nombre"].forEach(id => { $("#"+id).value = ""; });
+  pintarPrevia();
+}
+
+/* ===================== diálogos ===================== */
+function abrirDialogo(html){
+  $("#dialogo").innerHTML = html; $("#telon").hidden = false;
+  const f = $("#dialogo").querySelector("textarea, button"); if(f) f.focus();
+}
+function cerrarDialogo(){ $("#telon").hidden = true; $("#dialogo").innerHTML = ""; }
+
+function dialogoResponder(id){
+  const a = todos().find(x => x.id === id);
+  if(!a) return;
+  abrirDialogo(`<h2>Responder el aviso ${codigo(a.id)}</h2>
+    <p><b>${esc(a.tit)}.</b> ${esc(a.tx)}</p>
+    <div class="campo" style="margin-top:14px">
+      <label for="r-texto">Tu mensaje</label>
+      <textarea id="r-texto" maxlength="400" placeholder="Contá qué necesitás o por qué te interesa. Si querés dejá un horario para que te llamen."></textarea>
+      <span class="ayuda">Se lo mandamos a ${esc(a.q)}. No compartimos tu teléfono ni tu mail: eso lo decidís vos después.</span>
+    </div>
+    <div class="acciones">
+      <button class="btn tenue" data-cerrar>Cancelar</button>
+      <button class="btn principal" data-enviar="${a.id}">Enviar mensaje</button>
+    </div>`);
+}
+
+function dialogoBaja(id){
+  const a = S.mios.find(x => x.id === id);
+  if(!a) return;
+  abrirDialogo(`<h2>Dar de baja el aviso</h2>
+    <p>${esc(a.tit)}. Se borra del tablón y no se puede recuperar.</p>
+    <div class="acciones">
+      <button class="btn tenue" data-cerrar>Cancelar</button>
+      <button class="btn principal" data-confirmabaja="${a.id}">Dar de baja</button>
+    </div>`);
+}
+
+/* ===================== navegación ===================== */
+function irA(v){
+  vistaActual = v;
+  $$(".sec").forEach(b => b.setAttribute("aria-selected", String(b.dataset.vista === v)));
+  $$(".vista").forEach(s => s.classList.toggle("on", s.id === "v-" + v));
+  window.scrollTo({top:0, behavior:"instant"});
+}
+
+function pintarTodo(){
+  const c = CIRCULOS.find(x => x.id === S.circulo);
+  const n = delCirculo().length;
+  $("#cuenta-circulo").textContent = `${c.d} · ${n} avisos vigentes`;
+  pintarTablon(); pintarGuardados(); pintarActividad(); pintarPrevia();
+  $("#muestra-avisos").innerHTML = [AVISOS[2], AVISOS[3]].map(a => pintarAviso(a)).join("");
+}
+
+/* ===================== eventos ===================== */
+document.addEventListener("click", ev => {
+  const t = ev.target.closest("[data-vista],[data-t],[data-pt],[data-rubro],[data-responder],[data-guardar],[data-quitar],[data-baja],[data-confirmabaja],[data-enviar],[data-cerrar]");
+  if(!t) return;
+  const d = t.dataset;
+
+  if(d.vista) return irA(d.vista);
+
+  if(d.t){
+    F.tipo = d.t;
+    $$("#v-tablon .tipos button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.t === d.t)));
+    return pintarTablon();
+  }
+  if(d.pt){
+    tipoPub = d.pt;
+    $$("#p-tipos button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.pt === d.pt)));
+    return pintarPrevia();
+  }
+  if(d.rubro){
+    const on = t.getAttribute("aria-pressed") === "true";
+    F.rubros = on ? F.rubros.filter(x => x !== d.rubro) : F.rubros.concat(d.rubro);
+    t.setAttribute("aria-pressed", String(!on));
+    return pintarTablon();
+  }
+  if(d.responder) return dialogoResponder(Number(d.responder));
+  if(d.baja) return dialogoBaja(Number(d.baja));
+
+  if(d.confirmabaja){
+    const id = Number(d.confirmabaja);
+    S.mios = S.mios.filter(x => x.id !== id);
+    S.guardados = S.guardados.filter(x => x !== id);
+    guardar(); cerrarDialogo(); pintarTodo();
+    return flotante("Aviso dado de baja");
+  }
+  if(d.enviar){
+    const campo = $("#r-texto"), txt = (campo.value || "").trim();
+    if(txt.length < 10){ flotante("Escribí un poco más"); return; }
+    S.mensajes.push({aviso:Number(d.enviar), texto:txt, fecha:new Date().toLocaleDateString("es-AR")});
+    guardar(); cerrarDialogo(); pintarActividad();
+    return flotante("Mensaje enviado");
+  }
+  if(d.guardar){
+    const id = Number(d.guardar);
+    S.guardados = S.guardados.includes(id) ? S.guardados.filter(x => x !== id) : S.guardados.concat(id);
+    guardar(); pintarTodo();
+    return flotante(S.guardados.includes(id) ? "Guardado" : "Quitado de guardados");
+  }
+  if(d.quitar){
+    S.guardados = S.guardados.filter(x => x !== Number(d.quitar));
+    guardar(); pintarTodo(); return;
+  }
+  if("cerrar" in d) return cerrarDialogo();
+});
+
+$("#telon").addEventListener("click", ev => { if(ev.target.id === "telon") cerrarDialogo(); });
+document.addEventListener("keydown", ev => { if(ev.key === "Escape") cerrarDialogo(); });
+
+$("#sel-circulo").addEventListener("change", ev => {
+  S.circulo = ev.target.value; guardar(); pintarTodo();
+});
+["f-texto","f-modo","f-orden"].forEach(id => {
+  $("#"+id).addEventListener("input", ev => {
+    F[id.replace("f-","") === "texto" ? "texto" : id === "f-modo" ? "modo" : "orden"] = ev.target.value;
+    pintarTablon();
+  });
+});
+$("#f-limpiar").onclick = () => {
+  Object.assign(F, {tipo:"todos", texto:"", modo:"", orden:"nuevo", rubros:[]});
+  $("#f-texto").value = ""; $("#f-modo").value = ""; $("#f-orden").value = "nuevo";
+  $$("#v-tablon .tipos button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.t === "todos")));
+  pintarRubros(); pintarTablon();
+};
+
+["p-titulo","p-texto","p-zona","p-modo","p-disp","p-precio","p-nombre","p-rubro","p-circulo"].forEach(id => {
+  $("#"+id).addEventListener("input", pintarPrevia);
+});
+$("#p-publicar").onclick = publicar;
+$("#p-borrarform").onclick = () => { vaciarFormulario(); flotante("Formulario vacío"); };
+
+/* ===================== arranque ===================== */
+$("#fecha-hoy").textContent = new Date().toLocaleDateString("es-AR", {day:"numeric", month:"long", year:"numeric"});
+$("#sel-circulo").innerHTML = CIRCULOS.map(c => `<option value="${c.id}" ${c.activo?"":"disabled"}>${esc(c.n)}</option>`).join("");
+$("#p-circulo").innerHTML = CIRCULOS.filter(c => c.activo).map(c => `<option value="${c.id}">${esc(c.n)}</option>`).join("");
+$("#p-rubro").innerHTML = RUBROS.map(r => `<option>${esc(r)}</option>`).join("");
+$("#sel-circulo").value = S.circulo;
+$("#p-circulo").value = S.circulo;
+pintarRubros();
+pintarTodo();
+</script>

@@ -1,0 +1,705 @@
+<title>El Tablón</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Black&family=Archivo+Narrow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --papel:#E9EAE3; --hoja:#FBFBF7; --hoja2:#F2F2EC; --hoja3:#E3E4DC;
+  --tinta:#17181A; --tinta-2:#3C4048; --gris:#6E7076;
+  --filete:#C9CBC1; --filete-2:#ABAEA2;
+  --azul:#1D4E89; --azul-lav:#DEE7F2;
+  --rojo:#AB2A1D; --rojo-lav:#F6E2DF;
+  --sombra:0 1px 0 var(--filete);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --papel:#131417; --hoja:#1B1D21; --hoja2:#212429; --hoja3:#2A2E34;
+    --tinta:#E9E9E3; --tinta-2:#BCBFC5; --gris:#8B8F96;
+    --filete:#32363D; --filete-2:#454A53;
+    --azul:#87B4E8; --azul-lav:#1B2836;
+    --rojo:#E8897C; --rojo-lav:#331F1C;
+    --sombra:0 1px 0 var(--filete);
+  }
+}
+:root[data-theme="dark"]{
+  --papel:#131417; --hoja:#1B1D21; --hoja2:#212429; --hoja3:#2A2E34;
+  --tinta:#E9E9E3; --tinta-2:#BCBFC5; --gris:#8B8F96;
+  --filete:#32363D; --filete-2:#454A53;
+  --azul:#87B4E8; --azul-lav:#1B2836;
+  --rojo:#E8897C; --rojo-lav:#331F1C;
+  --sombra:0 1px 0 var(--filete);
+}
+
+*{box-sizing:border-box}
+body{background:var(--papel); color:var(--tinta); font-family:"Archivo","Helvetica Neue",Arial,sans-serif; font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased}
+p{margin:0}
+h1,h2,h3{margin:0; letter-spacing:-.01em}
+button{font:inherit; color:inherit; cursor:pointer}
+input,select,textarea{font:inherit; color:inherit}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.narrow{font-family:"Archivo Narrow","Archivo",sans-serif}
+:focus-visible{outline:2px solid var(--azul); outline-offset:2px}
+
+.hoja{max-width:1080px; margin:0 auto; padding-inline:18px; padding-block:0 60px}
+
+/* ---------- cabecera de la publicación ---------- */
+.cabecera{border-bottom:4px double var(--tinta); padding-block:22px 10px; margin-bottom:0}
+.cabtop{display:flex; align-items:flex-end; gap:16px; flex-wrap:wrap}
+.titulo{font-family:"Archivo Black",Impact,sans-serif; font-size:clamp(2.1rem,7vw,3.6rem); line-height:.92; letter-spacing:-.03em; text-transform:uppercase}
+.bajada{font-family:"Archivo Narrow",sans-serif; font-size:.82rem; text-transform:uppercase; letter-spacing:.2em; color:var(--gris); margin-top:8px}
+.cabmeta{margin-left:auto; text-align:right; font-family:"IBM Plex Mono",monospace; font-size:.68rem; color:var(--gris); line-height:1.7; text-transform:uppercase; letter-spacing:.06em}
+
+/* ---------- barra de círculo ---------- */
+.circulo{display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:11px 0; border-bottom:1px solid var(--filete-2)}
+.circulo .et{font-family:"Archivo Narrow",sans-serif; font-weight:700; font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gris)}
+.circulo select{background:var(--hoja); border:1px solid var(--filete-2); padding:6px 9px; font-family:"Archivo Narrow",sans-serif; font-weight:600; font-size:.9rem}
+.circulo .cuenta{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--gris)}
+
+/* ---------- navegación ---------- */
+nav.secc{display:flex; gap:0; border-bottom:2px solid var(--tinta); overflow-x:auto; scrollbar-width:none; position:sticky; top:0; background:var(--papel); z-index:20}
+nav.secc::-webkit-scrollbar{display:none}
+.sec{border:0; background:none; padding:11px 15px; white-space:nowrap; font-family:"Archivo Narrow",sans-serif; font-weight:700; font-size:.88rem; text-transform:uppercase; letter-spacing:.07em; color:var(--gris); border-bottom:3px solid transparent; margin-bottom:-2px}
+.sec:hover{color:var(--tinta)}
+.sec[aria-selected="true"]{color:var(--tinta); border-bottom-color:var(--rojo)}
+.sec .n{font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--rojo); margin-left:5px}
+
+main{padding-top:18px}
+.vista{display:none}
+.vista.on{display:block}
+
+/* ---------- filtros ---------- */
+.filtros{background:var(--hoja); border:1px solid var(--filete-2); padding:14px; margin-bottom:20px}
+.filtros-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(165px,1fr)); gap:12px}
+.campo{display:flex; flex-direction:column; gap:4px}
+.campo label{font-family:"Archivo Narrow",sans-serif; font-weight:700; font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; color:var(--gris)}
+.campo input[type="text"], .campo select, .campo textarea, .campo input[type="number"]{
+  background:var(--hoja2); border:1px solid var(--filete-2); padding:8px 9px; font-size:.92rem; border-radius:0;
+}
+.campo textarea{resize:vertical; min-height:88px; line-height:1.5}
+.campo .ayuda{font-size:.76rem; color:var(--gris)}
+
+.tipos{display:flex; gap:0; border:1px solid var(--tinta)}
+.tipos button{flex:1; border:0; background:var(--hoja); padding:8px 6px; font-family:"Archivo Narrow",sans-serif; font-weight:700; font-size:.8rem; text-transform:uppercase; letter-spacing:.08em; color:var(--gris); border-right:1px solid var(--filete-2)}
+.tipos button:last-child{border-right:0}
+.tipos button[aria-pressed="true"]{background:var(--tinta); color:var(--papel)}
+.tipos button[aria-pressed="true"][data-t="ofrezco"]{background:var(--azul); color:#fff}
+.tipos button[aria-pressed="true"][data-t="busco"]{background:var(--rojo); color:#fff}
+
+.rubros{display:flex; flex-wrap:wrap; gap:5px; margin-top:12px}
+.rub{font-family:"Archivo Narrow",sans-serif; font-size:.8rem; font-weight:600; padding:3px 9px; border:1px solid var(--filete-2); background:var(--hoja2); color:var(--tinta-2)}
+.rub[aria-pressed="true"]{background:var(--tinta); color:var(--papel); border-color:var(--tinta)}
+
+/* ---------- columnas de avisos ---------- */
+.columnas{column-count:3; column-gap:22px; column-rule:1px solid var(--filete)}
+@media (max-width:900px){.columnas{column-count:2}}
+@media (max-width:600px){.columnas{column-count:1; column-rule:0}}
+
+.aviso{break-inside:avoid; page-break-inside:avoid; background:var(--hoja); border:1px solid var(--filete-2); padding:12px 13px; margin-bottom:16px; display:inline-block; width:100%}
+.aviso.mio{border-color:var(--tinta); border-width:2px; background:var(--hoja2)}
+.avtop{display:flex; align-items:center; gap:7px; margin-bottom:7px; flex-wrap:wrap}
+.sello{font-family:"Archivo Black",sans-serif; font-size:.66rem; letter-spacing:.1em; text-transform:uppercase; padding:3px 7px; color:#fff}
+.sello.of{background:var(--azul)}
+.sello.bu{background:var(--rojo)}
+:root[data-theme="dark"] .sello, :root:not([data-theme="light"]) .sello{color:#14161A}
+.rubroet{font-family:"Archivo Narrow",sans-serif; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.09em; color:var(--gris)}
+.cod{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:.66rem; color:var(--gris)}
+.avtexto{font-size:.93rem; line-height:1.52; color:var(--tinta-2)}
+.avtexto b{font-family:"Archivo",sans-serif; font-weight:700; color:var(--tinta); text-transform:uppercase; letter-spacing:.01em}
+.avdatos{margin-top:9px; padding-top:8px; border-top:1px solid var(--filete); display:flex; flex-wrap:wrap; gap:4px 12px; font-family:"IBM Plex Mono",monospace; font-size:.71rem; color:var(--gris)}
+.avdatos .d b{color:var(--tinta-2); font-weight:500}
+.avpie{margin-top:10px; display:flex; gap:6px; flex-wrap:wrap}
+.mini{border:1px solid var(--filete-2); background:var(--hoja2); padding:5px 10px; font-family:"Archivo Narrow",sans-serif; font-weight:700; font-size:.78rem; text-transform:uppercase; letter-spacing:.06em}
+.mini:hover{background:var(--hoja3)}
+.mini.fuerte{background:var(--tinta); color:var(--papel); border-color:var(--tinta)}
+.mini.fuerte:hover{filter:brightness(1.25)}
+.mini.act{background:var(--azul-lav); border-color:var(--azul); color:var(--azul)}
+.mini.peligro{color:var(--rojo); border-color:var(--rojo)}
+.tuaviso{font-family:"Archivo Black",sans-serif; font-size:.62rem; letter-spacing:.12em; text-transform:uppercase; background:var(--tinta); color:var(--papel); padding:3px 7px}
+
+.vacio{border:2px dashed var(--filete-2); padding:44px 20px; text-align:center; color:var(--gris)}
+.vacio b{display:block; font-family:"Archivo Black",sans-serif; font-size:1.05rem; color:var(--tinta); text-transform:uppercase; letter-spacing:.02em; margin-bottom:7px}
+
+/* ---------- formularios y bloques de texto ---------- */
+.bloque{background:var(--hoja); border:1px solid var(--filete-2); padding:18px; margin-bottom:20px}
+.bloque > h2{font-family:"Archivo Black",sans-serif; font-size:1.12rem; text-transform:uppercase; letter-spacing:.01em; margin-bottom:5px}
+.bloque > .sub{color:var(--gris); font-size:.88rem; margin-bottom:16px}
+.form-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:13px}
+.ancho{grid-column:1/-1}
+.acciones{display:flex; gap:9px; flex-wrap:wrap; margin-top:16px; align-items:center}
+.btn{border:1px solid var(--tinta); background:var(--hoja); padding:10px 18px; font-family:"Archivo Narrow",sans-serif; font-weight:700; font-size:.9rem; text-transform:uppercase; letter-spacing:.08em}
+.btn:hover{background:var(--hoja3)}
+.btn.principal{background:var(--tinta); color:var(--papel)}
+.btn.principal:hover{filter:brightness(1.3)}
+.btn.tenue{border-color:var(--filete-2); color:var(--gris)}
+
+.previa{border:1px solid var(--filete-2); background:var(--hoja2); padding:13px; margin-top:14px}
+.previa .et{font-family:"Archivo Narrow",sans-serif; font-size:.7rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--gris); margin-bottom:9px}
+
+.nota{border-left:3px solid var(--azul); background:var(--azul-lav); padding:11px 13px; font-size:.86rem; color:var(--tinta-2)}
+.nota b{color:var(--tinta)}
+.nota.aten{border-left-color:var(--rojo); background:var(--rojo-lav)}
+
+.lista{margin:0; padding-left:19px; display:flex; flex-direction:column; gap:8px; color:var(--tinta-2); font-size:.93rem; max-width:66ch}
+.lista li::marker{color:var(--rojo)}
+.lista b{color:var(--tinta)}
+
+.pasos{display:grid; gap:0; margin:16px 0}
+.paso{display:grid; grid-template-columns:46px 1fr; gap:14px; padding:14px 0; border-bottom:1px solid var(--filete)}
+.paso:last-child{border-bottom:0}
+.paso .np{font-family:"Archivo Black",sans-serif; font-size:1.5rem; color:var(--filete-2); line-height:1}
+.paso h3{font-family:"Archivo Narrow",sans-serif; font-weight:700; font-size:1rem; text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px}
+.paso p{font-size:.9rem; color:var(--tinta-2); max-width:62ch}
+
+.hilo{border:1px solid var(--filete-2); background:var(--hoja); padding:13px; margin-bottom:13px}
+.hilo .enc{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:8px; font-family:"IBM Plex Mono",monospace; font-size:.7rem; color:var(--gris)}
+.hilo .cuerpo{font-size:.9rem; color:var(--tinta-2); border-left:2px solid var(--filete-2); padding-left:11px}
+
+/* ---------- modal ---------- */
+.telon{position:fixed; inset:0; z-index:60; background:rgba(12,13,15,.7); display:grid; place-items:center; padding:18px; overflow-y:auto}
+.telon[hidden]{display:none}
+.dialogo{background:var(--hoja); border:2px solid var(--tinta); max-width:480px; width:100%; padding:20px}
+.dialogo h2{font-family:"Archivo Black",sans-serif; font-size:1.05rem; text-transform:uppercase; margin-bottom:9px}
+.dialogo p{color:var(--tinta-2); font-size:.9rem}
+
+.aviso-flotante{position:fixed; left:50%; bottom:20px; transform:translateX(-50%); z-index:70; background:var(--tinta); color:var(--papel); padding:11px 18px; font-family:"Archivo Narrow",sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:.06em; font-size:.85rem; max-width:calc(100% - 30px)}
+.aviso-flotante[hidden]{display:none}
+
+footer.pie{border-top:4px double var(--tinta); margin-top:40px; padding-top:14px; font-family:"IBM Plex Mono",monospace; font-size:.7rem; color:var(--gris); line-height:1.8; text-transform:uppercase; letter-spacing:.05em}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
+</style>
+
+<div class="hoja">
+
+<header class="cabecera">
+  <div class="cabtop">
+    <div>
+      <h1 class="titulo">El Tablón</h1>
+      <div class="bajada">Ofrezco · Busco · Trabajo entre vecinas y vecinos</div>
+    </div>
+    <div class="cabmeta">
+      Edición de demostración<br>
+      Avisos ficticios<br>
+      <span id="fecha-hoy"></span>
+    </div>
+  </div>
+</header>
+
+<div class="circulo">
+  <span class="et">Círculo</span>
+  <select id="sel-circulo" aria-label="Elegir círculo"></select>
+  <span class="cuenta" id="cuenta-circulo"></span>
+</div>
+
+<nav class="secc" role="tablist" aria-label="Secciones">
+  <button class="sec" role="tab" data-vista="tablon" aria-selected="true">Tablón</button>
+  <button class="sec" role="tab" data-vista="publicar" aria-selected="false">Publicar aviso</button>
+  <button class="sec" role="tab" data-vista="guardados" aria-selected="false">Guardados<span class="n" id="n-guardados"></span></button>
+  <button class="sec" role="tab" data-vista="actividad" aria-selected="false">Mi actividad<span class="n" id="n-actividad"></span></button>
+  <button class="sec" role="tab" data-vista="como" aria-selected="false">Cómo funciona</button>
+</nav>
+
+<main>
+
+  <section class="vista on" id="v-tablon">
+    <div class="filtros">
+      <div class="tipos" role="group" aria-label="Tipo de aviso">
+        <button type="button" data-t="todos" aria-pressed="true">Todos</button>
+        <button type="button" data-t="ofrezco" aria-pressed="false">Ofrezco</button>
+        <button type="button" data-t="busco" aria-pressed="false">Busco</button>
+      </div>
+      <div class="filtros-grid" style="margin-top:12px">
+        <div class="campo"><label for="f-texto">Buscar</label><input type="text" id="f-texto" placeholder="plomero, clases, Natura, costura…"></div>
+        <div class="campo"><label for="f-modo">Modalidad</label>
+          <select id="f-modo"><option value="">Cualquiera</option><option>Presencial</option><option>A domicilio</option><option>Online</option><option>Mixta</option></select>
+        </div>
+        <div class="campo"><label for="f-orden">Ordenar</label>
+          <select id="f-orden"><option value="nuevo">Más recientes</option><option value="rubro">Por rubro</option><option value="zona">Por zona</option></select>
+        </div>
+      </div>
+      <div class="rubros" id="f-rubros"></div>
+      <div class="acciones" style="margin-top:12px">
+        <button class="btn tenue" id="f-limpiar">Limpiar</button>
+        <span class="mono" id="f-cuenta" style="margin-left:auto; font-size:.75rem; color:var(--gris)"></span>
+      </div>
+    </div>
+    <div class="columnas" id="tablon"></div>
+  </section>
+
+  <section class="vista" id="v-publicar">
+    <div class="bloque">
+      <h2>Poner un aviso</h2>
+      <p class="sub">Como en la revista: dos líneas bien escritas valen más que un párrafo largo. Tu aviso aparece arriba de todo, marcado como tuyo.</p>
+
+      <div class="tipos" role="group" aria-label="Tipo de aviso a publicar" id="p-tipos">
+        <button type="button" data-pt="ofrezco" aria-pressed="true">Ofrezco</button>
+        <button type="button" data-pt="busco" aria-pressed="false">Busco</button>
+      </div>
+
+      <div class="form-grid" style="margin-top:14px">
+        <div class="campo"><label for="p-titulo">Encabezado del aviso</label>
+          <input type="text" id="p-titulo" maxlength="46" placeholder="Electricista matriculada">
+          <span class="ayuda">Va en mayúsculas al principio, como en los clasificados.</span>
+        </div>
+        <div class="campo"><label for="p-rubro">Rubro</label><select id="p-rubro"></select></div>
+        <div class="campo ancho"><label for="p-texto">El aviso</label>
+          <textarea id="p-texto" maxlength="280" placeholder="Instalaciones, tableros y certificados. Trabajo en el día, presupuesto sin cargo."></textarea>
+          <span class="ayuda"><span class="mono" id="p-restan">280</span> caracteres disponibles.</span>
+        </div>
+        <div class="campo"><label for="p-zona">Zona</label><input type="text" id="p-zona" maxlength="40" placeholder="Almagro"></div>
+        <div class="campo"><label for="p-modo">Modalidad</label>
+          <select id="p-modo"><option>Presencial</option><option>A domicilio</option><option>Online</option><option>Mixta</option></select>
+        </div>
+        <div class="campo"><label for="p-disp">Disponibilidad</label><input type="text" id="p-disp" maxlength="40" placeholder="Lunes a viernes, tarde"></div>
+        <div class="campo"><label for="p-precio">Referencia de precio</label><input type="text" id="p-precio" maxlength="40" placeholder="A convenir / por hora / por trabajo"></div>
+        <div class="campo"><label for="p-nombre">Cómo te nombramos</label><input type="text" id="p-nombre" maxlength="30" placeholder="Flor V."></div>
+        <div class="campo"><label for="p-circulo">Círculo donde se publica</label><select id="p-circulo"></select></div>
+      </div>
+
+      <div class="nota" style="margin-top:14px"><b>Tus datos de contacto no se publican.</b> Quien se interese te escribe por el tablón y vos decidís si le pasás tu teléfono. Es la diferencia con pegar un papel en la puerta del almacén.</div>
+
+      <div class="previa" id="p-previa"></div>
+
+      <div class="acciones">
+        <button class="btn principal" id="p-publicar">Publicar el aviso</button>
+        <button class="btn tenue" id="p-borrarform">Vaciar el formulario</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="vista" id="v-guardados">
+    <div id="guardados"></div>
+  </section>
+
+  <section class="vista" id="v-actividad">
+    <div class="bloque">
+      <h2>Mis avisos</h2>
+      <p class="sub">Los que publicaste desde este navegador.</p>
+      <div id="mis-avisos"></div>
+    </div>
+    <div class="bloque">
+      <h2>Mensajes que mandé</h2>
+      <p class="sub">Respuestas a avisos de otras personas. En la demo nadie contesta.</p>
+      <div id="mis-mensajes"></div>
+    </div>
+  </section>
+
+  <section class="vista" id="v-como">
+    <div class="bloque">
+      <h2>Qué es esto</h2>
+      <p class="sub">Una revista de clasificados de trabajo, en digital, para un grupo concreto de personas.</p>
+      <ul class="lista">
+        <li><b>Dos lados, no uno.</b> No es una bolsa de empleo donde sólo las empresas publican. Acá hay avisos de <b>ofrezco</b> (el que tiene un oficio, una profesión, un producto, una hora libre) y de <b>busco</b> (el que necesita). Los dos valen lo mismo y conviven en la misma página.</li>
+        <li><b>Todo entra.</b> Oficios, profesiones, changas, cuidados, clases, costura, reventa de productos, trabajo online. No hay que ser una empresa para publicar.</li>
+        <li><b>Es de alguien.</b> Cada tablón pertenece a un grupo: un barrio, un gremio, un organismo, un grupo de amigas. No es un mercado abierto al mundo donde nadie se conoce.</li>
+        <li><b>El contacto es tuyo.</b> Nadie ve tu teléfono. Te escriben por el tablón y vos decidís a quién le respondés.</li>
+      </ul>
+    </div>
+
+    <div class="bloque">
+      <h2>Los círculos</h2>
+      <p class="sub">La misma aplicación, cuatro usos distintos. El círculo define quién ve los avisos y quién puede publicar.</p>
+      <div class="pasos">
+        <div class="paso"><div class="np">01</div><div>
+          <h3>Un barrio</h3>
+          <p>Almagro, por ejemplo. Vecinos que ofrecen oficios y vecinos que necesitan algo resuelto hoy. La cercanía es el valor: el plomero está a cuatro cuadras.</p>
+        </div></div>
+        <div class="paso"><div class="np">02</div><div>
+          <h3>Un gremio o sindicato</h3>
+          <p>La seccional abre su tablón para las personas afiliadas. Trabajo entre pares, con la confianza que da pertenecer al mismo lugar.</p>
+        </div></div>
+        <div class="paso"><div class="np">03</div><div>
+          <h3>Un organismo o una empresa</h3>
+          <p>Compañeras y compañeros de trabajo que además hacen otras cosas: cocinan, dan clases, arreglan, venden. Un tablón interno que no mezcla con el mundo.</p>
+        </div></div>
+        <div class="paso"><div class="np">04</div><div>
+          <h3>Un grupo de conocidas</h3>
+          <p>Amigas, egresadas de una carrera, madres de una escuela. El círculo más chico y el que mejor funciona: todas saben de quién se trata.</p>
+        </div></div>
+      </div>
+      <div class="nota"><b>Se pueden crear más.</b> Un círculo nuevo necesita tres cosas: alguien que lo administre, una regla de quién entra y unos treinta avisos para que no parezca vacío el primer día.</div>
+    </div>
+
+    <div class="bloque">
+      <h2>Las reglas</h2>
+      <ul class="lista">
+        <li><b>Un aviso por oficio.</b> Nada de publicar el mismo aviso cinco veces para aparecer arriba.</li>
+        <li><b>Se escribe como se habla.</b> Nada de mayúsculas gritadas ni signos de exclamación en cadena.</li>
+        <li><b>Precio de referencia, no promesa.</b> El acuerdo final es entre las dos personas.</li>
+        <li><b>El tablón no interviene en el trabajo.</b> No cobra, no garantiza, no media. Conecta.</li>
+        <li><b>Los avisos vencen.</b> A los sesenta días se dan de baja solos. Un tablón lleno de avisos viejos no sirve.</li>
+      </ul>
+      <div class="nota aten" style="margin-top:14px"><b>Lo que el tablón no es:</b> no es una agencia de colocación ni un intermediario laboral. No participa del acuerdo entre quien ofrece y quien contrata, ni percibe comisión por él. Conviene que eso esté escrito en los términos antes de abrirlo al público.</div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="pie">
+  El Tablón — demostración funcional. Los avisos de ejemplo son ficticios y fueron inventados para esta demo.<br>
+  Lo que publiques se guarda únicamente en este navegador. No se envía a ningún servidor.
+</footer>
+
+</div>
+
+<div class="telon" id="telon" hidden><div class="dialogo" id="dialogo"></div></div>
+<div class="aviso-flotante" id="flotante" hidden></div>
+
+<script>
+"use strict";
+
+/* ===================== datos ===================== */
+const CIRCULOS = [
+  {id:"almagro",  n:"Barrio de Almagro", d:"Vecinas y vecinos de Almagro y alrededores"},
+  {id:"gremio",   n:"Gremio — Seccional Capital", d:"Personas afiliadas a la seccional"},
+  {id:"organismo",n:"Organismo — compañeras de trabajo", d:"Personal del organismo, uso interno"},
+  {id:"conocidas",n:"Entre amigas y conocidas", d:"Círculo cerrado por invitación"}
+];
+
+const RUBROS = ["Oficios","Construcción","Arreglos y reparaciones","Limpieza","Cuidados","Salud","Clases y formación","Profesionales","Administración","Gastronomía","Belleza y estética","Costura y textil","Productos y reventa","Digital y online","Transporte y fletes","Eventos","Mascotas","Changas"];
+
+/* t: tipo, r: rubro, c: círculo, m: modalidad, d: días desde publicación */
+const AVISOS = [
+  {id:1,t:"ofrezco",c:"almagro",r:"Oficios",tit:"Electricista matriculada",tx:"Instalaciones, tableros, cambio de cableado y certificados. Trabajo en el día, presupuesto sin cargo. Veinte años en el oficio.",z:"Almagro",m:"A domicilio",disp:"Lunes a sábado",pr:"Por trabajo",q:"Silvia R.",d:2},
+  {id:2,t:"busco",c:"almagro",r:"Cuidados",tit:"Acompañante para mi mamá",tx:"Señora de 84 años, autoválida. Necesito alguien tres mañanas por semana para acompañarla al médico y a hacer las compras. Referencias comprobables.",z:"Almagro sur",m:"Presencial",disp:"Mar, jue y sáb a la mañana",pr:"Por hora, a convenir",q:"Marcela P.",d:1},
+  {id:3,t:"ofrezco",c:"almagro",r:"Productos y reventa",tit:"Consultora Natura",tx:"Tomo pedidos de todo el catálogo, entrego en el barrio sin cargo y armo combos para regalo. También busco gente que quiera revender conmigo.",z:"Almagro / Boedo",m:"Mixta",disp:"Toda la semana",pr:"Precio de catálogo",q:"Vanina L.",d:3},
+  {id:4,t:"busco",c:"almagro",r:"Productos y reventa",tit:"Busco consultora de Natura",tx:"Quiero hacer pedidos seguidos y que alguien del barrio me los acerque. Si sos consultora y entregás por Almagro, escribime.",z:"Almagro",m:"Presencial",disp:"Cualquier día",pr:"—",q:"Dolores F.",d:1},
+  {id:5,t:"ofrezco",c:"almagro",r:"Gastronomía",tit:"Viandas caseras semanales",tx:"Cocino por encargo: cinco viandas por semana, con opción vegetariana y sin TACC. Entrego los domingos a la tarde en tuppers propios.",z:"Almagro",m:"A domicilio",disp:"Entrega domingos",pr:"Por semana",q:"Rita M.",d:5},
+  {id:6,t:"ofrezco",c:"almagro",r:"Clases y formación",tit:"Apoyo escolar primaria",tx:"Maestra jubilada. Matemática y lengua, primaria completa. En mi casa o por videollamada. Grupos de hasta tres chicos.",z:"Almagro",m:"Mixta",disp:"Tardes",pr:"Por hora",q:"Nélida S.",d:7},
+  {id:7,t:"busco",c:"almagro",r:"Arreglos y reparaciones",tit:"Alguien que arregle persianas",tx:"Dos persianas de madera que no suben. Edificio viejo, cinta cortada. Necesito presupuesto antes de que llegue el frío.",z:"Medrano y Rivadavia",m:"A domicilio",disp:"A convenir",pr:"Presupuesto",q:"Jorge A.",d:2},
+  {id:8,t:"ofrezco",c:"almagro",r:"Costura y textil",tit:"Arreglos de ropa y dobladillos",tx:"Costurera con taller en casa. Dobladillos, cierres, ajustes de talle y arreglo de tapizados chicos. Entrega en 48 horas.",z:"Almagro",m:"Presencial",disp:"Lun a vie 9 a 18",pr:"Desde arreglo simple",q:"Carmen D.",d:4},
+  {id:9,t:"ofrezco",c:"almagro",r:"Mascotas",tit:"Paseadora de perros",tx:"Paseos de una hora, grupos chicos de hasta cuatro perros del mismo tamaño. Mando fotos del paseo. Tengo referencias del barrio.",z:"Almagro / Parque Centenario",m:"Presencial",disp:"Mañanas y tardes",pr:"Por paseo o por mes",q:"Ailén B.",d:6},
+  {id:10,t:"busco",c:"almagro",r:"Limpieza",tit:"Limpieza por hora, dos veces por semana",tx:"Departamento de dos ambientes, sin mascotas. Busco a alguien del barrio, con continuidad. Pago en blanco si hace falta.",z:"Almagro",m:"Presencial",disp:"Lunes y jueves",pr:"Por hora",q:"Cecilia R.",d:3},
+  {id:11,t:"ofrezco",c:"almagro",r:"Oficios",tit:"Plomero gasista matriculado",tx:"Destapaciones, cambio de termotanque, pérdidas y certificación de gas. Trabajo con factura. Urgencias el mismo día.",z:"Almagro y alrededores",m:"A domicilio",disp:"Todos los días",pr:"Presupuesto sin cargo",q:"Héctor G.",d:8},
+  {id:12,t:"ofrezco",c:"almagro",r:"Belleza y estética",tit:"Peluquería a domicilio",tx:"Corte, color y brushing en tu casa. Llevo todo. Atiendo también a personas mayores o con movilidad reducida.",z:"Almagro / Caballito",m:"A domicilio",disp:"Martes a sábado",pr:"Por servicio",q:"Yesica C.",d:2},
+  {id:13,t:"busco",c:"almagro",r:"Eventos",tit:"Fotógrafa para cumpleaños de 15",tx:"Fiesta chica, sesenta personas, en un salón de Almagro. Necesito cobertura de cuatro horas y fotos editadas. Pido ver trabajos anteriores.",z:"Almagro",m:"Presencial",disp:"Sábado 18 de octubre",pr:"Presupuesto cerrado",q:"Andrea V.",d:1},
+  {id:14,t:"ofrezco",c:"almagro",r:"Transporte y fletes",tit:"Flete chico con ayudante",tx:"Utilitario cerrado. Mudanzas de monoambiente, traslado de muebles y retiro de compras. Cobro por viaje, no por hora.",z:"CABA y GBA norte",m:"Presencial",disp:"Lun a sáb",pr:"Por viaje",q:"Ramiro T.",d:9},
+
+  {id:20,t:"ofrezco",c:"gremio",r:"Profesionales",tit:"Contadora para monotributo",tx:"Altas, recategorizaciones y facturación para compañeras y compañeros. Atención por videollamada y seguimiento por mensajería.",z:"CABA",m:"Online",disp:"Lun a vie",pr:"Abono mensual",q:"Paula E.",d:2},
+  {id:21,t:"busco",c:"gremio",r:"Administración",tit:"Alguien que ordene papeles de la seccional",tx:"Necesitamos digitalizar y ordenar el archivo de los últimos cinco años. Trabajo puntual, tres semanas, en la sede.",z:"Sede Capital",m:"Presencial",disp:"Mañanas",pr:"Por proyecto",q:"Comisión interna",d:4},
+  {id:22,t:"ofrezco",c:"gremio",r:"Clases y formación",tit:"Curso de Excel para el trabajo",tx:"Tres encuentros por videollamada, con ejercicios reales de planilla: liquidaciones, filtros y tablas dinámicas. Grupos de diez.",z:"—",m:"Online",disp:"Jueves 18 h",pr:"Por curso",q:"Damián R.",d:6},
+  {id:23,t:"ofrezco",c:"gremio",r:"Salud",tit:"Kinesiología a domicilio",tx:"Rehabilitación post quirúrgica y dolores de espalda por trabajo de oficina. Atiendo en domicilio con equipo propio.",z:"CABA zona centro",m:"A domicilio",disp:"Tardes",pr:"Por sesión",q:"Lucía M.",d:3},
+  {id:24,t:"busco",c:"gremio",r:"Digital y online",tit:"Quien arme el boletín mensual",tx:"Buscamos a alguien que diagrame y envíe el boletín a las afiliadas. Cuatro horas por mes, todo remoto.",z:"—",m:"Online",disp:"Última semana del mes",pr:"Mensual",q:"Prensa seccional",d:5},
+  {id:25,t:"ofrezco",c:"gremio",r:"Oficios",tit:"Herrería y rejas",tx:"Rejas, portones y estructuras. Trabajo de taller y colocación. Presupuesto con plano o con foto.",z:"GBA oeste",m:"Mixta",disp:"Lun a vie",pr:"Por trabajo",q:"Oscar N.",d:11},
+
+  {id:30,t:"ofrezco",c:"organismo",r:"Gastronomía",tit:"Tortas y budines por encargo",tx:"Hago tortas para cumpleaños de la oficina. Entrego en el edificio. Aviso con dos días de anticipación.",z:"Entrego en la oficina",m:"Presencial",disp:"Cualquier día",pr:"Según tamaño",q:"Noelia A.",d:1},
+  {id:31,t:"ofrezco",c:"organismo",r:"Clases y formación",tit:"Clases de inglés en el horario del almuerzo",tx:"Conversación en grupos de cuatro, media hora, en la sala de reuniones chica. Nivel intermedio en adelante.",z:"En el edificio",m:"Presencial",disp:"Mié y vie 13 h",pr:"Por mes",q:"Federico L.",d:3},
+  {id:32,t:"busco",c:"organismo",r:"Changas",tit:"Alguien que me cubra el viaje a Ezeiza",tx:"Necesito que alguien lleve unos papeles a la sede de Ezeiza el viernes. Pago el viaje y el tiempo.",z:"Ezeiza",m:"Presencial",disp:"Viernes a la mañana",pr:"Por única vez",q:"Gabriel S.",d:1},
+  {id:33,t:"ofrezco",c:"organismo",r:"Belleza y estética",tit:"Manicura en el edificio",tx:"Atiendo en el horario de almuerzo, en la sala vacía del tercer piso. Turnos de cuarenta minutos.",z:"En el edificio",m:"Presencial",disp:"Mar y jue 12 a 15",pr:"Por servicio",q:"Melina F.",d:4},
+  {id:34,t:"busco",c:"organismo",r:"Cuidados",tit:"Recomendaciones de jardín maternal",tx:"Más que un servicio busco data: alguien que tenga el hijo en un jardín cerca del trabajo y me cuente cómo le va.",z:"Cerca de la oficina",m:"Presencial",disp:"—",pr:"—",q:"Rocío D.",d:2},
+
+  {id:40,t:"ofrezco",c:"conocidas",r:"Digital y online",tit:"Diseño de identidad para emprendimientos",tx:"Logo, paleta y plantillas para redes. Trabajo con dos rondas de correcciones y entrego los archivos editables.",z:"—",m:"Online",disp:"Agenda con dos semanas",pr:"Por proyecto",q:"Juli T.",d:2},
+  {id:41,t:"ofrezco",c:"conocidas",r:"Profesionales",tit:"Traducciones público inglés-español",tx:"Documentación, partidas y títulos con legalización. También traducción técnica sin legalizar, más rápida y más barata.",z:"—",m:"Online",disp:"Lun a vie",pr:"Por carilla",q:"Belén O.",d:5},
+  {id:42,t:"busco",c:"conocidas",r:"Digital y online",tit:"Necesito quien me arme la tienda online",tx:"Vendo cerámica y ya no doy abasto con los mensajes. Quiero una tienda simple, con pago y envío. Presupuesto acotado, aviso.",z:"—",m:"Online",disp:"—",pr:"Presupuesto",q:"Sol M.",d:1},
+  {id:43,t:"ofrezco",c:"conocidas",r:"Productos y reventa",tit:"Cerámica hecha a mano",tx:"Tazas, platos y macetas de gres esmaltado. Pieza única o juegos por encargo. Entrego en mano o despacho al interior.",z:"CABA",m:"Mixta",disp:"Encargos con tres semanas",pr:"Por pieza",q:"Sol M.",d:6},
+  {id:44,t:"busco",c:"conocidas",r:"Salud",tit:"Busco psicóloga con turnos de noche",tx:"Trabajo hasta las 19 y nunca llego a un turno. Busco recomendación de alguien que atienda después de esa hora, presencial u online.",z:"CABA u online",m:"Mixta",disp:"Después de las 19",pr:"—",q:"Ana P.",d:3},
+  {id:45,t:"ofrezco",c:"conocidas",r:"Administración",tit:"Asistente virtual por horas",tx:"Agenda, mails, presupuestos y seguimiento de cobros. Trabajo por bloques de diez horas mensuales, todo remoto.",z:"—",m:"Online",disp:"Lun a vie",pr:"Bloques mensuales",q:"Caro G.",d:8},
+  {id:46,t:"ofrezco",c:"conocidas",r:"Clases y formación",tit:"Clases de yoga por videollamada",tx:"Grupos chicos, cuatro personas, para que pueda corregir. Hatha suave, apto para principiantes y para espaldas cansadas.",z:"—",m:"Online",disp:"Lun, mié y vie 8 h",pr:"Por mes",q:"Ine R.",d:4}
+];
+
+/* ===================== estado ===================== */
+const CLAVE = "el-tablon.v1";
+let S = cargar();
+let vistaActual = "tablon";
+let tipoPub = "ofrezco";
+
+function cargar(){
+  const base = {circulo:"almagro", mios:[], guardados:[], mensajes:[], proximoId:1000};
+  try{
+    const crudo = localStorage.getItem(CLAVE);
+    if(!crudo) return base;
+    return {...base, ...JSON.parse(crudo)};
+  }catch(err){ return base; }
+}
+function guardar(){ try{ localStorage.setItem(CLAVE, JSON.stringify(S)); }catch(err){} }
+
+const F = {tipo:"todos", texto:"", modo:"", orden:"nuevo", rubros:[]};
+
+/* ===================== utilidades ===================== */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const codigo = id => "A-" + String(id).padStart(4, "0");
+const hace = d => d === 0 ? "hoy" : d === 1 ? "ayer" : `hace ${d} días`;
+
+let tFlot;
+function flotante(txt){
+  const el = $("#flotante"); el.textContent = txt; el.hidden = false;
+  clearTimeout(tFlot); tFlot = setTimeout(() => { el.hidden = true; }, 2800);
+}
+
+function todos(){ return S.mios.concat(AVISOS); }
+function delCirculo(){ return todos().filter(a => a.c === S.circulo); }
+
+/* ===================== render de un aviso ===================== */
+function pintarAviso(a, opciones){
+  const o = opciones || {};
+  const mio = !!a.mio;
+  const guardado = S.guardados.includes(a.id);
+  return `<article class="aviso ${mio?"mio":""}">
+    <div class="avtop">
+      <span class="sello ${a.t === "ofrezco" ? "of" : "bu"}">${a.t === "ofrezco" ? "Ofrezco" : "Busco"}</span>
+      <span class="rubroet">${esc(a.r)}</span>
+      ${mio ? '<span class="tuaviso">Tu aviso</span>' : ''}
+      <span class="cod">${codigo(a.id)}</span>
+    </div>
+    <p class="avtexto"><b>${esc(a.tit)}.</b> ${esc(a.tx)}</p>
+    <div class="avdatos">
+      <span class="d">Zona <b>${esc(a.z || "—")}</b></span>
+      <span class="d">${esc(a.m)}</span>
+      ${a.disp ? `<span class="d">${esc(a.disp)}</span>` : ""}
+      ${a.pr && a.pr !== "—" ? `<span class="d">${esc(a.pr)}</span>` : ""}
+      <span class="d">${esc(a.q)} · ${hace(a.d)}</span>
+    </div>
+    <div class="avpie">
+      ${mio
+        ? `<button class="mini peligro" data-baja="${a.id}">Dar de baja</button>`
+        : `<button class="mini fuerte" data-responder="${a.id}">Responder</button>
+           <button class="mini ${guardado?"act":""}" data-guardar="${a.id}">${guardado ? "Guardado" : "Guardar"}</button>`}
+      ${o.quitar ? `<button class="mini" data-quitar="${a.id}">Quitar de guardados</button>` : ""}
+    </div>
+  </article>`;
+}
+
+/* ===================== tablón ===================== */
+function pintarTablon(){
+  const base = delCirculo();
+  const lista = base.filter(a => {
+      if(F.tipo !== "todos" && a.t !== F.tipo) return false;
+      if(F.modo && a.m !== F.modo) return false;
+      if(F.rubros.length && !F.rubros.includes(a.r)) return false;
+      if(F.texto){
+        const heno = (a.tit+" "+a.tx+" "+a.r+" "+a.z+" "+a.q).toLowerCase();
+        if(!heno.includes(F.texto.toLowerCase())) return false;
+      }
+      return true;
+    }).sort((x,y) => {
+      if(F.orden === "rubro") return x.r.localeCompare(y.r,"es") || x.d - y.d;
+      if(F.orden === "zona") return String(x.z).localeCompare(String(y.z),"es") || x.d - y.d;
+      return (x.mio ? -1 : y.mio ? 1 : 0) || x.d - y.d;
+    });
+
+  const ofr = lista.filter(a => a.t === "ofrezco").length;
+  $("#f-cuenta").textContent = `${lista.length} avisos · ${ofr} ofrecen · ${lista.length - ofr} buscan`;
+
+  $("#tablon").innerHTML = lista.length
+    ? lista.map(a => pintarAviso(a)).join("")
+    : `<div class="vacio" style="column-span:all"><b>No hay avisos con esos filtros</b>
+        <p>Probá sacar algún rubro, cambiar la modalidad o buscar otra palabra.</p></div>`;
+}
+
+function pintarRubros(){
+  $("#f-rubros").innerHTML = RUBROS.map(r =>
+    `<button class="rub" type="button" data-rubro="${esc(r)}" aria-pressed="${F.rubros.includes(r)}">${esc(r)}</button>`).join("");
+}
+
+/* ===================== guardados y actividad ===================== */
+function pintarGuardados(){
+  const lista = todos().filter(a => S.guardados.includes(a.id));
+  $("#n-guardados").textContent = S.guardados.length ? `(${S.guardados.length})` : "";
+  $("#guardados").innerHTML = lista.length
+    ? `<div class="columnas">${lista.map(a => pintarAviso(a, {quitar:true})).join("")}</div>`
+    : `<div class="vacio"><b>No guardaste ningún aviso</b>
+        <p>El botón Guardar de cada aviso lo deja acá, para volver después.</p></div>`;
+}
+
+function pintarActividad(){
+  $("#n-actividad").textContent = S.mios.length ? `(${S.mios.length})` : "";
+  $("#mis-avisos").innerHTML = S.mios.length
+    ? S.mios.map(a => pintarAviso(a)).join("")
+    : `<p style="color:var(--gris); font-size:.9rem">Todavía no publicaste ninguno.</p>`;
+
+  $("#mis-mensajes").innerHTML = S.mensajes.length
+    ? S.mensajes.slice().reverse().map(m => {
+        const a = todos().find(x => x.id === m.aviso);
+        return `<div class="hilo">
+          <div class="enc"><span>${codigo(m.aviso)}</span><span>·</span><span>${esc(a ? a.tit : "Aviso dado de baja")}</span><span style="margin-left:auto">${esc(m.fecha)}</span></div>
+          <div class="cuerpo">${esc(m.texto)}</div>
+        </div>`;
+      }).join("")
+    : `<p style="color:var(--gris); font-size:.9rem">Todavía no respondiste ningún aviso.</p>`;
+}
+
+/* ===================== publicar ===================== */
+function leerFormulario(){
+  return {
+    t: tipoPub,
+    r: $("#p-rubro").value,
+    tit: $("#p-titulo").value.trim(),
+    tx: $("#p-texto").value.trim(),
+    z: $("#p-zona").value.trim(),
+    m: $("#p-modo").value,
+    disp: $("#p-disp").value.trim(),
+    pr: $("#p-precio").value.trim(),
+    q: $("#p-nombre").value.trim(),
+    c: $("#p-circulo").value
+  };
+}
+
+function pintarPrevia(){
+  const v = leerFormulario();
+  const demo = {...v, id:S.proximoId, d:0, mio:true,
+    tit: v.tit || "Encabezado del aviso", tx: v.tx || "Acá va el texto del aviso.",
+    q: v.q || "Sin nombre", z: v.z || "—"};
+  $("#p-previa").innerHTML = `<div class="et">Así se va a ver en el tablón</div>${pintarAviso(demo)}`;
+  $("#p-restan").textContent = 280 - $("#p-texto").value.length;
+}
+
+function publicar(){
+  const v = leerFormulario();
+  if(v.tit.length < 3) return flotante("Falta el encabezado del aviso");
+  if(v.tx.length < 15) return flotante("El texto del aviso es muy corto");
+  if(!v.q) return flotante("Poné cómo te nombramos");
+
+  const nuevo = {...v, id:S.proximoId++, d:0, mio:true};
+  S.mios.unshift(nuevo);
+  S.circulo = v.c;
+  guardar();
+  $("#sel-circulo").value = S.circulo;
+  vaciarFormulario();
+  irA("tablon");
+  pintarTodo();
+  flotante(`Aviso ${codigo(nuevo.id)} publicado`);
+}
+
+function vaciarFormulario(){
+  ["p-titulo","p-texto","p-zona","p-disp","p-precio","p-nombre"].forEach(id => { $("#"+id).value = ""; });
+  pintarPrevia();
+}
+
+/* ===================== diálogos ===================== */
+function abrirDialogo(html){
+  $("#dialogo").innerHTML = html; $("#telon").hidden = false;
+  const f = $("#dialogo").querySelector("textarea, button"); if(f) f.focus();
+}
+function cerrarDialogo(){ $("#telon").hidden = true; $("#dialogo").innerHTML = ""; }
+
+function dialogoResponder(id){
+  const a = todos().find(x => x.id === id);
+  if(!a) return;
+  abrirDialogo(`<h2>Responder el aviso ${codigo(a.id)}</h2>
+    <p><b>${esc(a.tit)}.</b> ${esc(a.tx)}</p>
+    <div class="campo" style="margin-top:14px">
+      <label for="r-texto">Tu mensaje</label>
+      <textarea id="r-texto" maxlength="400" placeholder="Contá qué necesitás o por qué te interesa. Si querés dejá un horario para que te llamen."></textarea>
+      <span class="ayuda">Se lo mandamos a ${esc(a.q)}. No compartimos tu teléfono ni tu mail: eso lo decidís vos después.</span>
+    </div>
+    <div class="acciones">
+      <button class="btn tenue" data-cerrar>Cancelar</button>
+      <button class="btn principal" data-enviar="${a.id}">Enviar mensaje</button>
+    </div>`);
+}
+
+function dialogoBaja(id){
+  const a = S.mios.find(x => x.id === id);
+  if(!a) return;
+  abrirDialogo(`<h2>Dar de baja el aviso</h2>
+    <p>${esc(a.tit)}. Se borra del tablón y no se puede recuperar.</p>
+    <div class="acciones">
+      <button class="btn tenue" data-cerrar>Cancelar</button>
+      <button class="btn principal" data-confirmabaja="${a.id}">Dar de baja</button>
+    </div>`);
+}
+
+/* ===================== navegación ===================== */
+function irA(v){
+  vistaActual = v;
+  $$(".sec").forEach(b => b.setAttribute("aria-selected", String(b.dataset.vista === v)));
+  $$(".vista").forEach(s => s.classList.toggle("on", s.id === "v-" + v));
+  window.scrollTo({top:0, behavior:"instant"});
+}
+
+function pintarTodo(){
+  const c = CIRCULOS.find(x => x.id === S.circulo);
+  const n = delCirculo().length;
+  $("#cuenta-circulo").textContent = `${c.d} · ${n} avisos vigentes`;
+  pintarTablon(); pintarGuardados(); pintarActividad(); pintarPrevia();
+}
+
+/* ===================== eventos ===================== */
+document.addEventListener("click", ev => {
+  const t = ev.target.closest("[data-vista],[data-t],[data-pt],[data-rubro],[data-responder],[data-guardar],[data-quitar],[data-baja],[data-confirmabaja],[data-enviar],[data-cerrar]");
+  if(!t) return;
+  const d = t.dataset;
+
+  if(d.vista) return irA(d.vista);
+
+  if(d.t){
+    F.tipo = d.t;
+    $$("#v-tablon .tipos button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.t === d.t)));
+    return pintarTablon();
+  }
+  if(d.pt){
+    tipoPub = d.pt;
+    $$("#p-tipos button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.pt === d.pt)));
+    return pintarPrevia();
+  }
+  if(d.rubro){
+    const on = t.getAttribute("aria-pressed") === "true";
+    F.rubros = on ? F.rubros.filter(x => x !== d.rubro) : F.rubros.concat(d.rubro);
+    t.setAttribute("aria-pressed", String(!on));
+    return pintarTablon();
+  }
+  if(d.responder) return dialogoResponder(Number(d.responder));
+  if(d.baja) return dialogoBaja(Number(d.baja));
+
+  if(d.confirmabaja){
+    const id = Number(d.confirmabaja);
+    S.mios = S.mios.filter(x => x.id !== id);
+    S.guardados = S.guardados.filter(x => x !== id);
+    guardar(); cerrarDialogo(); pintarTodo();
+    return flotante("Aviso dado de baja");
+  }
+  if(d.enviar){
+    const campo = $("#r-texto"), txt = (campo.value || "").trim();
+    if(txt.length < 10){ flotante("Escribí un poco más"); return; }
+    S.mensajes.push({aviso:Number(d.enviar), texto:txt, fecha:new Date().toLocaleDateString("es-AR")});
+    guardar(); cerrarDialogo(); pintarActividad();
+    return flotante("Mensaje enviado");
+  }
+  if(d.guardar){
+    const id = Number(d.guardar);
+    S.guardados = S.guardados.includes(id) ? S.guardados.filter(x => x !== id) : S.guardados.concat(id);
+    guardar(); pintarTodo();
+    return flotante(S.guardados.includes(id) ? "Guardado" : "Quitado de guardados");
+  }
+  if(d.quitar){
+    S.guardados = S.guardados.filter(x => x !== Number(d.quitar));
+    guardar(); pintarTodo(); return;
+  }
+  if("cerrar" in d) return cerrarDialogo();
+});
+
+$("#telon").addEventListener("click", ev => { if(ev.target.id === "telon") cerrarDialogo(); });
+document.addEventListener("keydown", ev => { if(ev.key === "Escape") cerrarDialogo(); });
+
+$("#sel-circulo").addEventListener("change", ev => {
+  S.circulo = ev.target.value; guardar(); pintarTodo();
+});
+["f-texto","f-modo","f-orden"].forEach(id => {
+  $("#"+id).addEventListener("input", ev => {
+    F[id.replace("f-","") === "texto" ? "texto" : id === "f-modo" ? "modo" : "orden"] = ev.target.value;
+    pintarTablon();
+  });
+});
+$("#f-limpiar").onclick = () => {
+  Object.assign(F, {tipo:"todos", texto:"", modo:"", orden:"nuevo", rubros:[]});
+  $("#f-texto").value = ""; $("#f-modo").value = ""; $("#f-orden").value = "nuevo";
+  $$("#v-tablon .tipos button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.t === "todos")));
+  pintarRubros(); pintarTablon();
+};
+
+["p-titulo","p-texto","p-zona","p-modo","p-disp","p-precio","p-nombre","p-rubro","p-circulo"].forEach(id => {
+  $("#"+id).addEventListener("input", pintarPrevia);
+});
+$("#p-publicar").onclick = publicar;
+$("#p-borrarform").onclick = () => { vaciarFormulario(); flotante("Formulario vacío"); };
+
+/* ===================== arranque ===================== */
+$("#fecha-hoy").textContent = new Date().toLocaleDateString("es-AR", {day:"numeric", month:"long", year:"numeric"});
+$("#sel-circulo").innerHTML = CIRCULOS.map(c => `<option value="${c.id}">${esc(c.n)}</option>`).join("");
+$("#p-circulo").innerHTML = CIRCULOS.map(c => `<option value="${c.id}">${esc(c.n)}</option>`).join("");
+$("#p-rubro").innerHTML = RUBROS.map(r => `<option>${esc(r)}</option>`).join("");
+$("#sel-circulo").value = S.circulo;
+$("#p-circulo").value = S.circulo;
+pintarRubros();
+pintarTodo();
+</script>

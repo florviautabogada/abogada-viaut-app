@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0b0b">
+<title>clasifícATE</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--negro:#0b0b0b;--panel:#171717;--panel2:#202020;--borde:#2c2c2c;--verde:#00a651;--verde2:#00c25f;--blanco:#fff;--gris:#b5b5b5;--rojo:#ff6b6b}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--negro);color:var(--blanco);min-height:100vh;line-height:1.45}
+header{background:#000;border-bottom:3px solid var(--verde);padding:.9rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+.logo{font-size:1.5rem;font-weight:800;letter-spacing:.5px}.logo b{color:var(--verde)}
+.sub{font-size:.75rem;color:var(--gris)}
+.wrap{max-width:960px;margin:0 auto;padding:1rem}
+.card{background:var(--panel);border:1px solid var(--borde);border-radius:12px;padding:1.1rem;margin-bottom:1rem}
+h2{font-size:1.25rem;margin-bottom:.4rem}h3{font-size:1.05rem;margin-bottom:.6rem;color:var(--verde2)}
+p.ayuda{color:var(--gris);font-size:.9rem;margin-bottom:.9rem}
+label{display:block;font-size:.85rem;color:var(--gris);margin:.7rem 0 .25rem}
+input,select,textarea{width:100%;padding:.8rem;border-radius:8px;border:2px solid var(--borde);background:#fff;color:#111;font-size:1rem;font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--verde)}
+button{font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;border:0;border-radius:8px;padding:.8rem 1.1rem;background:var(--verde);color:#fff}
+button:hover{background:var(--verde2)}button:disabled{opacity:.5;cursor:wait}
+button.sec{background:transparent;border:2px solid var(--borde);color:var(--blanco)}
+button.sec:hover{border-color:var(--verde)}
+button.full{width:100%;margin-top:1rem}
+.tabs{display:flex;gap:.4rem;overflow-x:auto;padding:.6rem 1rem;background:#000;border-bottom:1px solid var(--borde)}
+.tabs button{background:transparent;color:var(--gris);border-bottom:3px solid transparent;border-radius:0;white-space:nowrap;padding:.6rem .9rem}
+.tabs button.on{color:var(--verde2);border-bottom-color:var(--verde)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.9rem}
+.persona{background:var(--panel2);border:1px solid var(--borde);border-radius:12px;padding:1rem}
+.persona.mismo{border-color:var(--verde)}
+.persona .n{font-weight:700;font-size:1.05rem}
+.persona .d{color:var(--gris);font-size:.88rem;margin-top:.2rem}
+.chip{display:inline-block;background:#0e2a1b;color:var(--verde2);border:1px solid #14502f;border-radius:99px;padding:.15rem .65rem;font-size:.8rem;margin:.25rem .25rem 0 0}
+.badge{display:inline-block;background:var(--verde);color:#fff;border-radius:6px;padding:.1rem .5rem;font-size:.72rem;font-weight:700;margin-bottom:.4rem}
+.estrellas{color:#ffc83d;font-size:.95rem;margin-top:.3rem}
+.fila{display:flex;gap:.6rem;flex-wrap:wrap}.fila>*{flex:1;min-width:150px}
+.oficios{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.5rem}
+.oficios label{display:flex;align-items:center;gap:.5rem;margin:0;padding:.55rem .7rem;background:var(--panel2);border:1px solid var(--borde);border-radius:8px;color:var(--blanco);font-size:.95rem;cursor:pointer}
+.oficios input{width:20px;height:20px;accent-color:var(--verde)}
+.msg{padding:.8rem;border-radius:8px;margin:.8rem 0;font-size:.92rem;display:none}
+.msg.ok{display:block;background:#0e2a1b;border:1px solid var(--verde);color:#c8f5dc}
+.msg.err{display:block;background:#2b1111;border:1px solid var(--rojo);color:#ffd0d0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.8rem;margin-bottom:1rem}
+.stat{background:var(--verde);border-radius:12px;padding:1rem;text-align:center}
+.stat b{display:block;font-size:2rem}.stat span{font-size:.8rem}
+.lista div{padding:.55rem 0;border-bottom:1px solid var(--borde);font-size:.92rem;display:flex;justify-content:space-between;gap:.5rem}
+.lista div:last-child{border:0}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{background:#000;text-align:left;padding:.55rem}td{padding:.55rem;border-top:1px solid var(--borde)}
+.scroll{overflow-x:auto}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:flex-end;justify-content:center;z-index:50}
+.modal.on{display:flex}
+.modal .caja{background:var(--panel);border-top:3px solid var(--verde);border-radius:16px 16px 0 0;padding:1.3rem;width:100%;max-width:560px;max-height:90vh;overflow:auto}
+@media(min-width:600px){.modal{align-items:center}.modal .caja{border-radius:16px}}
+.paso{display:flex;gap:.7rem;align-items:flex-start;margin:.5rem 0}
+.paso i{flex:0 0 28px;height:28px;border-radius:50%;background:var(--verde);display:grid;place-items:center;font-style:normal;font-weight:800}
+.hide{display:none!important}
+a{color:var(--verde2)}
+.estr button{background:var(--panel2);padding:.5rem .7rem;font-size:1.2rem;margin-right:.25rem;color:#ffc83d}
+.estr button:hover{background:#2a2a2a}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="logo">clasific<b>ATE</b></div><div class="sub">Junta Interna ATE INAES · entre compañeres es mejor</div></div>
+  <button class="sec hide" id="btnSalir" onclick="salir()">Salir</button>
+</header>
+
+<!-- ENTRADA -->
+<main id="vistaEntrada" class="wrap">
+  <div class="card" style="max-width:480px;margin:1.5rem auto">
+    <h2>Bienvenide</h2>
+    <p class="ayuda">Una red para intercambiar oficios, saberes y servicios entre compañeres de INAES.</p>
+    <div class="fila">
+      <button id="tabIngresar" onclick="modoEntrada('ingresar')">Ya tengo cuenta</button>
+      <button id="tabRegistro" class="sec" onclick="modoEntrada('registro')">Primera vez</button>
+    </div>
+    <div id="msgEntrada" class="msg"></div>
+
+    <form id="formIngresar" onsubmit="ingresar(event)">
+      <label>DNI (solo números)</label>
+      <input id="iDni" inputmode="numeric" autocomplete="username" required>
+      <label>Tu clave</label>
+      <input id="iClave" type="password" autocomplete="current-password" required>
+      <button class="full" id="bIngresar">Entrar</button>
+    </form>
+
+    <form id="formRegistro" class="hide" onsubmit="registrar(event)">
+      <p class="ayuda" style="margin-top:.9rem">Te verificamos con la nómina de la junta. Con tu DNI y apellido alcanza.</p>
+      <label>DNI (solo números)</label>
+      <input id="rDni" inputmode="numeric" required>
+      <label>Apellido</label>
+      <input id="rApellido" autocomplete="family-name" required>
+      <label>Elegí una clave (mínimo 6 caracteres)</label>
+      <input id="rClave" type="password" autocomplete="new-password" minlength="6" required>
+      <label>Organismo / dirección donde trabajás</label>
+      <input id="rOrganismo" placeholder="Ej: Dirección de Fomento" required>
+      <div class="fila">
+        <div><label>Edificio</label><input id="rEdificio" placeholder="Ej: 172"></div>
+        <div><label>Piso</label><input id="rPiso" placeholder="Ej: 2º"></div>
+      </div>
+      <div class="fila">
+        <div><label>Interno</label><input id="rInterno" inputmode="numeric"></div>
+        <div><label>Celular (para WhatsApp)</label><input id="rTelefono" inputmode="tel" placeholder="11 5555 5555"></div>
+      </div>
+      <button class="full" id="bRegistro">Crear mi cuenta</button>
+    </form>
+  </div>
+</main>
+
+<!-- APP -->
+<div id="vistaApp" class="hide">
+  <div class="tabs" id="tabs">
+    <button data-t="buscar" class="on">Buscar</button>
+    <button data-t="perfil">Mi perfil</button>
+    <button data-t="intercambios">Mis intercambios</button>
+    <button data-t="junta" id="tabJunta" class="hide">Panel de la junta</button>
+  </div>
+  <main class="wrap">
+
+    <section id="t-buscar">
+      <div class="card">
+        <h2>¿Qué necesitás?</h2>
+        <p class="ayuda">Elegí un oficio. Primero te mostramos a compañeres de tu mismo organismo.</p>
+        <div class="fila">
+          <select id="fOficio" onchange="pintarBusqueda()"><option value="">Todos los oficios</option></select>
+          <input id="fTexto" placeholder="Buscar por nombre o palabra" oninput="pintarBusqueda()">
+        </div>
+      </div>
+      <div id="resultados" class="grid"></div>
+    </section>
+
+    <section id="t-perfil" class="hide">
+      <div class="card">
+        <h2>Mi perfil</h2>
+        <p class="ayuda">Esto es lo que ven otres compañeres. Cuanto más completo, mejor.</p>
+        <div id="msgPerfil" class="msg"></div>
+        <div class="fila">
+          <div><label>Nombre</label><input id="pNombre" disabled></div>
+          <div><label>DNI</label><input id="pDni" disabled></div>
+        </div>
+        <label>Organismo / dirección</label><input id="pOrganismo">
+        <div class="fila">
+          <div><label>Edificio</label><input id="pEdificio"></div>
+          <div><label>Piso</label><input id="pPiso"></div>
+          <div><label>Área</label><input id="pArea"></div>
+        </div>
+        <div class="fila">
+          <div><label>Interno</label><input id="pInterno"></div>
+          <div><label>Celular</label><input id="pTelefono" inputmode="tel"></div>
+        </div>
+        <h3 style="margin-top:1.2rem">¿Qué sabés hacer u ofrecer?</h3>
+        <div class="oficios" id="listaOficios"></div>
+        <label>Contá un poco más (matrícula, experiencia, zona, horarios)</label>
+        <textarea id="pDesc" rows="3" maxlength="400"></textarea>
+        <button class="full" onclick="guardarPerfil()">Guardar</button>
+      </div>
+    </section>
+
+    <section id="t-intercambios" class="hide">
+      <div class="card">
+        <h2>Mis intercambios</h2>
+        <p class="ayuda">Cuando te contactás con alguien queda registrado acá. Después marcalo como hecho y dejá tus estrellas.</p>
+        <div id="listaInterc"></div>
+      </div>
+    </section>
+
+    <section id="t-junta" class="hide">
+      <div id="juntaCont"></div>
+    </section>
+  </main>
+</div>
+
+<!-- MODAL CONTACTO -->
+<div class="modal" id="modal" onclick="if(event.target===this)cerrarModal()">
+  <div class="caja" id="modalCont"></div>
+</div>
+
+<script>
+const SUPABASE_URL = "https://jdftklijmjlwagkrbxdm.supabase.co";
+const SUPABASE_KEY = "sb_publishable_R7DEe9p3fNIrsHUoMEheuw_S6JAK70r";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const OFICIOS = ["Electricista matriculado","Electricista","Plomería","Gasista matriculado","Carpintería","Pintura","Albañilería","Informática / soporte técnico","Diseño y comunicación","Contabilidad / impuestos","Asesoramiento jurídico","Docencia / apoyo escolar","Cuidado de personas","Cocina / viandas","Costura / arreglos","Mecánica","Transporte / fletes","Salud / terapias","Traducción","Otro"];
+
+let yo = null, personas = [], reputs = {}, misIntercambios = [];
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const emailDe = dni => `${String(dni).replace(/\D/g,"")}@clasificate.app`;
+const soloNum = s => String(s||"").replace(/\D/g,"");
+
+function aviso(id, texto, tipo){ const m=$(id); m.textContent=texto; m.className="msg "+tipo; if(tipo==="ok") setTimeout(()=>m.className="msg",4000); }
+function estrellas(n){ n=Math.round(n||0); return "★".repeat(n)+"☆".repeat(5-n); }
+
+/* ---------- ENTRADA ---------- */
+function modoEntrada(m){
+  const reg = m==="registro";
+  $("formIngresar").classList.toggle("hide", reg);
+  $("formRegistro").classList.toggle("hide", !reg);
+  $("tabIngresar").className = reg ? "sec" : "";
+  $("tabRegistro").className = reg ? "" : "sec";
+  $("msgEntrada").className="msg";
+}
+
+async function ingresar(e){
+  e.preventDefault();
+  const b=$("bIngresar"); b.disabled=true;
+  const { error } = await sb.auth.signInWithPassword({ email: emailDe($("iDni").value), password: $("iClave").value });
+  b.disabled=false;
+  if(error){ aviso("msgEntrada","DNI o clave incorrectos. Si es tu primera vez, tocá \"Primera vez\".","err"); return; }
+  await iniciar();
+}
+
+async function registrar(e){
+  e.preventDefault();
+  const b=$("bRegistro"); b.disabled=true;
+  const datos = {
+    dni: soloNum($("rDni").value), apellido: $("rApellido").value, clave: $("rClave").value,
+    organismo: $("rOrganismo").value, edificio: $("rEdificio").value, piso: $("rPiso").value,
+    interno: $("rInterno").value, telefono: $("rTelefono").value
+  };
+  try{
+    const r = await fetch(`${SUPABASE_URL}/functions/v1/registro`, {
+      method:"POST", headers:{ "Content-Type":"application/json", "apikey":SUPABASE_KEY }, body: JSON.stringify(datos)
+    });
+    const j = await r.json();
+    if(!r.ok){ aviso("msgEntrada", j.error || "No se pudo crear la cuenta.", "err"); b.disabled=false; return; }
+  }catch(_){ aviso("msgEntrada","Sin conexión. Probá de nuevo.","err"); b.disabled=false; return; }
+  const { error } = await sb.auth.signInWithPassword({ email: emailDe(datos.dni), password: datos.clave });
+  b.disabled=false;
+  if(error){ aviso("msgEntrada","Cuenta creada. Ahora entrá con tu DNI y tu clave.","ok"); modoEntrada("ingresar"); return; }
+  await iniciar();
+}
+
+async function salir(){ await sb.auth.signOut(); location.reload(); }
+
+/* ---------- INICIO ---------- */
+async function iniciar(){
+  const { data:{ user } } = await sb.auth.getUser();
+  if(!user) return;
+  const { data: p } = await sb.from("perfiles").select("*").eq("id", user.id).maybeSingle();
+  if(!p){ await sb.auth.signOut(); aviso("msgEntrada","Tu cuenta no tiene perfil. Escribile a la junta.","err"); return; }
+  yo = p;
+  $("vistaEntrada").classList.add("hide");
+  $("vistaApp").classList.remove("hide");
+  $("btnSalir").classList.remove("hide");
+  $("tabJunta").classList.toggle("hide", !yo.es_junta);
+  armarFiltros(); armarOficiosPerfil(); pintarPerfil();
+  await cargarPersonas();
+  irA("buscar");
+}
+
+document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => irA(b.dataset.t));
+function irA(t){
+  document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b.dataset.t===t));
+  ["buscar","perfil","intercambios","junta"].forEach(x => $("t-"+x).classList.toggle("hide", x!==t));
+  if(t==="intercambios") cargarIntercambios();
+  if(t==="junta") cargarJunta();
+  if(t==="buscar") cargarPersonas();
+}
+
+/* ---------- BUSCAR ---------- */
+function armarFiltros(){
+  $("fOficio").innerHTML = '<option value="">Todos los oficios</option>' + OFICIOS.map(o=>`<option>${esc(o)}</option>`).join("");
+}
+async function cargarPersonas(){
+  const [{ data: ps }, { data: rs }] = await Promise.all([
+    sb.from("perfiles").select("id,nombre,apellido,organismo,edificio,piso,area,interno,telefono,oficios,descripcion").neq("id", yo.id),
+    sb.rpc("reputaciones")
+  ]);
+  personas = (ps||[]).filter(p => p.oficios && p.oficios.length);
+  reputs = {}; (rs||[]).forEach(r => reputs[r.id] = r);
+  pintarBusqueda();
+}
+function pintarBusqueda(){
+  const of = $("fOficio").value, tx = $("fTexto").value.toLowerCase().trim();
+  const mio = (yo.organismo||"").toLowerCase().trim();
+  let lista = personas.filter(p =>
+    (!of || p.oficios.includes(of)) &&
+    (!tx || `${p.nombre} ${p.apellido} ${p.descripcion||""} ${p.oficios.join(" ")}`.toLowerCase().includes(tx)));
+  const mismo = p => mio && (p.organismo||"").toLowerCase().trim()===mio;
+  lista.sort((a,b) => (mismo(b)-mismo(a)) || ((reputs[b.id]?.promedio||0)-(reputs[a.id]?.promedio||0)));
+  $("resultados").innerHTML = lista.length ? lista.map(p => {
+    const r = reputs[p.id];
+    return `<div class="persona ${mismo(p)?"mismo":""}">
+      ${mismo(p)?'<div class="badge">Tu mismo organismo</div>':""}
+      <div class="n">${esc(p.nombre)} ${esc(p.apellido)}</div>
+      <div class="d">${esc(p.organismo||"")}${p.edificio?` · Ed. ${esc(p.edificio)}`:""}${p.piso?` · Piso ${esc(p.piso)}`:""}</div>
+      <div>${p.oficios.map(o=>`<span class="chip">${esc(o)}</span>`).join("")}</div>
+      ${p.descripcion?`<div class="d" style="margin-top:.4rem">${esc(p.descripcion)}</div>`:""}
+      <div class="estrellas">${r?`${estrellas(r.promedio)} <span class="d">${r.promedio} (${r.cantidad})</span>`:'<span class="d">Sin calificaciones todavía</span>'}</div>
+      <button class="full" onclick="abrirContacto('${p.id}')">Contactar</button>
+    </div>`;
+  }).join("") : '<div class="card"><p class="ayuda">Todavía no hay compañeres con ese oficio. Pasale el link a más gente.</p></div>';
+}
+
+function abrirContacto(id){
+  const p = personas.find(x=>x.id===id); if(!p) return;
+  $("modalCont").innerHTML = `
+    <h2>Contactar a ${esc(p.nombre)} ${esc(p.apellido)}</h2>
+    <p class="ayuda">Al confirmar te mostramos cómo comunicarte, y queda registrado el contacto.</p>
+    <label>¿Para qué oficio?</label>
+    <select id="cOficio">${p.oficios.map(o=>`<option>${esc(o)}</option>`).join("")}</select>
+    <div id="cDatos"></div>
+    <button class="full" id="bConfirmar" onclick="confirmarContacto('${p.id}')">Confirmar y ver contacto</button>
+    <button class="full sec" onclick="cerrarModal()">Cancelar</button>`;
+  $("modal").classList.add("on");
+}
+function cerrarModal(){ $("modal").classList.remove("on"); }
+
+function linkWhats(tel){
+  let n = soloNum(tel); if(!n) return null;
+  if(n.startsWith("54")) return `https://wa.me/${n}`;
+  if(n.startsWith("0")) n = n.slice(1);
+  if(n.startsWith("15")) n = "11"+n.slice(2);
+  return `https://wa.me/549${n}`;
+}
+
+async function confirmarContacto(id){
+  const p = personas.find(x=>x.id===id), oficio = $("cOficio").value;
+  $("bConfirmar").disabled = true;
+  const { data: ya } = await sb.from("intercambios").select("id").eq("solicitante", yo.id).eq("prestador", id).eq("oficio", oficio).eq("estado","contactado").limit(1);
+  if(!ya || !ya.length){
+    const { error } = await sb.from("intercambios").insert({ solicitante: yo.id, prestador: id, oficio });
+    if(error){ $("cDatos").innerHTML = '<div class="msg err">No se pudo registrar. Probá de nuevo.</div>'; $("bConfirmar").disabled=false; return; }
+  }
+  const wa = linkWhats(p.telefono);
+  $("cDatos").innerHTML = `<div class="card" style="margin-top:1rem">
+    <h3>Cómo comunicarte</h3>
+    ${p.interno?`<div class="paso"><i>1</i><div>Interno: <b>${esc(p.interno)}</b></div></div>`:""}
+    ${p.telefono?`<div class="paso"><i>${p.interno?2:1}</i><div>Celular: <b>${esc(p.telefono)}</b></div></div>`:""}
+    ${p.edificio||p.piso||p.area?`<div class="paso"><i>★</i><div>${esc([p.edificio&&"Edificio "+p.edificio,p.piso&&"Piso "+p.piso,p.area].filter(Boolean).join(" · "))}</div></div>`:""}
+    ${wa?`<a href="${wa}" target="_blank" rel="noopener"><button class="full" style="margin-top:.6rem">Escribir por WhatsApp</button></a>`:""}
+    <p class="ayuda" style="margin-top:.8rem">Después pasá por <b>Mis intercambios</b> para dejar tus estrellas.</p>
+  </div>`;
+  $("bConfirmar").classList.add("hide");
+}
+
+/* ---------- PERFIL ---------- */
+function armarOficiosPerfil(){
+  $("listaOficios").innerHTML = OFICIOS.map((o,i)=>`<label><input type="checkbox" value="${esc(o)}" id="of${i}"> ${esc(o)}</label>`).join("");
+}
+function pintarPerfil(){
+  $("pNombre").value = `${yo.nombre} ${yo.apellido}`; $("pDni").value = yo.dni;
+  $("pOrganismo").value = yo.organismo||""; $("pEdificio").value = yo.edificio||""; $("pPiso").value = yo.piso||"";
+  $("pArea").value = yo.area||""; $("pInterno").value = yo.interno||""; $("pTelefono").value = yo.telefono||"";
+  $("pDesc").value = yo.descripcion||"";
+  OFICIOS.forEach((o,i)=> $("of"+i).checked = (yo.oficios||[]).includes(o));
+}
+async function guardarPerfil(){
+  const cambios = {
+    organismo:$("pOrganismo").value.trim()||null, edificio:$("pEdificio").value.trim()||null, piso:$("pPiso").value.trim()||null,
+    area:$("pArea").value.trim()||null, interno:$("pInterno").value.trim()||null, telefono:$("pTelefono").value.trim()||null,
+    descripcion:$("pDesc").value.trim()||null,
+    oficios: OFICIOS.filter((o,i)=>$("of"+i).checked)
+  };
+  const { error } = await sb.from("perfiles").update(cambios).eq("id", yo.id);
+  if(error){ aviso("msgPerfil","No se pudo guardar. Probá de nuevo.","err"); return; }
+  yo = { ...yo, ...cambios };
+  aviso("msgPerfil","Guardado. Ya te pueden encontrar.","ok");
+}
+
+/* ---------- INTERCAMBIOS ---------- */
+async function cargarIntercambios(){
+  const { data } = await sb.from("intercambios").select("*").or(`solicitante.eq.${yo.id},prestador.eq.${yo.id}`).order("created_at",{ascending:false});
+  misIntercambios = data||[];
+  const ids = [...new Set(misIntercambios.flatMap(i=>[i.solicitante,i.prestador]))].filter(x=>x!==yo.id);
+  let nombres = {};
+  if(ids.length){ const { data: ps } = await sb.from("perfiles").select("id,nombre,apellido,organismo").in("id", ids); (ps||[]).forEach(p=>nombres[p.id]=p); }
+  $("listaInterc").innerHTML = misIntercambios.length ? misIntercambios.map(i=>{
+    const soySol = i.solicitante===yo.id, otroId = soySol?i.prestador:i.solicitante, o = nombres[otroId]||{nombre:"Compañere",apellido:""};
+    const miCal = soySol ? i.cal_al_prestador : i.cal_al_solicitante;
+    const suCal = soySol ? i.cal_al_solicitante : i.cal_al_prestador;
+    return `<div class="persona" style="margin-bottom:.8rem">
+      <div class="n">${esc(o.nombre)} ${esc(o.apellido)}</div>
+      <div class="d">${soySol?"Le pediste":"Te pidió"}: <b>${esc(i.oficio)}</b> · ${new Date(i.created_at).toLocaleDateString("es-AR")} · ${i.estado==="realizado"?"Realizado":"Contactado"}</div>
+      ${i.estado==="contactado"?`<button class="full" onclick="marcarRealizado('${i.id}')">Ya lo hicimos</button>`:""}
+      ${i.estado==="realizado"?(miCal?`<div class="estrellas">Tu calificación: ${estrellas(miCal)}</div>`:`<div class="estr" style="margin-top:.6rem"><div class="d">Calificá a ${esc(o.nombre)}:</div>${[1,2,3,4,5].map(n=>`<button onclick="calificar('${i.id}',${n})">${n}★</button>`).join("")}</div>`):""}
+      ${suCal?`<div class="d" style="margin-top:.3rem">Te calificó con ${suCal} ★</div>`:""}
+    </div>`;
+  }).join("") : '<p class="ayuda">Todavía no tenés intercambios. Probá en <b>Buscar</b>.</p>';
+}
+async function marcarRealizado(id){ await sb.from("intercambios").update({estado:"realizado"}).eq("id",id); cargarIntercambios(); }
+async function calificar(id,n){
+  const i = misIntercambios.find(x=>x.id===id); if(!i) return;
+  const campo = i.solicitante===yo.id ? "cal_al_prestador" : "cal_al_solicitante";
+  await sb.from("intercambios").update({[campo]:n}).eq("id",id);
+  cargarIntercambios();
+}
+
+/* ---------- JUNTA ---------- */
+async function cargarJunta(){
+  if(!yo.es_junta) return;
+  const [{ data: st, error }, { data: ints }, { data: ps }] = await Promise.all([
+    sb.rpc("estadisticas_junta"),
+    sb.from("intercambios").select("*").order("created_at",{ascending:false}),
+    sb.from("perfiles").select("id,nombre,apellido,organismo,edificio,piso,area,interno")
+  ]);
+  if(error){ $("juntaCont").innerHTML='<div class="msg err">No se pudieron cargar las estadísticas.</div>'; return; }
+  const m = {}; (ps||[]).forEach(p=>m[p.id]=p);
+  const nom = id => m[id] ? `${m[id].nombre} ${m[id].apellido}` : "—";
+  const org = id => m[id]?.organismo || "—";
+  const lista = (arr, f) => arr.length ? `<div class="lista">${arr.map(f).join("")}</div>` : '<p class="ayuda">Sin datos todavía.</p>';
+  window._juntaFilas = (ints||[]).map(i=>({fecha:new Date(i.created_at).toLocaleDateString("es-AR"),pide:nom(i.solicitante),orgPide:org(i.solicitante),presta:nom(i.prestador),orgPresta:org(i.prestador),oficio:i.oficio,estado:i.estado,calPrestador:i.cal_al_prestador||"",calSolicitante:i.cal_al_solicitante||""}));
+  $("juntaCont").innerHTML = `
+    <div class="stats">
+      <div class="stat"><b>${st.trabajadores}</b><span>Personas en la red</span></div>
+      <div class="stat"><b>${st.intercambios}</b><span>Contactos / matches</span></div>
+      <div class="stat"><b>${st.realizados}</b><span>Intercambios realizados</span></div>
+    </div>
+    <div class="card"><h3>Oficios más pedidos</h3>${lista(st.oficios_pedidos,x=>`<div><span>${esc(x.oficio)}</span><b>${x.cantidad}</b></div>`)}</div>
+    <div class="card"><h3>Quiénes son más actives</h3>${lista(st.mas_activos,x=>`<div><span>${esc(x.nombre)} ${esc(x.apellido)} · ${esc(x.organismo||"")}</span><b>${x.cantidad}</b></div>`)}</div>
+    <div class="card"><h3>Mapa de la red: qué organismos se conectan</h3>${lista(st.red_organismos,x=>`<div><span>${esc(x.desde||"—")} → ${esc(x.hacia||"—")}</span><b>${x.cantidad}</b></div>`)}</div>
+    <div class="card"><h3>Registro de intercambios</h3>
+      <button class="sec" onclick="bajarCSV()" style="margin-bottom:.8rem">Descargar planilla (CSV)</button>
+      <div class="scroll"><table><thead><tr><th>Fecha</th><th>Pide</th><th>Organismo</th><th>Presta</th><th>Organismo</th><th>Oficio</th><th>Estado</th></tr></thead>
+      <tbody>${window._juntaFilas.map(f=>`<tr><td>${esc(f.fecha)}</td><td>${esc(f.pide)}</td><td>${esc(f.orgPide)}</td><td>${esc(f.presta)}</td><td>${esc(f.orgPresta)}</td><td>${esc(f.oficio)}</td><td>${esc(f.estado)}</td></tr>`).join("")}</tbody></table></div>
+    </div>`;
+}
+function bajarCSV(){
+  const cab = ["Fecha","Pide","Organismo pide","Presta","Organismo presta","Oficio","Estado","Cal. al prestador","Cal. al solicitante"];
+  const celda = v => `"${String(v).replace(/"/g,'""').replace(/^([=+\-@])/,"'$1")}"`;
+  const filas = window._juntaFilas.map(f=>[f.fecha,f.pide,f.orgPide,f.presta,f.orgPresta,f.oficio,f.estado,f.calPrestador,f.calSolicitante].map(celda).join(","));
+  const blob = new Blob(["﻿"+[cab.map(celda).join(","),...filas].join("\n")],{type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "clasificate-intercambios.csv"; a.click();
+}
+
+/* ---------- ARRANQUE ---------- */
+sb.auth.getSession().then(({data})=>{ if(data.session) iniciar(); });
+</script>
+</body>
+</html>

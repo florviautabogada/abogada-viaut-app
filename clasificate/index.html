@@ -89,9 +89,11 @@ a{color:var(--verde2)}
     </form>
 
     <form id="formRegistro" class="hide" onsubmit="registrar(event)">
-      <p class="ayuda" style="margin-top:.9rem">Te verificamos con la nómina de la junta. Con tu DNI y apellido alcanza.</p>
-      <label>DNI (solo números)</label>
+      <p class="ayuda" style="margin-top:.9rem">Abierto a todes les trabajadores de INAES. Con tu DNI, nombre y apellido alcanza.</p>
+      <label>DNI (solo números, sin puntos)</label>
       <input id="rDni" inputmode="numeric" required>
+      <label>Nombre</label>
+      <input id="rNombre" autocomplete="given-name" required>
       <label>Apellido</label>
       <input id="rApellido" autocomplete="family-name" required>
       <label>Elegí una clave (mínimo 6 caracteres)</label>
@@ -219,7 +221,7 @@ async function registrar(e){
   e.preventDefault();
   const b=$("bRegistro"); b.disabled=true;
   const datos = {
-    dni: soloNum($("rDni").value), apellido: $("rApellido").value, clave: $("rClave").value,
+    dni: soloNum($("rDni").value), nombre: $("rNombre").value, apellido: $("rApellido").value, clave: $("rClave").value,
     organismo: $("rOrganismo").value, edificio: $("rEdificio").value, piso: $("rPiso").value,
     interno: $("rInterno").value, telefono: $("rTelefono").value
   };
